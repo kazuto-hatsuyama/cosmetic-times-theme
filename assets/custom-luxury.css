@@ -327,3 +327,124 @@ textarea:focus {
 a {
   transition: color 0.22s ease, opacity 0.22s ease;
 }
+
+
+/* ======================================================
+   COSMETIC TIMES REFINED UI
+   ====================================================== */
+
+body {
+  background: #f7f3ee;
+  color: #222;
+  font-family: "Noto Serif JP", serif;
+}
+
+.section-background,
+.section,
+[class*="color-scheme"] {
+  background: #f7f3ee !important;
+  color: #222 !important;
+}
+
+.ct-hero {
+  height: 72vh;
+  min-height: 520px;
+}
+
+.ct-hero-overlay {
+  background:
+    linear-gradient(
+      to right,
+      rgba(0,0,0,.48) 0%,
+      rgba(0,0,0,.18) 38%,
+      transparent 72%
+    ) !important;
+}
+
+.ct-hero-content {
+  max-width: 620px;
+}
+
+.ct-hero-title {
+  font-weight: 400;
+  letter-spacing: .04em;
+}
+
+.ct-hero-sub {
+  font-size: 14px;
+  line-height: 1.9;
+}
+
+.ct-cat-grid {
+  gap: 12px;
+  padding: 0 24px;
+}
+
+.ct-cat-item {
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.section-resource-list {
+  background: #f7f3ee !important;
+}
+
+.resource-list {
+  gap: 28px !important;
+}
+
+.product-card__content {
+  background: #fff !important;
+  border-radius: 18px !important;
+  border: 1px solid rgba(0,0,0,.05) !important;
+  box-shadow: 0 10px 30px rgba(0,0,0,.05) !important;
+  overflow: hidden;
+  transition: .3s ease;
+}
+
+product-card:hover .product-card__content {
+  transform: translateY(-4px);
+  box-shadow: 0 18px 40px rgba(0,0,0,.08) !important;
+  border-color: rgba(201,168,76,.3) !important;
+}
+
+.card-gallery {
+  background: #fff !important;
+}
+
+.product-media img {
+  object-fit: contain !important;
+  padding: 22px;
+  background: #fff;
+}
+
+.product-card .text-block p {
+  color: #222 !important;
+  font-size: 14px !important;
+  line-height: 1.7;
+  letter-spacing: .02em;
+}
+
+.price,
+.price__sale {
+  color: #b58b2f !important;
+  font-size: 18px !important;
+  font-weight: 600;
+}
+
+.compare-at-price {
+  color: #999 !important;
+}
+
+.quick-add__button {
+  background: #111 !important;
+  color: #fff !important;
+  border-radius: 999px !important;
+  border: none !important;
+}
+
+footer,
+[class*="footer"] {
+  background: #fff !important;
+  color: #666 !important;
+}
