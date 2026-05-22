@@ -330,8 +330,8 @@ a {
 
 
 /* ======================================================
-   COSMETIC TIMES REFINED UI
-   ====================================================== */
+   COSMETIC TIMES REFINED UI — DISABLED
+   ======================================================
 
 body {
   background: #f7f3ee;
@@ -449,7 +449,7 @@ footer,
   color: #666 !important;
 }
 
-/* 商品画像エリアをグレーグラデ＋内側影で浮かせる */
+[商品画像エリアをグレーグラデ＋内側影で浮かせる]
 .product-media,
 .product-media-container,
 .card-gallery {
@@ -475,3 +475,5 @@ footer,
     inset 0 0 0 1px rgba(0,0,0,.03);
   pointer-events: none;
 }
+
+======================================================= */
