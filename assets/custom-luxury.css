@@ -316,3 +316,20 @@ textarea:focus {
 a {
   transition: color 0.22s ease, opacity 0.22s ease;
 }
+
+
+/* ── 18. Product Detail — Media Gallery Width ─────────────────── */
+
+@media screen and (min-width: 750px) {
+  product-information .product-information__media {
+    max-width: 440px;
+  }
+}
+
+
+/* ── 19. Homepage — New Arrivals Image Height ─────────────────── */
+
+.resource-list product-card .card-gallery {
+  max-height: 220px;
+  overflow: hidden;
+}
