@@ -74,8 +74,8 @@
         "horizontal_alignment_flex_direction_column": "center",
         "vertical_alignment_flex_direction_column": "flex-end",
         "gap": 24,
-        "section_width": "page-width",
-        "section_height": "medium",
+        "section_width": "full-width",
+        "section_height": "large",
         "section_height_custom": 50,
         "color_scheme": "scheme-6",
         "toggle_overlay": true,
@@ -84,8 +84,363 @@
         "gradient_direction": "to bottom",
         "blurred_reflection": false,
         "reflection_opacity": 75,
-        "padding-block-start": 100,
-        "padding-block-end": 72
+        "padding-block-start": 120,
+        "padding-block-end": 80
+      }
+    },
+    "marquee_brands": {
+      "type": "marquee",
+      "blocks": {
+        "brand_1": {
+          "type": "text",
+          "settings": {
+            "text": "<p>CHANEL</p>",
+            "width": "fit-content",
+            "max_width": "normal",
+            "alignment": "center",
+            "type_preset": "custom",
+            "font": "var(--font-heading--family)",
+            "font_size": "0.85rem",
+            "line_height": "normal",
+            "letter_spacing": "wide",
+            "case": "uppercase",
+            "wrap": "nowrap",
+            "color": "var(--color-foreground-heading)",
+            "background": false,
+            "background_color": "#00000026",
+            "corner_radius": 0,
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {}
+        },
+        "div_1": {
+          "type": "_divider",
+          "settings": {
+            "style": "dot",
+            "color": "var(--color-primary)"
+          },
+          "blocks": {}
+        },
+        "brand_2": {
+          "type": "text",
+          "settings": {
+            "text": "<p>DIOR</p>",
+            "width": "fit-content",
+            "max_width": "normal",
+            "alignment": "center",
+            "type_preset": "custom",
+            "font": "var(--font-heading--family)",
+            "font_size": "0.85rem",
+            "line_height": "normal",
+            "letter_spacing": "wide",
+            "case": "uppercase",
+            "wrap": "nowrap",
+            "color": "var(--color-foreground-heading)",
+            "background": false,
+            "background_color": "#00000026",
+            "corner_radius": 0,
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {}
+        },
+        "div_2": {
+          "type": "_divider",
+          "settings": {
+            "style": "dot",
+            "color": "var(--color-primary)"
+          },
+          "blocks": {}
+        },
+        "brand_3": {
+          "type": "text",
+          "settings": {
+            "text": "<p>LANCÔME</p>",
+            "width": "fit-content",
+            "max_width": "normal",
+            "alignment": "center",
+            "type_preset": "custom",
+            "font": "var(--font-heading--family)",
+            "font_size": "0.85rem",
+            "line_height": "normal",
+            "letter_spacing": "wide",
+            "case": "uppercase",
+            "wrap": "nowrap",
+            "color": "var(--color-foreground-heading)",
+            "background": false,
+            "background_color": "#00000026",
+            "corner_radius": 0,
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {}
+        },
+        "div_3": {
+          "type": "_divider",
+          "settings": {
+            "style": "dot",
+            "color": "var(--color-primary)"
+          },
+          "blocks": {}
+        },
+        "brand_4": {
+          "type": "text",
+          "settings": {
+            "text": "<p>SHISEIDO</p>",
+            "width": "fit-content",
+            "max_width": "normal",
+            "alignment": "center",
+            "type_preset": "custom",
+            "font": "var(--font-heading--family)",
+            "font_size": "0.85rem",
+            "line_height": "normal",
+            "letter_spacing": "wide",
+            "case": "uppercase",
+            "wrap": "nowrap",
+            "color": "var(--color-foreground-heading)",
+            "background": false,
+            "background_color": "#00000026",
+            "corner_radius": 0,
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {}
+        },
+        "div_4": {
+          "type": "_divider",
+          "settings": {
+            "style": "dot",
+            "color": "var(--color-primary)"
+          },
+          "blocks": {}
+        },
+        "brand_5": {
+          "type": "text",
+          "settings": {
+            "text": "<p>ESTÉE LAUDER</p>",
+            "width": "fit-content",
+            "max_width": "normal",
+            "alignment": "center",
+            "type_preset": "custom",
+            "font": "var(--font-heading--family)",
+            "font_size": "0.85rem",
+            "line_height": "normal",
+            "letter_spacing": "wide",
+            "case": "uppercase",
+            "wrap": "nowrap",
+            "color": "var(--color-foreground-heading)",
+            "background": false,
+            "background_color": "#00000026",
+            "corner_radius": 0,
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {}
+        },
+        "div_5": {
+          "type": "_divider",
+          "settings": {
+            "style": "dot",
+            "color": "var(--color-primary)"
+          },
+          "blocks": {}
+        },
+        "brand_6": {
+          "type": "text",
+          "settings": {
+            "text": "<p>CLINIQUE</p>",
+            "width": "fit-content",
+            "max_width": "normal",
+            "alignment": "center",
+            "type_preset": "custom",
+            "font": "var(--font-heading--family)",
+            "font_size": "0.85rem",
+            "line_height": "normal",
+            "letter_spacing": "wide",
+            "case": "uppercase",
+            "wrap": "nowrap",
+            "color": "var(--color-foreground-heading)",
+            "background": false,
+            "background_color": "#00000026",
+            "corner_radius": 0,
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {}
+        },
+        "div_6": {
+          "type": "_divider",
+          "settings": {
+            "style": "dot",
+            "color": "var(--color-primary)"
+          },
+          "blocks": {}
+        },
+        "brand_7": {
+          "type": "text",
+          "settings": {
+            "text": "<p>GIVENCHY</p>",
+            "width": "fit-content",
+            "max_width": "normal",
+            "alignment": "center",
+            "type_preset": "custom",
+            "font": "var(--font-heading--family)",
+            "font_size": "0.85rem",
+            "line_height": "normal",
+            "letter_spacing": "wide",
+            "case": "uppercase",
+            "wrap": "nowrap",
+            "color": "var(--color-foreground-heading)",
+            "background": false,
+            "background_color": "#00000026",
+            "corner_radius": 0,
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {}
+        },
+        "div_7": {
+          "type": "_divider",
+          "settings": {
+            "style": "dot",
+            "color": "var(--color-primary)"
+          },
+          "blocks": {}
+        },
+        "brand_8": {
+          "type": "text",
+          "settings": {
+            "text": "<p>YSL BEAUTÉ</p>",
+            "width": "fit-content",
+            "max_width": "normal",
+            "alignment": "center",
+            "type_preset": "custom",
+            "font": "var(--font-heading--family)",
+            "font_size": "0.85rem",
+            "line_height": "normal",
+            "letter_spacing": "wide",
+            "case": "uppercase",
+            "wrap": "nowrap",
+            "color": "var(--color-foreground-heading)",
+            "background": false,
+            "background_color": "#00000026",
+            "corner_radius": 0,
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {}
+        },
+        "div_8": {
+          "type": "_divider",
+          "settings": {
+            "style": "dot",
+            "color": "var(--color-primary)"
+          },
+          "blocks": {}
+        },
+        "brand_9": {
+          "type": "text",
+          "settings": {
+            "text": "<p>GUERLAIN</p>",
+            "width": "fit-content",
+            "max_width": "normal",
+            "alignment": "center",
+            "type_preset": "custom",
+            "font": "var(--font-heading--family)",
+            "font_size": "0.85rem",
+            "line_height": "normal",
+            "letter_spacing": "wide",
+            "case": "uppercase",
+            "wrap": "nowrap",
+            "color": "var(--color-foreground-heading)",
+            "background": false,
+            "background_color": "#00000026",
+            "corner_radius": 0,
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {}
+        },
+        "div_9": {
+          "type": "_divider",
+          "settings": {
+            "style": "dot",
+            "color": "var(--color-primary)"
+          },
+          "blocks": {}
+        },
+        "brand_10": {
+          "type": "text",
+          "settings": {
+            "text": "<p>NARS</p>",
+            "width": "fit-content",
+            "max_width": "normal",
+            "alignment": "center",
+            "type_preset": "custom",
+            "font": "var(--font-heading--family)",
+            "font_size": "0.85rem",
+            "line_height": "normal",
+            "letter_spacing": "wide",
+            "case": "uppercase",
+            "wrap": "nowrap",
+            "color": "var(--color-foreground-heading)",
+            "background": false,
+            "background_color": "#00000026",
+            "corner_radius": 0,
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {}
+        },
+        "div_10": {
+          "type": "_divider",
+          "settings": {
+            "style": "dot",
+            "color": "var(--color-primary)"
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "brand_1", "div_1",
+        "brand_2", "div_2",
+        "brand_3", "div_3",
+        "brand_4", "div_4",
+        "brand_5", "div_5",
+        "brand_6", "div_6",
+        "brand_7", "div_7",
+        "brand_8", "div_8",
+        "brand_9", "div_9",
+        "brand_10", "div_10"
+      ],
+      "name": "ブランド一覧マーキー",
+      "settings": {
+        "movement_direction": "reverse",
+        "color_scheme": "scheme-2",
+        "padding-block-start": 16,
+        "padding-block-end": 16,
+        "gap_between_elements": 40
       }
     },
     "product_list_fa6P9H": {
@@ -278,13 +633,14 @@
         "horizontal_alignment": "flex-start",
         "gap": 28,
         "color_scheme": "scheme-1",
-        "padding-block-start": 48,
-        "padding-block-end": 48
+        "padding-block-start": 64,
+        "padding-block-end": 64
       }
     }
   },
   "order": [
     "hero_jVaWmY",
+    "marquee_brands",
     "product_list_fa6P9H"
   ]
 }
