@@ -9,137 +9,14 @@
  */{
   "sections": {
     "hero_jVaWmY": {
-      "type": "hero",
-      "blocks": {
-        "text_sublabel": {
-          "type": "text",
-          "name": "サブラベル",
-          "settings": {
-            "text": "<p>BRAND COSMETICS ONLINE STORE</p>",
-            "width": "fit-content",
-            "max_width": "normal",
-            "alignment": "left",
-            "type_preset": "custom",
-            "font": "var(--font-heading--family)",
-            "font_size": "0.65rem",
-            "line_height": "normal",
-            "letter_spacing": "wide",
-            "case": "uppercase",
-            "wrap": "nowrap",
-            "color": "#c9a96e",
-            "background": false,
-            "background_color": "#00000026",
-            "corner_radius": 0,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {}
-        },
-        "text_YLPk4p": {
-          "type": "text",
-          "name": "t:names.heading",
-          "settings": {
-            "text": "<p>デパコスが驚きの価格で</p>",
-            "width": "fit-content",
-            "max_width": "normal",
-            "alignment": "left",
-            "type_preset": "h1",
-            "font": "var(--font-heading--family)",
-            "font_size": "1rem",
-            "line_height": "normal",
-            "letter_spacing": "normal",
-            "case": "none",
-            "wrap": "pretty",
-            "color": "#ffffff",
-            "background": false,
-            "background_color": "#00000026",
-            "corner_radius": 0,
-            "padding-block-start": 8,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {}
-        },
-        "text_subdesc": {
-          "type": "text",
-          "name": "サブテキスト",
-          "settings": {
-            "text": "<p>CHANEL・DIOR・SHISEIDO など国内外ブランドを最大80%OFFで</p>",
-            "width": "fit-content",
-            "max_width": "normal",
-            "alignment": "left",
-            "type_preset": "custom",
-            "font": "var(--font-body--family)",
-            "font_size": "0.85rem",
-            "line_height": "normal",
-            "letter_spacing": "normal",
-            "case": "none",
-            "wrap": "pretty",
-            "color": "rgba(255,255,255,0.8)",
-            "background": false,
-            "background_color": "#00000026",
-            "corner_radius": 0,
-            "padding-block-start": 8,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {}
-        },
-        "button_H9gpTf": {
-          "type": "button",
-          "name": "t:names.button",
-          "settings": {
-            "label": "今すぐショッピング",
-            "link": "shopify://collections/all",
-            "open_in_new_tab": false,
-            "style_class": "button-primary",
-            "width": "fit-content",
-            "custom_width": 100,
-            "width_mobile": "fit-content",
-            "custom_width_mobile": 100
-          },
-          "blocks": {}
-        }
-      },
-      "block_order": [
-        "text_sublabel",
-        "text_YLPk4p",
-        "text_subdesc",
-        "button_H9gpTf"
-      ],
-      "name": "t:names.hero",
+      "type": "custom-liquid",
+      "name": "ヒーロースライドショー",
       "settings": {
-        "media_type_1": "image",
-        "media_type_2": "image",
-        "stack_media_on_mobile": false,
-        "custom_mobile_media": false,
-        "media_type_1_mobile": "image",
-        "media_type_2_mobile": "image",
-        "open_in_new_tab": false,
-        "content_direction": "column",
-        "vertical_on_mobile": true,
-        "horizontal_alignment": "space-between",
-        "vertical_alignment": "flex-end",
-        "align_baseline": true,
-        "horizontal_alignment_flex_direction_column": "center",
-        "vertical_alignment_flex_direction_column": "flex-end",
-        "gap": 16,
-        "section_width": "full-width",
-        "section_height": "large",
-        "section_height_custom": 50,
+        "custom_liquid": "<style>.ct-hero{position:relative;width:100%;overflow:hidden;height:85svh;min-height:420px;background:#060E17}.ct-hero-slide{position:absolute;inset:0;opacity:0;animation:ctFade 15s infinite}.ct-hero-slide:nth-child(1){animation-delay:0s}.ct-hero-slide:nth-child(2){animation-delay:5s}.ct-hero-slide:nth-child(3){animation-delay:10s}@keyframes ctFade{0%,28%{opacity:1}33%,100%{opacity:0}}.ct-hero-slide img{width:100%;height:100%;object-fit:cover;object-position:center}.ct-hero-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(6,14,23,.85) 0%,rgba(6,14,23,.4) 40%,transparent 70%);z-index:1;pointer-events:none}.ct-hero-content{position:absolute;bottom:clamp(40px,7vw,100px);left:0;right:0;z-index:2;padding:0 clamp(24px,5vw,80px)}.ct-hero-label{display:block;font-size:.6rem;letter-spacing:.38em;text-transform:uppercase;color:#c9a84c;font-family:var(--font-heading--family,serif);margin-bottom:16px}.ct-hero-title{font-size:clamp(2.2rem,5vw,4.5rem);font-weight:300;color:#fff;letter-spacing:.08em;margin:0 0 12px;font-family:var(--font-heading--family,serif);line-height:1.1}.ct-hero-sub{display:block;font-size:clamp(.78rem,1.5vw,1rem);color:rgba(255,255,255,.78);margin-bottom:32px;letter-spacing:.06em;font-family:var(--font-body--family,serif)}.ct-hero-btn{display:inline-flex;align-items:center;gap:10px;padding:14px 36px;border:1px solid #c9a84c;color:#c9a84c;text-decoration:none;font-size:.68rem;letter-spacing:.28em;text-transform:uppercase;font-family:var(--font-heading--family,serif);transition:background .3s,color .3s}.ct-hero-btn:hover{background:#c9a84c;color:#0d1b2a}</style><div class=\"ct-hero\"><div class=\"ct-hero-slide\"><img src=\"https://cdn.shopify.com/s/files/1/0807/5821/0788/files/1000_320.png?v=1779421972\" alt=\"\" loading=\"eager\"></div><div class=\"ct-hero-slide\"><img src=\"https://cdn.shopify.com/s/files/1/0807/5821/0788/files/outlet_banner.png?v=1779421975\" alt=\"\" loading=\"lazy\"></div><div class=\"ct-hero-slide\"><img src=\"https://cdn.shopify.com/s/files/1/0807/5821/0788/files/20200623deo_slide.jpg?v=1779421972\" alt=\"\" loading=\"lazy\"></div><div class=\"ct-hero-overlay\"></div><div class=\"ct-hero-content\"><span class=\"ct-hero-label\">Brand Cosmetics Online Store</span><h1 class=\"ct-hero-title\">デパコスが驚きの価格で</h1><span class=\"ct-hero-sub\">CHANEL・DIOR・SHISEIDO など国内外ブランドを最大80%OFF</span><a href=\"/collections/all\" class=\"ct-hero-btn\">今すぐショッピング →</a></div></div>",
         "color_scheme": "scheme-6",
-        "toggle_overlay": true,
-        "overlay_color": "#12121266",
-        "overlay_style": "solid",
-        "gradient_direction": "to bottom",
-        "blurred_reflection": false,
-        "reflection_opacity": 75,
-        "padding-block-start": 120,
-        "padding-block-end": 80
+        "section_width": "full-width",
+        "padding-block-start": 0,
+        "padding-block-end": 0
       }
     },
     "category_grid": {
@@ -157,7 +34,7 @@
       "type": "custom-liquid",
       "name": "プロモーションバナー",
       "settings": {
-        "custom_liquid": "<style>.ct-promo-banners{display:grid;grid-template-columns:1fr 1fr;gap:3px;margin-top:3px}.ct-promo-banner{position:relative;overflow:hidden;aspect-ratio:5/2;display:flex;align-items:flex-end;text-decoration:none;background:#0d0d0d}.ct-promo-banner__bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .5s ease;filter:brightness(.75)}.ct-promo-banner:hover .ct-promo-banner__bg{transform:scale(1.04);filter:brightness(.6)}.ct-promo-banner__overlay{position:absolute;inset:0}.ct-promo-banner--sale .ct-promo-banner__overlay{background:linear-gradient(to top,rgba(50,0,12,.88) 0%,rgba(0,0,0,.15) 65%)}.ct-promo-banner--new .ct-promo-banner__overlay{background:linear-gradient(to top,rgba(6,6,20,.9) 0%,rgba(0,0,0,.15) 65%)}.ct-promo-banner__content{position:relative;z-index:2;padding:clamp(16px,2.5vw,36px) clamp(20px,3.5vw,44px);width:100%}.ct-promo-banner__label{display:block;font-size:.58rem;letter-spacing:.32em;text-transform:uppercase;color:#c9a96e;margin-bottom:8px;font-family:var(--font-heading--family,serif)}.ct-promo-banner__title{font-size:clamp(1.6rem,3.5vw,2.8rem);font-weight:300;color:#fff;letter-spacing:.1em;margin:0 0 8px;line-height:1.05;font-family:var(--font-heading--family,serif)}.ct-promo-banner__sub{display:block;font-size:.72rem;color:rgba(255,255,255,.75);margin-bottom:16px;letter-spacing:.06em}.ct-promo-banner__cta{display:inline-flex;align-items:center;gap:8px;font-size:.62rem;letter-spacing:.28em;text-transform:uppercase;color:#c9a96e;border-bottom:1px solid rgba(201,169,110,.45);padding-bottom:3px;transition:border-color .3s}.ct-promo-banner:hover .ct-promo-banner__cta{border-color:#c9a96e}@media(max-width:749px){.ct-promo-banners{grid-template-columns:1fr}.ct-promo-banner{aspect-ratio:16/7}}</style><div class=\"ct-promo-banners\"><a href=\"/collections/sale\" class=\"ct-promo-banner ct-promo-banner--sale\"><img class=\"ct-promo-banner__bg\" src=\"https://www.cosmetic-times.com/image/sale/outlet_banner.png\" alt=\"OUTLET SALE\"><div class=\"ct-promo-banner__overlay\"></div><div class=\"ct-promo-banner__content\"><span class=\"ct-promo-banner__label\">Limited Time Offer</span><h2 class=\"ct-promo-banner__title\">OUTLET SALE</h2><span class=\"ct-promo-banner__sub\">最大80%OFF &#8226; 数量限定 &#8226; 在庫処分</span><span class=\"ct-promo-banner__cta\">今すぐチェック &#8594;</span></div></a><a href=\"/collections/new\" class=\"ct-promo-banner ct-promo-banner--new\"><div class=\"ct-promo-banner__overlay\"></div><div class=\"ct-promo-banner__content\"><span class=\"ct-promo-banner__label\">New Arrivals</span><h2 class=\"ct-promo-banner__title\">新着商品</h2><span class=\"ct-promo-banner__sub\">最新アイテムが続々入荷中</span><span class=\"ct-promo-banner__cta\">コレクションを見る &#8594;</span></div></a></div>",
+        "custom_liquid": "<style>.ct-promo-banners{display:grid;grid-template-columns:1fr 1fr;gap:3px;margin-top:3px}.ct-promo-banner{position:relative;overflow:hidden;aspect-ratio:5/2;display:flex;align-items:flex-end;text-decoration:none;background:#0d0d0d}.ct-promo-banner__bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .5s ease;filter:brightness(.75)}.ct-promo-banner:hover .ct-promo-banner__bg{transform:scale(1.04);filter:brightness(.6)}.ct-promo-banner__overlay{position:absolute;inset:0}.ct-promo-banner--sale .ct-promo-banner__overlay{background:linear-gradient(to top,rgba(50,0,12,.88) 0%,rgba(0,0,0,.15) 65%)}.ct-promo-banner--new .ct-promo-banner__overlay{background:linear-gradient(to top,rgba(6,6,20,.9) 0%,rgba(0,0,0,.15) 65%)}.ct-promo-banner__content{position:relative;z-index:2;padding:clamp(16px,2.5vw,36px) clamp(20px,3.5vw,44px);width:100%}.ct-promo-banner__label{display:block;font-size:.58rem;letter-spacing:.32em;text-transform:uppercase;color:#c9a96e;margin-bottom:8px;font-family:var(--font-heading--family,serif)}.ct-promo-banner__title{font-size:clamp(1.6rem,3.5vw,2.8rem);font-weight:300;color:#fff;letter-spacing:.1em;margin:0 0 8px;line-height:1.05;font-family:var(--font-heading--family,serif)}.ct-promo-banner__sub{display:block;font-size:.72rem;color:rgba(255,255,255,.75);margin-bottom:16px;letter-spacing:.06em}.ct-promo-banner__cta{display:inline-flex;align-items:center;gap:8px;font-size:.62rem;letter-spacing:.28em;text-transform:uppercase;color:#c9a96e;border-bottom:1px solid rgba(201,169,110,.45);padding-bottom:3px;transition:border-color .3s}.ct-promo-banner:hover .ct-promo-banner__cta{border-color:#c9a96e}@media(max-width:749px){.ct-promo-banners{grid-template-columns:1fr}.ct-promo-banner{aspect-ratio:16/7}}</style><div class=\"ct-promo-banners\"><a href=\"/collections/sale\" class=\"ct-promo-banner ct-promo-banner--sale\"><img class=\"ct-promo-banner__bg\" src=\"https://cdn.shopify.com/s/files/1/0807/5821/0788/files/outlet_banner.png?v=1779421975\" alt=\"OUTLET SALE\"><div class=\"ct-promo-banner__overlay\"></div><div class=\"ct-promo-banner__content\"><span class=\"ct-promo-banner__label\">Limited Time Offer</span><h2 class=\"ct-promo-banner__title\">OUTLET SALE</h2><span class=\"ct-promo-banner__sub\">最大80%OFF &#8226; 数量限定 &#8226; 在庫処分</span><span class=\"ct-promo-banner__cta\">今すぐチェック &#8594;</span></div></a><a href=\"/collections/new\" class=\"ct-promo-banner ct-promo-banner--new\"><img class=\"ct-promo-banner__bg\" src=\"https://cdn.shopify.com/s/files/1/0807/5821/0788/files/20200623deo_slide.jpg?v=1779421972\" alt=\"新着商品\" loading=\"lazy\"><div class=\"ct-promo-banner__overlay\"></div><div class=\"ct-promo-banner__content\"><span class=\"ct-promo-banner__label\">New Arrivals</span><h2 class=\"ct-promo-banner__title\">新着商品</h2><span class=\"ct-promo-banner__sub\">最新アイテムが続々入荷中</span><span class=\"ct-promo-banner__cta\">コレクションを見る &#8594;</span></div></a></div>",
         "color_scheme": "scheme-1",
         "section_width": "full-width",
         "padding-block-start": 0,
