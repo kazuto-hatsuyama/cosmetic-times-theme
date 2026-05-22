@@ -11,22 +11,22 @@
     "hero_jVaWmY": {
       "type": "hero",
       "blocks": {
-        "text_YLPk4p": {
+        "text_sublabel": {
           "type": "text",
-          "name": "t:names.heading",
+          "name": "サブラベル",
           "settings": {
-            "text": "<p>Browse our latest products</p>",
+            "text": "<p>BRAND COSMETICS ONLINE STORE</p>",
             "width": "fit-content",
             "max_width": "normal",
             "alignment": "left",
-            "type_preset": "h2",
-            "font": "var(--font-body--family)",
-            "font_size": "1rem",
+            "type_preset": "custom",
+            "font": "var(--font-heading--family)",
+            "font_size": "0.65rem",
             "line_height": "normal",
-            "letter_spacing": "normal",
-            "case": "none",
-            "wrap": "pretty",
-            "color": "var(--color-foreground-heading)",
+            "letter_spacing": "wide",
+            "case": "uppercase",
+            "wrap": "nowrap",
+            "color": "#c9a96e",
             "background": false,
             "background_color": "#00000026",
             "corner_radius": 0,
@@ -37,14 +37,66 @@
           },
           "blocks": {}
         },
+        "text_YLPk4p": {
+          "type": "text",
+          "name": "t:names.heading",
+          "settings": {
+            "text": "<p>デパコスが驚きの価格で</p>",
+            "width": "fit-content",
+            "max_width": "normal",
+            "alignment": "left",
+            "type_preset": "h1",
+            "font": "var(--font-heading--family)",
+            "font_size": "1rem",
+            "line_height": "normal",
+            "letter_spacing": "normal",
+            "case": "none",
+            "wrap": "pretty",
+            "color": "#ffffff",
+            "background": false,
+            "background_color": "#00000026",
+            "corner_radius": 0,
+            "padding-block-start": 8,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {}
+        },
+        "text_subdesc": {
+          "type": "text",
+          "name": "サブテキスト",
+          "settings": {
+            "text": "<p>CHANEL・DIOR・SHISEIDO など国内外ブランドを最大80%OFFで</p>",
+            "width": "fit-content",
+            "max_width": "normal",
+            "alignment": "left",
+            "type_preset": "custom",
+            "font": "var(--font-body--family)",
+            "font_size": "0.85rem",
+            "line_height": "normal",
+            "letter_spacing": "normal",
+            "case": "none",
+            "wrap": "pretty",
+            "color": "rgba(255,255,255,0.8)",
+            "background": false,
+            "background_color": "#00000026",
+            "corner_radius": 0,
+            "padding-block-start": 8,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {}
+        },
         "button_H9gpTf": {
           "type": "button",
           "name": "t:names.button",
           "settings": {
-            "label": "Shop all",
+            "label": "今すぐショッピング",
             "link": "shopify://collections/all",
             "open_in_new_tab": false,
-            "style_class": "button-secondary",
+            "style_class": "button-primary",
             "width": "fit-content",
             "custom_width": 100,
             "width_mobile": "fit-content",
@@ -54,7 +106,9 @@
         }
       },
       "block_order": [
+        "text_sublabel",
         "text_YLPk4p",
+        "text_subdesc",
         "button_H9gpTf"
       ],
       "name": "t:names.hero",
@@ -73,7 +127,7 @@
         "align_baseline": true,
         "horizontal_alignment_flex_direction_column": "center",
         "vertical_alignment_flex_direction_column": "flex-end",
-        "gap": 24,
+        "gap": 16,
         "section_width": "full-width",
         "section_height": "large",
         "section_height_custom": 50,
@@ -88,11 +142,22 @@
         "padding-block-end": 80
       }
     },
+    "category_grid": {
+      "type": "custom-liquid",
+      "name": "カテゴリナビ",
+      "settings": {
+        "custom_liquid": "<style>.ct-cat-wrap{padding:40px 0 0}.ct-cat-heading{text-align:center;font-family:var(--font-heading--family,serif);font-size:.6rem;letter-spacing:.35em;text-transform:uppercase;color:var(--color-foreground);opacity:.5;margin-bottom:20px}.ct-cat-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:3px}.ct-cat-item{position:relative;overflow:hidden;aspect-ratio:2/3;display:flex;align-items:flex-end;text-decoration:none;background:#111}.ct-cat-item img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .6s ease;filter:brightness(.82)}.ct-cat-item:hover img{transform:scale(1.07);filter:brightness(.65)}.ct-cat-item__overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.8) 0%,rgba(0,0,0,.05) 55%)}.ct-cat-item__label{position:relative;z-index:1;padding:14px 10px;width:100%;text-align:center}.ct-cat-item__ja{display:block;font-size:.82rem;color:#fff;font-family:var(--font-heading--family,serif);letter-spacing:.08em;margin-bottom:4px}.ct-cat-item__en{display:block;font-size:.52rem;letter-spacing:.28em;text-transform:uppercase;color:#c9a96e}@media(max-width:749px){.ct-cat-grid{grid-template-columns:repeat(3,1fr)}.ct-cat-item:nth-child(4),.ct-cat-item:nth-child(5){display:none}}</style><div class=\"ct-cat-wrap\"><p class=\"ct-cat-heading\">Category</p><div class=\"ct-cat-grid\"><a href=\"/collections/skincare\" class=\"ct-cat-item\"><img src=\"https://www.cosmetic-times.com/image/common/navitopic_skincare.jpg\" alt=\"スキンケア\" loading=\"lazy\"><div class=\"ct-cat-item__overlay\"></div><div class=\"ct-cat-item__label\"><span class=\"ct-cat-item__ja\">スキンケア</span><span class=\"ct-cat-item__en\">Skincare</span></div></a><a href=\"/collections/makeup\" class=\"ct-cat-item\"><img src=\"https://www.cosmetic-times.com/image/common/navitopic_makeup.jpg\" alt=\"メイクアップ\" loading=\"lazy\"><div class=\"ct-cat-item__overlay\"></div><div class=\"ct-cat-item__label\"><span class=\"ct-cat-item__ja\">メイクアップ</span><span class=\"ct-cat-item__en\">Makeup</span></div></a><a href=\"/collections/body\" class=\"ct-cat-item\"><img src=\"https://www.cosmetic-times.com/image/common/navitopic_body.jpg\" alt=\"ボディケア\" loading=\"lazy\"><div class=\"ct-cat-item__overlay\"></div><div class=\"ct-cat-item__label\"><span class=\"ct-cat-item__ja\">ボディケア</span><span class=\"ct-cat-item__en\">Body Care</span></div></a><a href=\"/collections/haircare\" class=\"ct-cat-item\"><img src=\"https://www.cosmetic-times.com/image/common/navitopic_haircare.jpg\" alt=\"ヘアケア\" loading=\"lazy\"><div class=\"ct-cat-item__overlay\"></div><div class=\"ct-cat-item__label\"><span class=\"ct-cat-item__ja\">ヘアケア</span><span class=\"ct-cat-item__en\">Hair Care</span></div></a><a href=\"/collections/coffret\" class=\"ct-cat-item\"><img src=\"https://www.cosmetic-times.com/image/common/navitopic_coffret.jpg\" alt=\"コフレ・雑貨\" loading=\"lazy\"><div class=\"ct-cat-item__overlay\"></div><div class=\"ct-cat-item__label\"><span class=\"ct-cat-item__ja\">コフレ・雑貨</span><span class=\"ct-cat-item__en\">Coffret</span></div></a></div></div>",
+        "color_scheme": "scheme-1",
+        "section_width": "full-width",
+        "padding-block-start": 0,
+        "padding-block-end": 0
+      }
+    },
     "promo_banners": {
       "type": "custom-liquid",
       "name": "プロモーションバナー",
       "settings": {
-        "custom_liquid": "<style>.ct-promo-banners{display:grid;grid-template-columns:1fr 1fr;gap:2px;width:100%}.ct-promo-banner{position:relative;overflow:hidden;aspect-ratio:4/3;display:flex;align-items:flex-end;text-decoration:none;transition:transform 0.5s ease}.ct-promo-banner::before{content:'';position:absolute;inset:0;transition:opacity 0.5s ease;opacity:0;background:rgba(255,255,255,.04);z-index:1}.ct-promo-banner:hover::before{opacity:1}.ct-promo-banner__overlay{position:absolute;inset:0}.ct-promo-banner--sale .ct-promo-banner__overlay{background:linear-gradient(to top,rgba(60,0,15,.9) 0%,rgba(20,0,5,.4) 50%,rgba(0,0,0,.1) 100%)}.ct-promo-banner--new .ct-promo-banner__overlay{background:linear-gradient(to top,rgba(8,8,25,.9) 0%,rgba(15,15,35,.4) 50%,rgba(0,0,0,.1) 100%)}.ct-promo-banner--sale{background:linear-gradient(160deg,#2d0010 0%,#1a0008 100%)}.ct-promo-banner--new{background:linear-gradient(160deg,#0d0d20 0%,#080812 100%)}.ct-promo-banner__content{position:relative;z-index:2;padding:clamp(20px,3vw,40px) clamp(24px,4vw,48px);width:100%}.ct-promo-banner__label{display:block;font-size:.65rem;letter-spacing:.3em;text-transform:uppercase;color:#c9a96e;margin-bottom:10px;font-family:var(--font-heading--family,serif)}.ct-promo-banner__title{font-size:clamp(1.8rem,4vw,3rem);font-weight:300;color:#fff;letter-spacing:.08em;margin:0 0 20px;line-height:1.1;font-family:var(--font-heading--family,serif)}.ct-promo-banner__cta{display:inline-flex;align-items:center;gap:10px;font-size:.7rem;letter-spacing:.25em;text-transform:uppercase;color:#c9a96e;padding-bottom:3px;border-bottom:1px solid rgba(201,169,110,.4);transition:border-color 0.3s ease}.ct-promo-banner:hover .ct-promo-banner__cta{border-color:#c9a96e}.ct-promo-banner__cta-arrow{font-size:.9rem;transition:transform 0.3s ease}.ct-promo-banner:hover .ct-promo-banner__cta-arrow{transform:translateX(4px)}@media(max-width:749px){.ct-promo-banners{grid-template-columns:1fr}.ct-promo-banner{aspect-ratio:3/2}}</style><div class=\"ct-promo-banners\"><a href=\"/collections/sale\" class=\"ct-promo-banner ct-promo-banner--sale\"><div class=\"ct-promo-banner__overlay\"></div><div class=\"ct-promo-banner__content\"><span class=\"ct-promo-banner__label\">Limited Time Offer</span><h2 class=\"ct-promo-banner__title\">SALE</h2><span class=\"ct-promo-banner__cta\">今すぐチェック<span class=\"ct-promo-banner__cta-arrow\">&#8594;</span></span></div></a><a href=\"/collections/new\" class=\"ct-promo-banner ct-promo-banner--new\"><div class=\"ct-promo-banner__overlay\"></div><div class=\"ct-promo-banner__content\"><span class=\"ct-promo-banner__label\">New Collection</span><h2 class=\"ct-promo-banner__title\">新着商品</h2><span class=\"ct-promo-banner__cta\">コレクションを見る<span class=\"ct-promo-banner__cta-arrow\">&#8594;</span></span></div></a></div>",
+        "custom_liquid": "<style>.ct-promo-banners{display:grid;grid-template-columns:1fr 1fr;gap:3px;margin-top:3px}.ct-promo-banner{position:relative;overflow:hidden;aspect-ratio:5/2;display:flex;align-items:flex-end;text-decoration:none;background:#0d0d0d}.ct-promo-banner__bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .5s ease;filter:brightness(.75)}.ct-promo-banner:hover .ct-promo-banner__bg{transform:scale(1.04);filter:brightness(.6)}.ct-promo-banner__overlay{position:absolute;inset:0}.ct-promo-banner--sale .ct-promo-banner__overlay{background:linear-gradient(to top,rgba(50,0,12,.88) 0%,rgba(0,0,0,.15) 65%)}.ct-promo-banner--new .ct-promo-banner__overlay{background:linear-gradient(to top,rgba(6,6,20,.9) 0%,rgba(0,0,0,.15) 65%)}.ct-promo-banner__content{position:relative;z-index:2;padding:clamp(16px,2.5vw,36px) clamp(20px,3.5vw,44px);width:100%}.ct-promo-banner__label{display:block;font-size:.58rem;letter-spacing:.32em;text-transform:uppercase;color:#c9a96e;margin-bottom:8px;font-family:var(--font-heading--family,serif)}.ct-promo-banner__title{font-size:clamp(1.6rem,3.5vw,2.8rem);font-weight:300;color:#fff;letter-spacing:.1em;margin:0 0 8px;line-height:1.05;font-family:var(--font-heading--family,serif)}.ct-promo-banner__sub{display:block;font-size:.72rem;color:rgba(255,255,255,.75);margin-bottom:16px;letter-spacing:.06em}.ct-promo-banner__cta{display:inline-flex;align-items:center;gap:8px;font-size:.62rem;letter-spacing:.28em;text-transform:uppercase;color:#c9a96e;border-bottom:1px solid rgba(201,169,110,.45);padding-bottom:3px;transition:border-color .3s}.ct-promo-banner:hover .ct-promo-banner__cta{border-color:#c9a96e}@media(max-width:749px){.ct-promo-banners{grid-template-columns:1fr}.ct-promo-banner{aspect-ratio:16/7}}</style><div class=\"ct-promo-banners\"><a href=\"/collections/sale\" class=\"ct-promo-banner ct-promo-banner--sale\"><img class=\"ct-promo-banner__bg\" src=\"https://www.cosmetic-times.com/image/sale/outlet_banner.png\" alt=\"OUTLET SALE\"><div class=\"ct-promo-banner__overlay\"></div><div class=\"ct-promo-banner__content\"><span class=\"ct-promo-banner__label\">Limited Time Offer</span><h2 class=\"ct-promo-banner__title\">OUTLET SALE</h2><span class=\"ct-promo-banner__sub\">最大80%OFF &#8226; 数量限定 &#8226; 在庫処分</span><span class=\"ct-promo-banner__cta\">今すぐチェック &#8594;</span></div></a><a href=\"/collections/new\" class=\"ct-promo-banner ct-promo-banner--new\"><div class=\"ct-promo-banner__overlay\"></div><div class=\"ct-promo-banner__content\"><span class=\"ct-promo-banner__label\">New Arrivals</span><h2 class=\"ct-promo-banner__title\">新着商品</h2><span class=\"ct-promo-banner__sub\">最新アイテムが続々入荷中</span><span class=\"ct-promo-banner__cta\">コレクションを見る &#8594;</span></div></a></div>",
         "color_scheme": "scheme-1",
         "section_width": "full-width",
         "padding-block-start": 0,
@@ -431,6 +496,72 @@
             "color": "var(--color-primary)"
           },
           "blocks": {}
+        },
+        "brand_11": {
+          "type": "text",
+          "settings": {
+            "text": "<p>COSME DECORTÉ</p>",
+            "width": "fit-content",
+            "max_width": "normal",
+            "alignment": "center",
+            "type_preset": "custom",
+            "font": "var(--font-heading--family)",
+            "font_size": "0.85rem",
+            "line_height": "normal",
+            "letter_spacing": "wide",
+            "case": "uppercase",
+            "wrap": "nowrap",
+            "color": "var(--color-foreground-heading)",
+            "background": false,
+            "background_color": "#00000026",
+            "corner_radius": 0,
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {}
+        },
+        "div_11": {
+          "type": "_divider",
+          "settings": {
+            "style": "dot",
+            "color": "var(--color-primary)"
+          },
+          "blocks": {}
+        },
+        "brand_12": {
+          "type": "text",
+          "settings": {
+            "text": "<p>CLARINS</p>",
+            "width": "fit-content",
+            "max_width": "normal",
+            "alignment": "center",
+            "type_preset": "custom",
+            "font": "var(--font-heading--family)",
+            "font_size": "0.85rem",
+            "line_height": "normal",
+            "letter_spacing": "wide",
+            "case": "uppercase",
+            "wrap": "nowrap",
+            "color": "var(--color-foreground-heading)",
+            "background": false,
+            "background_color": "#00000026",
+            "corner_radius": 0,
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {}
+        },
+        "div_12": {
+          "type": "_divider",
+          "settings": {
+            "style": "dot",
+            "color": "var(--color-primary)"
+          },
+          "blocks": {}
         }
       },
       "block_order": [
@@ -443,7 +574,9 @@
         "brand_7", "div_7",
         "brand_8", "div_8",
         "brand_9", "div_9",
-        "brand_10", "div_10"
+        "brand_10", "div_10",
+        "brand_11", "div_11",
+        "brand_12", "div_12"
       ],
       "name": "ブランド一覧マーキー",
       "settings": {
@@ -495,12 +628,12 @@
               "type": "_product-list-text",
               "name": "t:names.collection_title",
               "settings": {
-                "text": "<h3>{{ closest.collection.title }}</h3>",
+                "text": "<h3>新着商品</h3>",
                 "width": "fit-content",
                 "max_width": "normal",
                 "alignment": "left",
                 "type_preset": "h4",
-                "font": "var(--font-body--family)",
+                "font": "var(--font-heading--family)",
                 "font_size": "",
                 "line_height": "normal",
                 "letter_spacing": "normal",
@@ -521,7 +654,7 @@
               "type": "_product-list-button",
               "name": "t:names.product_list_button",
               "settings": {
-                "label": "View all",
+                "label": "すべて見る",
                 "open_in_new_tab": false,
                 "style_class": "link",
                 "width": "fit-content",
@@ -627,7 +760,7 @@
           ]
         }
       },
-      "name": "Featured collection",
+      "name": "新着商品",
       "settings": {
         "collection": "all",
         "layout_type": "grid",
@@ -651,6 +784,7 @@
   },
   "order": [
     "hero_jVaWmY",
+    "category_grid",
     "promo_banners",
     "marquee_brands",
     "product_list_fa6P9H"
