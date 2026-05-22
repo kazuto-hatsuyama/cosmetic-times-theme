@@ -1,65 +1,351 @@
-/* Luxury デパコス Styling — Cosmetic Times Renewal */
+/* ================================================================
+   COSMETIC TIMES — Luxury Design System v2.0
+   Background : #0D1B2A (Deep Navy)
+   Accent     : #C9A84C (Gold)
+   Typography : Cormorant Garamond (heading) / Noto Serif JP (body)
+   ================================================================ */
 
-/* Heading letter-spacing for luxury feel */
-h1, h2, h3, .h1, .h2, .h3 {
-  letter-spacing: 0.04em;
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Noto+Serif+JP:wght@300;400&display=swap');
+
+
+/* ── 1. Design Tokens ─────────────────────────── */
+
+:root {
+  /* Custom luxury tokens */
+  --ct-navy:        #0D1B2A;
+  --ct-navy-deep:   #060E17;
+  --ct-gold:        #C9A84C;
+  --ct-gold-hover:  #DDB95A;
+  --ct-gold-dim:    rgba(201, 168, 76, 0.18);
+  --ct-gold-border: rgba(201, 168, 76, 0.22);
+  --ct-text:        #E8DFD0;
+  --ct-text-muted:  rgba(232, 223, 208, 0.55);
+  --ct-text-head:   #F5EFE4;
+
+  /* Font family overrides (loaded via @import above) */
+  --font-heading--family:    'Cormorant Garamond', 'Noto Serif JP', 'YuMincho', Georgia, serif;
+  --font-heading--weight:    300;
+  --font-subheading--family: 'Cormorant Garamond', 'Noto Serif JP', Georgia, serif;
+  --font-subheading--weight: 400;
+  --font-body--family:       'Noto Serif JP', 'YuMincho', '游明朝', Georgia, serif;
+  --font-body--weight:       300;
+  --font-accent--family:     'Cormorant Garamond', Georgia, serif;
+
+  /* Hero height: near full-screen */
+  --section-height-large: 92svh;
+
+  /* Heading spacing */
+  --font-heading--spacing: 0.08em;
 }
 
-h4, h5, h6, .h4, .h5, .h6 {
+
+/* ── 2. Color Scheme Variable Overrides ───────── */
+/*
+ * body [class*="color-scheme"] has specificity (0,1,1),
+ * which beats .color-scheme-1 (0,1,0) from color-schemes.liquid.
+ * This overrides every scheme class sitewide.
+ */
+:root,
+body [class*="color-scheme"] {
+  --color-background:                        #0D1B2A;
+  --color-background-rgb:                    13, 27, 42;
+  --color-foreground:                        #E8DFD0;
+  --color-foreground-rgb:                    232, 223, 208;
+  --color-foreground-heading:                #F5EFE4;
+  --color-foreground-heading-rgb:            245, 239, 228;
+  --color-primary:                           #C9A84C;
+  --color-primary-rgb:                       201, 168, 76;
+  --color-primary-hover:                     #DDB95A;
+  --color-primary-hover-rgb:                 221, 185, 90;
+  --color-border:                            rgba(201, 168, 76, 0.18);
+  --color-border-rgb:                        201, 168, 76;
+  --color-shadow:                            rgba(0, 0, 0, 0.55);
+  --color-shadow-rgb:                        0, 0, 0;
+
+  /* Primary button: gold fill + navy text */
+  --color-primary-button-text:               #0D1B2A;
+  --color-primary-button-background:         #C9A84C;
+  --color-primary-button-border:             #C9A84C;
+  --color-primary-button-hover-text:         #0D1B2A;
+  --color-primary-button-hover-background:   #DDB95A;
+  --color-primary-button-hover-border:       #DDB95A;
+
+  /* Secondary button: gold outline */
+  --color-secondary-button-text:             #C9A84C;
+  --color-secondary-button-background:       transparent;
+  --color-secondary-button-border:           rgba(201, 168, 76, 0.5);
+  --color-secondary-button-hover-text:       #0D1B2A;
+  --color-secondary-button-hover-background: #C9A84C;
+  --color-secondary-button-hover-border:     #C9A84C;
+
+  /* Inputs */
+  --color-input-background:                  rgba(255, 255, 255, 0.04);
+  --color-input-text:                        #E8DFD0;
+  --color-input-text-rgb:                    232, 223, 208;
+  --color-input-border:                      rgba(201, 168, 76, 0.2);
+  --color-input-hover-background:            rgba(255, 255, 255, 0.07);
+}
+
+
+/* ── 3. Base ──────────────────────────────────── */
+
+html,
+body {
+  background-color: #0D1B2A;
+  color: #E8DFD0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* All section backgrounds go dark */
+.section-background {
+  background-color: #0D1B2A;
+}
+
+/* Luxury scrollbar */
+html {
+  scrollbar-color: rgba(201, 168, 76, 0.3) #0D1B2A;
+  scrollbar-width: thin;
+}
+::-webkit-scrollbar        { width: 4px; }
+::-webkit-scrollbar-track  { background: #0D1B2A; }
+::-webkit-scrollbar-thumb  { background: rgba(201, 168, 76, 0.3); border-radius: 2px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(201, 168, 76, 0.55); }
+
+
+/* ── 4. Typography ────────────────────────────── */
+
+h1, h2, h3, h4, h5, h6,
+.h1, .h2, .h3, .h4, .h5, .h6 {
+  font-family: 'Cormorant Garamond', 'Noto Serif JP', Georgia, serif;
+  font-weight: 300;
+  color: #F5EFE4;
+}
+h1, .h1 { letter-spacing: 0.09em; }
+h2, .h2 { letter-spacing: 0.07em; }
+h3, .h3 { letter-spacing: 0.06em; }
+h4, h5, h6, .h4, .h5, .h6 { letter-spacing: 0.1em; }
+
+body {
+  font-family: 'Noto Serif JP', 'YuMincho', '游明朝', Georgia, serif;
+  font-weight: 300;
+  line-height: 1.85;
+}
+
+
+/* ── 5. Header ────────────────────────────────── */
+
+.header-section,
+header-component {
+  background-color: rgba(13, 27, 42, 0.96) !important;
+  border-bottom: 1px solid rgba(201, 168, 76, 0.14) !important;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+/* Announcement bar */
+.header-announcements__bar,
+[class*="announcement-bar"] {
+  background-color: #060E17 !important;
+  border-bottom: 1px solid rgba(201, 168, 76, 0.1) !important;
+  color: rgba(201, 168, 76, 0.85) !important;
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  letter-spacing: 0.18em;
+  font-size: 0.72rem;
+}
+
+
+/* ── 6. Buttons ───────────────────────────────── */
+
+.button,
+[class*="button-"] {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  font-size: 0.78rem;
+  font-weight: 400;
+  transition: background-color 0.35s ease, border-color 0.35s ease, color 0.35s ease;
+}
+
+/* Link-style buttons */
+.link,
+a.link {
+  color: #C9A84C;
+  letter-spacing: 0.12em;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  border-bottom: 1px solid rgba(201, 168, 76, 0.35);
+  padding-bottom: 1px;
+  transition: border-color 0.25s ease;
+}
+.link:hover, a.link:hover {
+  border-color: #C9A84C;
+}
+
+
+/* ── 7. Product Cards ─────────────────────────── */
+
+.product-card__content {
+  background-color: #0D1B2A;
+  border: 1px solid rgba(201, 168, 76, 0.07);
+  transition: border-color 0.4s ease, box-shadow 0.4s ease;
+}
+
+product-card:hover .product-card__content {
+  border-color: rgba(201, 168, 76, 0.55) !important;
+  box-shadow:
+    0 0 0 1px rgba(201, 168, 76, 0.18),
+    0 16px 48px rgba(0, 0, 0, 0.55) !important;
+}
+
+/* Price */
+.price,
+.price__regular,
+.price__sale {
+  color: #C9A84C !important;
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 1.05rem;
   letter-spacing: 0.06em;
 }
-
-/* Refined button transitions */
-.button,
-.button-primary,
-.button-secondary,
-[class*="button"] {
-  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  font-size: 0.8rem;
+.price__compare {
+  color: rgba(232, 223, 208, 0.38) !important;
 }
 
-/* Elegant header bottom border */
-header-component {
-  border-bottom: 1px solid rgba(196, 30, 58, 0.12);
+
+/* ── 8. Badges (Sold Out / Sale) ──────────────── */
+
+.product-badges__badge {
+  background-color: rgba(13, 27, 42, 0.88) !important;
+  color: #C9A84C !important;
+  border: 1px solid rgba(201, 168, 76, 0.5) !important;
+  font-family: 'Cormorant Garamond', Georgia, serif !important;
+  font-size: 0.58rem !important;
+  letter-spacing: 0.24em !important;
+  text-transform: uppercase !important;
+  padding: 3px 10px !important;
+  backdrop-filter: blur(4px);
 }
 
-/* Product card subtle hover border */
-.product-card,
-.collection-card {
-  transition: box-shadow 0.3s ease;
-}
 
-.product-card:hover,
-.collection-card:hover {
-  box-shadow: 0 4px 24px rgba(196, 30, 58, 0.08);
-}
+/* ── 9. Marquee ───────────────────────────────── */
 
-/* Marquee brand names styling */
 .marquee__repeated-items p {
-  font-weight: 600;
+  font-family: 'Cormorant Garamond', Georgia, serif !important;
+  font-weight: 400;
+  letter-spacing: 0.22em;
+  font-size: 0.9rem !important;
+}
+
+
+/* ── 10. Collection Cards ─────────────────────── */
+
+.collection-card {
+  border: 1px solid rgba(201, 168, 76, 0.07);
+  transition: border-color 0.4s ease, box-shadow 0.4s ease;
+}
+.collection-card:hover {
+  border-color: rgba(201, 168, 76, 0.45) !important;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.55) !important;
+}
+
+
+/* ── 11. Section Spacing ──────────────────────── */
+
+.section--page-width {
+  padding-block: clamp(56px, 7vw, 104px);
+}
+.section--full-width {
+  padding-block: 0;
+}
+
+
+/* ── 12. Dividers / HR ────────────────────────── */
+
+hr {
+  border-color: rgba(201, 168, 76, 0.14);
+}
+
+
+/* ── 13. Form Inputs ──────────────────────────── */
+
+input[type="text"],
+input[type="email"],
+input[type="search"],
+input[type="tel"],
+textarea,
+select {
+  background-color: rgba(255, 255, 255, 0.04) !important;
+  border-color: rgba(201, 168, 76, 0.2) !important;
+  color: #E8DFD0 !important;
+}
+input:focus,
+textarea:focus {
+  border-color: rgba(201, 168, 76, 0.5) !important;
+  box-shadow: 0 0 0 3px rgba(201, 168, 76, 0.1) !important;
+  outline: none !important;
+}
+
+
+/* ── 14. Cart Drawer / Predictive Search ──────── */
+
+.drawer,
+[class*="drawer"],
+.predictive-search,
+[class*="popover"] {
+  background-color: #0D1B2A !important;
+  border-color: rgba(201, 168, 76, 0.14) !important;
+}
+
+
+/* ── 15. Footer ───────────────────────────────── */
+
+[class*="footer"] {
+  background-color: #060E17 !important;
+  border-top: 1px solid rgba(201, 168, 76, 0.12) !important;
+}
+[class*="footer"] a {
+  color: rgba(232, 223, 208, 0.6);
+  transition: color 0.25s ease;
+}
+[class*="footer"] a:hover {
+  color: #C9A84C;
+}
+
+
+/* ── 16. Hero Full-Screen Override ───────────── */
+
+/* Push section-height-large to near-full-screen */
+:root {
+  --section-height-large: 92svh;
+}
+
+/* Hero overlay: richer gradient for luxury feel */
+.hero [class*="overlay"],
+[data-testid*="hero"] [class*="overlay"] {
+  background: linear-gradient(
+    to top,
+    rgba(6, 14, 23, 0.82) 0%,
+    rgba(6, 14, 23, 0.25) 55%,
+    transparent 100%
+  ) !important;
+}
+
+
+/* ── 17. Quick-Add Button ─────────────────────── */
+
+[class*="quick-add"] button,
+.quick-add-modal__submit {
+  background-color: #C9A84C !important;
+  color: #0D1B2A !important;
+  border-color: #C9A84C !important;
+  font-family: 'Cormorant Garamond', Georgia, serif;
   letter-spacing: 0.15em;
 }
 
-/* Refined link styles */
+
+/* ── 18. General Links ────────────────────────── */
+
 a {
-  transition: color 0.2s ease, opacity 0.2s ease;
-}
-
-/* Section spacing polish */
-.section {
-  position: relative;
-}
-
-/* Crisp image rendering */
-img {
-  -webkit-font-smoothing: antialiased;
-  image-rendering: -webkit-optimize-contrast;
-}
-
-/* Anti-aliased text rendering */
-body {
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  transition: color 0.22s ease, opacity 0.22s ease;
 }
