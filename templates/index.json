@@ -88,6 +88,17 @@
         "padding-block-end": 80
       }
     },
+    "promo_banners": {
+      "type": "custom-liquid",
+      "name": "プロモーションバナー",
+      "settings": {
+        "custom_liquid": "<style>.ct-promo-banners{display:grid;grid-template-columns:1fr 1fr;gap:2px;width:100%}.ct-promo-banner{position:relative;overflow:hidden;aspect-ratio:4/3;display:flex;align-items:flex-end;text-decoration:none;transition:transform 0.5s ease}.ct-promo-banner::before{content:'';position:absolute;inset:0;transition:opacity 0.5s ease;opacity:0;background:rgba(255,255,255,.04);z-index:1}.ct-promo-banner:hover::before{opacity:1}.ct-promo-banner__overlay{position:absolute;inset:0}.ct-promo-banner--sale .ct-promo-banner__overlay{background:linear-gradient(to top,rgba(60,0,15,.9) 0%,rgba(20,0,5,.4) 50%,rgba(0,0,0,.1) 100%)}.ct-promo-banner--new .ct-promo-banner__overlay{background:linear-gradient(to top,rgba(8,8,25,.9) 0%,rgba(15,15,35,.4) 50%,rgba(0,0,0,.1) 100%)}.ct-promo-banner--sale{background:linear-gradient(160deg,#2d0010 0%,#1a0008 100%)}.ct-promo-banner--new{background:linear-gradient(160deg,#0d0d20 0%,#080812 100%)}.ct-promo-banner__content{position:relative;z-index:2;padding:clamp(20px,3vw,40px) clamp(24px,4vw,48px);width:100%}.ct-promo-banner__label{display:block;font-size:.65rem;letter-spacing:.3em;text-transform:uppercase;color:#c9a96e;margin-bottom:10px;font-family:var(--font-heading--family,serif)}.ct-promo-banner__title{font-size:clamp(1.8rem,4vw,3rem);font-weight:300;color:#fff;letter-spacing:.08em;margin:0 0 20px;line-height:1.1;font-family:var(--font-heading--family,serif)}.ct-promo-banner__cta{display:inline-flex;align-items:center;gap:10px;font-size:.7rem;letter-spacing:.25em;text-transform:uppercase;color:#c9a96e;padding-bottom:3px;border-bottom:1px solid rgba(201,169,110,.4);transition:border-color 0.3s ease}.ct-promo-banner:hover .ct-promo-banner__cta{border-color:#c9a96e}.ct-promo-banner__cta-arrow{font-size:.9rem;transition:transform 0.3s ease}.ct-promo-banner:hover .ct-promo-banner__cta-arrow{transform:translateX(4px)}@media(max-width:749px){.ct-promo-banners{grid-template-columns:1fr}.ct-promo-banner{aspect-ratio:3/2}}</style><div class=\"ct-promo-banners\"><a href=\"/collections/sale\" class=\"ct-promo-banner ct-promo-banner--sale\"><div class=\"ct-promo-banner__overlay\"></div><div class=\"ct-promo-banner__content\"><span class=\"ct-promo-banner__label\">Limited Time Offer</span><h2 class=\"ct-promo-banner__title\">SALE</h2><span class=\"ct-promo-banner__cta\">今すぐチェック<span class=\"ct-promo-banner__cta-arrow\">&#8594;</span></span></div></a><a href=\"/collections/new\" class=\"ct-promo-banner ct-promo-banner--new\"><div class=\"ct-promo-banner__overlay\"></div><div class=\"ct-promo-banner__content\"><span class=\"ct-promo-banner__label\">New Collection</span><h2 class=\"ct-promo-banner__title\">新着商品</h2><span class=\"ct-promo-banner__cta\">コレクションを見る<span class=\"ct-promo-banner__cta-arrow\">&#8594;</span></span></div></a></div>",
+        "color_scheme": "scheme-1",
+        "section_width": "full-width",
+        "padding-block-start": 0,
+        "padding-block-end": 0
+      }
+    },
     "marquee_brands": {
       "type": "marquee",
       "blocks": {
@@ -640,6 +651,7 @@
   },
   "order": [
     "hero_jVaWmY",
+    "promo_banners",
     "marquee_brands",
     "product_list_fa6P9H"
   ]
