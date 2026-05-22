@@ -26,8 +26,12 @@
 
   {% capture list_items %}
     {% if section.settings.collection != blank and shop.products_count != 0 %}
-      {% paginate section.settings.collection.products by max_items %}
-        {% for product in section.settings.collection.products limit: max_items %}
+      {% assign fetch_limit = 50 %}
+      {% paginate section.settings.collection.products by fetch_limit %}
+        {% assign in_stock = section.settings.collection.products | where: "available", true %}
+        {% assign out_of_stock = section.settings.collection.products | where: "available", false %}
+        {% assign sorted_products = in_stock | concat: out_of_stock %}
+        {% for product in sorted_products limit: max_items %}
           <div
             class="resource-list__item"
           >
