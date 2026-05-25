@@ -30,7 +30,7 @@
       {% for product in section.settings.collection.products limit: max_items %}
           <div
             class="resource-list__item"
-            data-available="{{ product.available }}"
+            data-available="{% if product.available %}true{% else %}false{% endif %}"
           >
             {% # theme-check-disable UniqueStaticBlockId %}
               {% content_for 'block', type: '_product-card', id: 'static-product-card', closest.product: product %}
