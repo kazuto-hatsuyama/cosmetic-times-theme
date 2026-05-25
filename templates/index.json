@@ -47,7 +47,7 @@
         "brand_1": {
           "type": "text",
           "settings": {
-            "text": "<p>CHANEL</p>",
+            "text": "<p><a href=\"/collections/096\">CHANEL</a></p>",
             "width": "fit-content",
             "max_width": "normal",
             "alignment": "center",
@@ -80,7 +80,7 @@
         "brand_2": {
           "type": "text",
           "settings": {
-            "text": "<p>DIOR</p>",
+            "text": "<p><a href=\"/collections/016\">DIOR</a></p>",
             "width": "fit-content",
             "max_width": "normal",
             "alignment": "center",
@@ -113,7 +113,7 @@
         "brand_3": {
           "type": "text",
           "settings": {
-            "text": "<p>LANCÔME</p>",
+            "text": "<p><a href=\"/collections/047\">LANCÔME</a></p>",
             "width": "fit-content",
             "max_width": "normal",
             "alignment": "center",
@@ -146,7 +146,7 @@
         "brand_4": {
           "type": "text",
           "settings": {
-            "text": "<p>SHISEIDO</p>",
+            "text": "<p><a href=\"/collections/131\">SHISEIDO</a></p>",
             "width": "fit-content",
             "max_width": "normal",
             "alignment": "center",
@@ -179,7 +179,7 @@
         "brand_5": {
           "type": "text",
           "settings": {
-            "text": "<p>ESTÉE LAUDER</p>",
+            "text": "<p><a href=\"/collections/030\">ESTÉE LAUDER</a></p>",
             "width": "fit-content",
             "max_width": "normal",
             "alignment": "center",
@@ -212,7 +212,7 @@
         "brand_6": {
           "type": "text",
           "settings": {
-            "text": "<p>CLINIQUE</p>",
+            "text": "<p><a href=\"/collections/018\">CLINIQUE</a></p>",
             "width": "fit-content",
             "max_width": "normal",
             "alignment": "center",
@@ -245,7 +245,7 @@
         "brand_7": {
           "type": "text",
           "settings": {
-            "text": "<p>GIVENCHY</p>",
+            "text": "<p><a href=\"/collections/116\">GIVENCHY</a></p>",
             "width": "fit-content",
             "max_width": "normal",
             "alignment": "center",
@@ -278,7 +278,7 @@
         "brand_8": {
           "type": "text",
           "settings": {
-            "text": "<p>YSL BEAUTÉ</p>",
+            "text": "<p><a href=\"/collections/077\">YSL BEAUTÉ</a></p>",
             "width": "fit-content",
             "max_width": "normal",
             "alignment": "center",
@@ -311,7 +311,7 @@
         "brand_9": {
           "type": "text",
           "settings": {
-            "text": "<p>GUERLAIN</p>",
+            "text": "<p><a href=\"/collections/037\">GUERLAIN</a></p>",
             "width": "fit-content",
             "max_width": "normal",
             "alignment": "center",
@@ -344,7 +344,7 @@
         "brand_10": {
           "type": "text",
           "settings": {
-            "text": "<p>NARS</p>",
+            "text": "<p><a href=\"/collections/213\">NARS</a></p>",
             "width": "fit-content",
             "max_width": "normal",
             "alignment": "center",
@@ -377,7 +377,7 @@
         "brand_11": {
           "type": "text",
           "settings": {
-            "text": "<p>COSME DECORTÉ</p>",
+            "text": "<p><a href=\"/collections/149\">COSME DECORTÉ</a></p>",
             "width": "fit-content",
             "max_width": "normal",
             "alignment": "center",
@@ -410,7 +410,7 @@
         "brand_12": {
           "type": "text",
           "settings": {
-            "text": "<p>CLARINS</p>",
+            "text": "<p><a href=\"/collections/017\">CLARINS</a></p>",
             "width": "fit-content",
             "max_width": "normal",
             "alignment": "center",
