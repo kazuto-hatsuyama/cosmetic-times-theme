@@ -335,8 +335,11 @@ a {
 }
 
 
-/* ── 20. Product List — Sold-out to end ──────────────────────────── */
-
+/* ── 20. Product List — Sold-out to end ── */
+.resource-list--grid {
+  display: flex !important;
+  flex-wrap: wrap !important;
+}
 .resource-list--grid .resource-list__item[data-available="false"] {
-  order: 1 !important;
+  order: 9999 !important;
 }
