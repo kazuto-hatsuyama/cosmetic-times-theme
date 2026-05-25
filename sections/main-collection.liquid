@@ -49,8 +49,11 @@
     {% endif %}
 
     {% paginate collection.products by products_per_page %}
+      {% assign page_in_stock = collection.products | where: "available", true %}
+      {% assign page_out_of_stock = collection.products | where: "available", false %}
+      {% assign page_sorted = page_in_stock | concat: page_out_of_stock %}
       {% capture children %}
-        {% for product in collection.products %}
+        {% for product in page_sorted %}
           <li
             id="{{ section.id }}-{{ product.id }}"
             class="product-grid__item product-grid__item--{{ forloop.index0 }}"
