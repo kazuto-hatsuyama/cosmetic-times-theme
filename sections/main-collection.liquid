@@ -1,22 +1,11 @@
 
 
-<script>
-  (function () {
-    try {
-      var url = new URL(window.location.href);
-      if (url.search.indexOf('filter.') !== -1) return;
-      var ref = document.referrer ? new URL(document.referrer) : null;
-      if (ref && ref.pathname === url.pathname) return;
-      url.searchParams.set('filter.p.available', '1');
-      window.location.replace(url.toString());
-    } catch (e) {}
-  })();
-</script>
 <script
   src="{{ 'results-list.js' | asset_url }}"
   type="module"
   fetchpriority="low"
 ></script>
+
 {% javascript %}
   const url = new URL(window.location.href);
   if (url.hash) {
