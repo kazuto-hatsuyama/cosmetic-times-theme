@@ -327,9 +327,9 @@ a {
 }
 
 
-/* ── 19. Homepage — New Arrivals Image Height ─────────────────── */
+/* ── 19. Homepage — New Arrivals Image Size ─────────────────────── */
 
 .resource-list product-card .card-gallery {
-  max-height: 220px;
+  height: 180px !important;
   overflow: hidden;
 }
