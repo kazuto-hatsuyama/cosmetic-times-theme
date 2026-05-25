@@ -333,3 +333,10 @@ a {
   height: 180px !important;
   overflow: hidden;
 }
+
+
+/* ── 20. Product List — Sold-out to end ──────────────────────────── */
+
+.resource-list--grid .resource-list__item[data-available="false"] {
+  order: 1;
+}
