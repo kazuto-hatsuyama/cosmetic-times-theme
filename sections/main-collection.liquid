@@ -5,6 +5,7 @@
   type="module"
   fetchpriority="low"
 ></script>
+<script src="{{ 'sold-out-sort.js' | asset_url }}" defer></script>
 
 {% javascript %}
   const url = new URL(window.location.href);
@@ -57,6 +58,7 @@
               class="product-grid__item product-grid__item--{{ forloop.index0 }}"
               data-page="{{ paginate.current_page }}"
               data-product-id="{{ product.id }}"
+              data-available="true"
               ref="cards[]"
             >
               {% # theme-check-disable %}
@@ -72,6 +74,7 @@
               class="product-grid__item product-grid__item--{{ forloop.index0 }}"
               data-page="{{ paginate.current_page }}"
               data-product-id="{{ product.id }}"
+              data-available="false"
               ref="cards[]"
             >
               {% # theme-check-disable %}
