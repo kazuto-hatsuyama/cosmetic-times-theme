@@ -80,6 +80,25 @@
   </div>
 </div>
 
+<script>
+  (function() {
+    if (window.__soldOutSorted) return;
+    window.__soldOutSorted = true;
+    function sortSoldOut() {
+      document.querySelectorAll('.resource-list--grid').forEach(function(grid) {
+        Array.prototype.slice.call(grid.children)
+          .filter(function(el) { return el.dataset && el.dataset.available === 'false'; })
+          .forEach(function(el) { grid.appendChild(el); });
+      });
+    }
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', sortSoldOut);
+    } else {
+      sortSoldOut();
+    }
+  })();
+</script>
+
 {% schema %}
 {
   "name": "t:names.product_list",
