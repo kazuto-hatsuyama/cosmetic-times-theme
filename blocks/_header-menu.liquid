@@ -39,6 +39,7 @@
             role="list"
           >
             {% for link in block_settings.menu.links %}
+              {% unless link.title == 'Home' or link.title == 'Catalog' or link.title == 'Contact' %}
               <li>
                 <a
                   href="{{ link.url }}"
@@ -51,6 +52,7 @@
                   {{- link.title -}}
                 </a>
               </li>
+              {% endunless %}
             {% endfor %}
           </ul>
         </div>
@@ -84,6 +86,7 @@
 
     {% capture children %}
       {% for link in block_settings.menu.links %}
+        {% unless link.title == 'Home' or link.title == 'Catalog' or link.title == 'Contact' %}
         <li
           role="presentation"
           class="menu-list__list-item"
@@ -138,6 +141,7 @@
             </div>
           {%- endif -%}
         </li>
+        {% endunless %}
       {% endfor %}
       <li
         class="menu-list__list-item"

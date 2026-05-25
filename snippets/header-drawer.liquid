@@ -102,6 +102,7 @@
             {% assign first_accordion_open = false %}
             {% assign animation_index = 0 %}
             {%- for link in linklist.links -%}
+              {% unless link.title == 'Home' or link.title == 'Catalog' or link.title == 'Contact' %}
               {% assign animation_index = animation_index | plus: 1 %}
               <li
                 style="--menu-drawer-animation-index: {{ animation_index }};"
@@ -248,6 +249,7 @@
                   </a>
                 {% endif %}
               </li>
+              {% endunless %}
             {%- endfor -%}
           {% else %}
             {%- comment -%}
@@ -255,6 +257,7 @@
             {%- endcomment -%}
             {% assign animation_index = 0 %}
             {%- for link in linklist.links -%}
+              {% unless link.title == 'Home' or link.title == 'Catalog' or link.title == 'Contact' %}
               {% assign animation_index = animation_index | plus: 1 %}
               <li
                 class="menu-drawer__list-item"
@@ -568,6 +571,7 @@
                   </a>
                 {%- endif -%}
               </li>
+              {% endunless %}
             {%- endfor -%}
           {% endif %}
         </ul>
