@@ -336,6 +336,14 @@ a {
 
 
 /* ── 20. Product List — Sold-out to end ── */
+.product-grid {
+  display: flex !important;
+  flex-wrap: wrap !important;
+}
+.product-grid .product-grid__item[data-available="false"] {
+  order: 9999 !important;
+}
+
 .resource-list--grid {
   display: flex !important;
   flex-wrap: wrap !important;
