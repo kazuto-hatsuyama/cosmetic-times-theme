@@ -1,5 +1,17 @@
 
 
+<script>
+  (function () {
+    try {
+      var url = new URL(window.location.href);
+      if (url.search.indexOf('filter.') !== -1) return;
+      var ref = document.referrer ? new URL(document.referrer) : null;
+      if (ref && ref.pathname === url.pathname) return;
+      url.searchParams.set('filter.p.available', '1');
+      window.location.replace(url.toString());
+    } catch (e) {}
+  })();
+</script>
 <script
   src="{{ 'results-list.js' | asset_url }}"
   type="module"
@@ -50,19 +62,17 @@
     {% paginate collection.products by products_per_page %}
       {% capture children %}
         {% for product in collection.products %}
-          {% if product.available %}
-            <li
-              id="{{ section.id }}-{{ product.id }}"
-              class="product-grid__item product-grid__item--{{ forloop.index0 }}"
-              data-page="{{ paginate.current_page }}"
-              data-product-id="{{ product.id }}"
-              ref="cards[]"
-            >
-              {% # theme-check-disable %}
-              {% content_for 'block', type: '_product-card', id: 'product-card', closest.product: product %}
-              {% # theme-check-enable %}
-            </li>
-          {% endif %}
+          <li
+            id="{{ section.id }}-{{ product.id }}"
+            class="product-grid__item product-grid__item--{{ forloop.index0 }}"
+            data-page="{{ paginate.current_page }}"
+            data-product-id="{{ product.id }}"
+            ref="cards[]"
+          >
+            {% # theme-check-disable %}
+            {% content_for 'block', type: '_product-card', id: 'product-card', closest.product: product %}
+            {% # theme-check-enable %}
+          </li>
         {% endfor %}
       {% endcapture %}
 
