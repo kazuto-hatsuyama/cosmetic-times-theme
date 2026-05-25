@@ -28,35 +28,18 @@
     {% if section.settings.collection != blank and shop.products_count != 0 %}
       {% assign fetch_limit = 50 %}
       {% paginate section.settings.collection.products by fetch_limit %}
-        {% assign item_count = 0 %}
-        {% comment %}第1パス: 在庫あり{% endcomment %}
-        {% for product in section.settings.collection.products %}
-          {% if item_count >= max_items %}{% break %}{% endif %}
-          {% if product.available %}
-            {% if item_count > 0 %}<!--@list/split-->{% endif %}
-            <div
-              class="resource-list__item"
-            >
-              {% # theme-check-disable UniqueStaticBlockId %}
-                {% content_for 'block', type: '_product-card', id: 'static-product-card', closest.product: product %}
-              {% # theme-check-enable UniqueStaticBlockId %}
-            </div>
-            {% assign item_count = item_count | plus: 1 %}
-          {% endif %}
-        {% endfor %}
-        {% comment %}第2パス: 売り切れ{% endcomment %}
-        {% for product in section.settings.collection.products %}
-          {% if item_count >= max_items %}{% break %}{% endif %}
-          {% unless product.available %}
-            {% if item_count > 0 %}<!--@list/split-->{% endif %}
-            <div
-              class="resource-list__item"
-            >
-              {% # theme-check-disable UniqueStaticBlockId %}
-                {% content_for 'block', type: '_product-card', id: 'static-product-card', closest.product: product %}
-              {% # theme-check-enable UniqueStaticBlockId %}
-            </div>
-            {% assign item_count = item_count | plus: 1 %}
+        {% assign sorted_products = section.settings.collection.products | sort: "available" | reverse %}
+        {% for product in sorted_products limit: max_items %}
+          <div
+            class="resource-list__item"
+          >
+            {% # theme-check-disable UniqueStaticBlockId %}
+              {% content_for 'block', type: '_product-card', id: 'static-product-card', closest.product: product %}
+            {% # theme-check-enable UniqueStaticBlockId %}
+          </div>
+
+          {% unless forloop.last %}
+            <!--@list/split-->
           {% endunless %}
         {% endfor %}
       {% endpaginate %}
