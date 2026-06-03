@@ -40,24 +40,37 @@
 |---|---|
 | 業種 | 化粧品EC（デパコス・ブランドコスメ） |
 | ターゲット | 30〜50代女性 |
-| ブランド方向性 | 高級感・デパコス（ゴールドアクセント、ダーク系） |
+| ブランド方向性 | 高級感・デパコス（クリームホワイト×ゴールド、明るい高級感） |
 | 取扱ブランド数 | 151ブランド（CHANEL, DIOR, SHISEIDO 等） |
 
 ## トップページ構成（templates/index.json）
 
-現在のセクション順：
+現在のセクション順（2026-05-22 リニューアル後）：
 
-1. **ヒーロー**（`hero_jVaWmY`）- 「デパコスが驚きの価格で」フルwidth背景画像
+1. **ヒーロースライドショー**（`hero_jVaWmY`）- `type:custom-liquid` / CSSフェードアニメーション3枚スライド
+   - Shopify CDN画像3枚を15秒サイクルで切り替え（animation-delay: 0s / 5s / 10s）
+   - `@keyframes ctFade` による純CSS実装（JS不使用）
+   - キャッチコピー「デパコスが驚きの価格で」・CTAボタン「今すぐショッピング」付き
 2. **カテゴリナビ**（`category_grid`）- 現行サイト画像を使った5カテゴリグリッド
    - スキンケア / メイクアップ / ボディケア / ヘアケア / コフレ・雑貨
    - 画像元: `https://www.cosmetic-times.com/image/common/navitopic_*.jpg`
-3. **プロモーションバナー**（`promo_banners`）- 2カラム横並び
-   - SALE: `https://www.cosmetic-times.com/image/sale/outlet_banner.png` 使用（最大80%OFF）
-   - 新着商品: ダークネイビー系グラデーション
+   - `.ct-cat-item` の `aspect-ratio: 1/1`（正方形）で表示
+3. **商品一覧**（`product_list_fa6P9H`）- 新着商品、4カラムグリッド
+   - 新着画像 `max-height: 220px`（CSS section 19）で制約
 4. **ブランドマーキー**（`marquee_brands`）- 12ブランド横スクロール
-5. **商品一覧**（`product_list_fa6P9H`）- 新着商品、4カラムグリッド
+5. **プロモーションバナー**（`promo_banners`）- 2カラム横並び（`type:custom-liquid`）
+   - SALE: Shopify CDN `outlet_banner.png` 使用（最大80%OFF）
+   - 新着商品: Shopify CDN `20200623deo_slide.jpg` を背景に使用
 
 ## カスタマイズ済みファイル
+
+### assets/custom-luxury.css
+- Luxury Design System **v4.0**（2026-05-22）
+- 方針: **レイアウトは変えない** / 色・フォント・ホバーのみ上書き
+- `body [class*="color-scheme"]` セレクタで specificity (0,1,1) → Shopify の `.color-scheme-1` (0,1,0) を確実に上書き
+- Cream White (`#FAFAF7`) + Gold (`#C9A84C`) + Cormorant Garamond / **Noto Sans JP**（v3.0 の Noto Serif JP から変更）
+- Section 18: 商品詳細ページ画像 `max-width: 440px`（デスクトップのみ）
+- Section 19: 新着商品カード画像 `max-height: 220px`
 
 ### sections/product-list.liquid
 - 商品ループを在庫あり優先ソートに変更（2026-05-22）
@@ -65,8 +78,24 @@
 - `paginate` の取得件数を `fetch_limit = 50` に拡張してからソート
 
 ### templates/index.json
-- トップページ全体を現行サイト（cosmetic-times.com）を参考にリニューアル（2026-05-22）
-- 現行サイトの画像（navitopic, outlet_banner）をそのまま使用
+- トップページ全体を高級感デパコスデザインにリニューアル（2026-05-22）
+- ヒーローを `type:hero` → `type:custom-liquid` に変更（CDN URL直接指定のため）
+- Shopify CDN登録済み画像を全面採用
+- セクション順: hero → category_grid → **product_list** → marquee_brands → promo_banners（商品一覧を上位に移動）
+- category_grid の `.ct-cat-item` に `aspect-ratio: 1/1`（正方形）を適用
+
+### layout/theme.liquid
+- Google Fonts（Cormorant Garamond + **Noto Sans JP**）を `<head>` 先頭に追加
+- `custom-luxury.css` を `color-schemes` の後に読み込み
+
+## Shopify CDN 登録済み画像URL
+
+```
+# ヒーロー・バナー用
+https://cdn.shopify.com/s/files/1/0807/5821/0788/files/1000_320.png?v=1779421972
+https://cdn.shopify.com/s/files/1/0807/5821/0788/files/outlet_banner.png?v=1779421975
+https://cdn.shopify.com/s/files/1/0807/5821/0788/files/20200623deo_slide.jpg?v=1779421972
+```
 
 ## 現行サイトから流用できる画像URL
 
@@ -78,15 +107,27 @@ https://www.cosmetic-times.com/image/common/navitopic_body.jpg
 https://www.cosmetic-times.com/image/common/navitopic_haircare.jpg
 https://www.cosmetic-times.com/image/common/navitopic_coffret.jpg
 
-# バナー
-https://www.cosmetic-times.com/image/sale/outlet_banner.png
-
 # ロゴ
 https://www.cosmetic-times.com/image/common/header_logo_ct2.png
 
 # LINE
 https://www.cosmetic-times.com/image/top/line_frends.png
 ```
+
+## 既知の注意事項（ハマりやすい点）
+
+### `type:hero` は CDN URL を JSON で指定できない
+- Shopify の `hero` セクションタイプは画像IDをShopify管理画面経由でのみ設定可能
+- CDN URLを直接使いたい場合は `type:custom-liquid` でHTMLを書く
+
+### `shopify theme pull` は絶対に単独実行しない
+- フル pull を実行すると `templates/index.json` がサーバー版（シンプル版）に上書きされる
+- 実行前に必ず `git stash` → pull 後に `git checkout -- <ファイル名>` で復元
+- 通常は不要。緊急時のみ `--only` で特定ファイルのみpull
+
+### `backdrop-filter` はヘッダーに使わない
+- `backdrop-filter: blur()` はスタッキングコンテキストを生成しヘッダーレイアウトを破壊する
+- 透明ヘッダーモードが機能しなくなるため禁止
 
 ## よく使うコマンド
 
