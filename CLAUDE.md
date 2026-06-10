@@ -31,6 +31,14 @@
 - `type:hero` のCDN URLはJSONで直接指定不可（別の方法で対応すること）
 - **大きな変更（セクション追加・CSS大幅変更など）はmain直pushではなく、featureブランチを切ってユーザー確認後にマージすること**
 
+## ⚠️ テーマ標準ファイルへの変更（上書きリスクあり）
+
+以下のファイルは Horizon テーマ標準ファイルを改変したもの。Shopify管理画面でテーマをアップデートすると**上書きされて修正が消える**。アップデート後は必ず再適用すること。
+
+| ファイル | 変更内容 |
+|---|---|
+| `assets/variant-picker.js` | `buildRequestUrl` に `data-section-id` フォールバックを追加（バリアント切り替え画像更新修正） |
+
 ---
 
 ## 作業フロー
@@ -99,10 +107,21 @@ style: ヒーロースライドショーのフォントサイズ調整
 
 | ファイル | 内容 |
 |---|---|
-| `assets/custom-luxury.css` | Luxury Design System v4.0 |
-| `sections/product-list.liquid` | 在庫あり優先ソート |
-| `templates/index.json` | トップページ全体リニューアル |
+| `assets/custom-luxury.css` | Luxury Design System v4.0（section19 は object-fit:cover） |
+| `assets/variant-picker.js` | バリアント切り替え画像更新修正（※テーマ更新で上書きリスク） |
+| `sections/product-list.liquid` | 在庫あり優先ソート・スキーマ修正3件（2026-06-10） |
+| `templates/index.json` | トップページ全体リニューアル・ctFade修正・h1→h2 |
+| `templates/product.json` | icons_style を "arrow" に修正 |
 | `layout/theme.liquid` | Google Fonts + custom-luxury.css 追加 |
+
+---
+
+## 未対応事項（次回以降に対応）
+
+| 項目 | 内容 |
+|---|---|
+| category_grid 画像 | 5枚のカテゴリ画像が旧サーバー `https://www.cosmetic-times.com/image/common/navitopic_*.jpg` を参照中。旧サーバー停止前にShopify CDNへ移行が必要 |
+| バリアント説明文切り替え | `text` ブロックはバリアント変更時の自動更新非対応。`type: "product-description"` ブロックへ変更すれば対応可能 |
 
 ---
 
