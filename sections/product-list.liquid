@@ -25,7 +25,7 @@
   </div>
 
   {% capture list_items %}
-    {% if section.settings.collection != blank and shop.products_count != 0 %}
+    {% if section.settings.collection != blank and section.settings.collection.products_count > 0 %}
       {% assign available_count = 0 %}
       {% for product in section.settings.collection.products limit: 50 %}
         {% if product.available and available_count < max_items %}
@@ -260,7 +260,7 @@
         }
       ],
       "default": "none",
-      "visible_if": "{{ section.settings.icons_style != 'none' and section.settings.layout_type == 'carousel' or section.settings.carousel_on_mobile == true }}"
+      "visible_if": "{{ section.settings.icons_style != 'none' and (section.settings.layout_type == 'carousel' or section.settings.carousel_on_mobile == true) }}"
     },
     {
       "type": "header",
@@ -359,6 +359,7 @@
         "icons_style": "arrow",
         "icons_shape": "none",
         "section_width": "page-width",
+        "horizontal_alignment": "flex-start",
         "gap": 28,
         "color_scheme": "scheme-1",
         "padding-block-start": 48,
