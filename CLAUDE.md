@@ -111,7 +111,7 @@ style: ヒーロースライドショーのフォントサイズ調整
 | `assets/variant-picker.js` | バリアント切り替え画像更新修正（※テーマ更新で上書きリスク） |
 | `sections/product-list.liquid` | 在庫あり優先ソート・スキーマ修正3件（2026-06-10） |
 | `templates/index.json` | トップページ全体リニューアル・ctFade修正・h1→h2 |
-| `templates/product.json` | icons_style を "arrow" に修正 |
+| `templates/product.json` | icons_style を "arrow" に修正・説明文ブロックを product-description タイプに変更（2026-06-10） |
 | `layout/theme.liquid` | Google Fonts + custom-luxury.css 追加 |
 
 ---
@@ -121,7 +121,7 @@ style: ヒーロースライドショーのフォントサイズ調整
 | 項目 | 内容 |
 |---|---|
 | category_grid 画像 | 5枚のカテゴリ画像が旧サーバー `https://www.cosmetic-times.com/image/common/navitopic_*.jpg` を参照中。旧サーバー停止前にShopify CDNへ移行が必要 |
-| バリアント説明文切り替え | `text` ブロックはバリアント変更時の自動更新非対応。`type: "product-description"` ブロックへ変更すれば対応可能 |
+| ~~バリアント説明文切り替え~~ | ~~`text` ブロックはバリアント変更時の自動更新非対応。`type: "product-description"` ブロックへ変更すれば対応可能~~ → **2026-06-10 対応済み** |
 
 ---
 
