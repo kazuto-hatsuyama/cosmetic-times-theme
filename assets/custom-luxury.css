@@ -328,8 +328,16 @@ a {
 
 
 /* ── 19. Homepage — New Arrivals Image Size ─────────────────────── */
-
+/*
+ * image_ratio:"adapt" 設定と整合させるため固定高さを廃止。
+ * object-fit:cover で画像比率を保ちつつコンテナに収める。
+ */
 .resource-list product-card .card-gallery {
-  height: 180px !important;
   overflow: hidden;
+}
+.resource-list product-card .card-gallery img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
 }
