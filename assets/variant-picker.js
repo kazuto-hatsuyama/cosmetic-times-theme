@@ -297,6 +297,17 @@ export default class VariantPicker extends Component {
       return `${productUrl}?section_id=${SECTION_ID_MAP[closestSectionId]}&${params.join('&')}`;
     }
 
+    // For the standard product page, append section_id so that closest.product
+    // is resolved correctly in the section render response, enabling media-gallery
+    // and other blocks to be updated properly on variant change.
+    const sectionId = this.dataset.sectionId;
+    if (sectionId) {
+      if (productUrl?.includes('?')) {
+        productUrl = productUrl.split('?')[0];
+      }
+      return `${productUrl}?section_id=${sectionId}&${params.join('&')}`;
+    }
+
     return `${productUrl}?${params.join('&')}`;
   }
 
