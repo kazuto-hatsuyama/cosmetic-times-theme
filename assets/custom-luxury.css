@@ -1,7 +1,7 @@
 /* ================================================================
-   COSMETIC TIMES — Luxury Design System v4.0
+   COSMETIC TIMES — Luxury Design System v4.1
    方針: レイアウトは変えない / 色・フォント・ホバーのみ上書き
-   Background : #FAFAF7 (Cream White)
+   Background : #FFFFFF (Pure White)
    Accent     : #C9A84C (Gold)
    Font       : Cormorant Garamond (見出し) / Noto Sans JP (本文)
    ================================================================ */
@@ -30,12 +30,12 @@
  */
 :root,
 body [class*="color-scheme"] {
-  --color-background:                        #FAFAF7;
-  --color-background-rgb:                    250, 250, 247;
-  --color-foreground:                        #1A1A1A;
-  --color-foreground-rgb:                    26, 26, 26;
-  --color-foreground-heading:                #111111;
-  --color-foreground-heading-rgb:            17, 17, 17;
+  --color-background:                        #FFFFFF;
+  --color-background-rgb:                    255, 255, 255;
+  --color-foreground:                        #2A2A2A;
+  --color-foreground-rgb:                    42, 42, 42;
+  --color-foreground-heading:                #1A1A1A;
+  --color-foreground-heading-rgb:            26, 26, 26;
   --color-primary:                           #C9A84C;
   --color-primary-rgb:                       201, 168, 76;
   --color-primary-hover:                     #B8962E;
@@ -71,22 +71,22 @@ body [class*="color-scheme"] {
 
 html,
 body {
-  background-color: #FAFAF7;
-  color: #1A1A1A;
+  background-color: #FFFFFF;
+  color: #2A2A2A;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 .section-background {
-  background-color: #FAFAF7;
+  background-color: #FFFFFF;
 }
 
 html {
-  scrollbar-color: rgba(201, 168, 76, 0.35) #F0EFE8;
+  scrollbar-color: rgba(201, 168, 76, 0.35) #F5F3EE;
   scrollbar-width: thin;
 }
 ::-webkit-scrollbar        { width: 4px; }
-::-webkit-scrollbar-track  { background: #F0EFE8; }
+::-webkit-scrollbar-track  { background: #F5F3EE; }
 ::-webkit-scrollbar-thumb  { background: rgba(201, 168, 76, 0.35); border-radius: 2px; }
 ::-webkit-scrollbar-thumb:hover { background: #C9A84C; }
 
@@ -100,7 +100,7 @@ h1, h2, h3, h4, h5, h6,
 .h1, .h2, .h3, .h4, .h5, .h6 {
   font-family: 'Cormorant Garamond', Georgia, serif;
   font-weight: 300;
-  color: #111111;
+  color: #1A1A1A;
 }
 h1, .h1 { letter-spacing: 0.06em; }
 h2, .h2 { letter-spacing: 0.05em; }
@@ -127,8 +127,8 @@ header-component {
 
 .header-announcements__bar,
 [class*="announcement-bar"] {
-  background-color: #F5F0E8;
-  border-bottom: 1px solid rgba(201, 168, 76, 0.2);
+  background-color: #FFF9F0;
+  border-bottom: 1px solid rgba(201, 168, 76, 0.18);
   color: #7A6435;
   font-family: 'Cormorant Garamond', Georgia, serif;
   letter-spacing: 0.18em;
@@ -170,10 +170,10 @@ a.link:hover {
 
 .product-card__content {
   background-color: #ffffff;
-  border: 1px solid rgba(0, 0, 0, 0.06) !important;
+  border: 1px solid rgba(0, 0, 0, 0.05) !important;
   border-radius: 12px !important;
   overflow: hidden;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04) !important;
+  box-shadow: 0 1px 8px rgba(0, 0, 0, 0.03) !important;
   transition: border-color 0.35s ease, box-shadow 0.35s ease, transform 0.35s ease;
 }
 
@@ -282,11 +282,11 @@ textarea:focus {
 /* ── 15. Footer ───────────────────────────────────────────────── */
 
 [class*="footer"] {
-  background-color: #F5F0E8 !important;
+  background-color: #FAF8F4 !important;
   border-top: 1px solid rgba(0, 0, 0, 0.06) !important;
 }
 [class*="footer"] a {
-  color: rgba(26, 26, 26, 0.55);
+  color: rgba(42, 42, 42, 0.55);
   transition: color 0.25s ease;
 }
 [class*="footer"] a:hover {
