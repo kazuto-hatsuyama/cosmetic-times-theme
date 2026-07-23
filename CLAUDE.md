@@ -6,10 +6,10 @@
 
 | 項目 | 値 |
 |---|---|
-| ストア | cosmetic-times-dev.myshopify.com |
+| ストア | cosmetic-times-prd.myshopify.com（※将来の本番ストア。現時点では未公開の検証ストア。旧デプロイ先 cosmetic-times-dev.myshopify.com からは2026-07-23に切替） |
 | 現行サイト（移行元） | https://www.cosmetic-times.com/ |
-| テーマ名 | Horizon（公開中・liveテーマ） |
-| テーマID | 158415487204 |
+| テーマ名 | Horizon（liveテーマ） |
+| テーマID | 138815832273 |
 
 ---
 
@@ -70,10 +70,10 @@ style: ヒーロースライドショーのフォントサイズ調整
 
 | 項目 | 内容 |
 |---|---|
-| 設定日 | 2026-05-21 |
+| 設定日 | 2026-05-21（push先を2026-07-23に cosmetic-times-prd へ切替） |
 | ファイル | `.github/workflows/deploy.yml` |
 | トリガー | main ブランチへの push |
-| 認証 | GitHub Secrets に `SHOPIFY_CLI_THEME_TOKEN` 登録済み |
+| 認証 | GitHub Secrets に `SHOPIFY_CLI_THEME_TOKEN` 登録済み。**⚠️ トークンはストア単位で発行されるため、push先をprdストアに切り替えた際は、prdストア用のテーマアクセストークンに再登録が必要**（旧devストア用トークンのままだとpush失敗する） |
 | Actions確認 | https://github.com/kazuto-hatsuyama/cosmetic-times-theme/actions |
 
 ---
@@ -116,12 +116,44 @@ style: ヒーロースライドショーのフォントサイズ調整
 
 ---
 
+## MCPサーバー設定
+
+| サーバー名 | 用途 | 設定場所 | 状態 |
+|---|---|---|---|
+| Chrome DevTools MCP | ブラウザ操作・スクリーンショット・JS実行・ネットワーク検証 | Claude Code 組み込み | ✅ 使用可能（推奨） |
+| Playwright MCP | フォーム操作・クリックなど複雑なブラウザ自動化 | `C:\Users\1213\.claude.json` | ✅ 登録済み（2026-06-10）※セッション再起動後に有効 |
+
+### ブラウザ操作の使い分け
+
+- **スクリーンショット・ページ確認** → Chrome DevTools MCP を使う（フォント読み込み待ちタイムアウトなし）
+- **フォーム入力・クリック操作** → Playwright MCP を使う
+
+### Playwright MCP の設定メモ
+
+- `--no-sandbox` 警告対策として `--browser-args=--disable-setuid-sandbox --no-sandbox` を追加済み（2026-06-12）
+- 設定ファイル: `C:\Users\1213\.claude.json` の `D:/Inetpub/shopify_theme` プロジェクト内
+- **変更反映にはClaudeセッションの再起動が必要**
+
+### devストアへのアクセス（パスワード保護）
+
+- ストアパスワード: `1shuei`（cosmetic-times-dev用。cosmetic-times-prdへの切替後は同じパスワードか要確認）
+- Playwright でアクセスする手順:
+  1. `/password` ページを開く
+  2. 「パスワードを入力してアクセスする」ボタンをクリック（パスワード入力欄が折りたたまれているため）
+  3. パスワードを入力して Enter
+  4. 認証後は同セッション内でそのままページ遷移可能
+
+---
+
 ## 未対応事項（次回以降に対応）
 
 | 項目 | 内容 |
 |---|---|
 | category_grid 画像 | 5枚のカテゴリ画像が旧サーバー `https://www.cosmetic-times.com/image/common/navitopic_*.jpg` を参照中。旧サーバー停止前にShopify CDNへ移行が必要 |
 | ~~バリアント説明文切り替え~~ | ~~`text` ブロックはバリアント変更時の自動更新非対応。`type: "product-description"` ブロックへ変更すれば対応可能~~ → **2026-06-10 対応済み** |
+| バリアント画像割り当て（admin作業） | 商品 `/products/06900044` の全8バリアントで `featured_image: null`。Shopify管理画面でバリアント編集→画像選択が必要。引き継ぎ: `C:\Users\1213\handover.md` |
+| バリアント説明文登録（admin作業） | 同商品のバリアント個別説明文が未登録。管理画面でバリアントの `description` メタフィールドに入力。テーマ側（product-description ブロック）は対応済み。引き継ぎ: `C:\Users\1213\handover.md` |
+| favicon設定 | `favicon.ico 404`（機能影響なし）。対応は管理画面→テーマカスタマイズ→ファビコン設定 |
 
 ---
 

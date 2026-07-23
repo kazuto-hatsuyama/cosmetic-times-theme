@@ -27,8 +27,8 @@ jobs:
           shopify version
           echo "=== Starting theme push ==="
           shopify theme push \
-            --store cosmetic-times-dev.myshopify.com \
-            --theme 158415487204 \
+            --store cosmetic-times-prd.myshopify.com \
+            --theme 138815832273 \
             --allow-live \
             --nodelete \
             --verbose
