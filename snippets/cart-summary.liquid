@@ -219,6 +219,55 @@
     </div>
   {% endif %}
 
+  <script
+    type="module"
+    src="{{ 'cart-points.js' | asset_url }}"
+  ></script>
+
+  <cart-points-component class="cart-points">
+    {% if customer %}
+      <p class="cart-points__balance">
+        保有ポイント: {{ customer.metafields.custom.point_balance.value | default: 0 }} pt
+      </p>
+    {% endif %}
+    <form
+      on:submit="/applyPoints"
+      onsubmit="return false;"
+      class="cart-points__form"
+    >
+      <label
+        for="cart-points-input"
+        class="visually-hidden"
+      >
+        使用するポイント数
+      </label>
+      <input
+        id="cart-points-input"
+        ref="pointsInput"
+        class="cart-points__input"
+        type="number"
+        name="points_used"
+        min="0"
+        step="1"
+        placeholder="使用するポイント数"
+        value="{{ cart.attributes.points_used }}"
+      >
+      <button
+        type="submit"
+        class="button cart-points__button"
+      >
+        適用
+      </button>
+    </form>
+    <p
+      class="cart-points__message hidden"
+      ref="pointsMessage"
+      role="status"
+      data-success-text="ポイントを適用しました（チェックアウトで割引が反映されます）"
+      data-error-text="ポイントの適用に失敗しました"
+    ></p>
+  </cart-points-component>
+
   {%- liquid
     if settings.currency_code_enabled_cart_total
       assign total_price = cart.total_price | money_with_currency
@@ -482,6 +531,49 @@
     @media screen and (min-width: 750px) {
       margin-block-start: var(--margin-3xs);
     }
+  }
+
+  .cart-points {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-2xs);
+    width: 100%;
+    border-block-end: 1px solid var(--color-border);
+    padding-block-end: var(--padding-md);
+    margin-block-end: var(--margin-3xs);
+  }
+
+  .cart-points__balance {
+    font-size: var(--font-size--2xs);
+    margin: 0;
+  }
+
+  .cart-points__form {
+    display: flex;
+    gap: var(--padding-md);
+    align-items: center;
+  }
+
+  .cart-points__input {
+    background-color: var(--color-input-background);
+    color: var(--color-input-text);
+    border-width: var(--style-border-width-inputs);
+    border-color: var(--color-input-border);
+    border-style: solid;
+    border-radius: var(--style-border-radius-inputs);
+    padding: var(--padding-sm) var(--padding-md);
+    flex-grow: 1;
+    min-width: 0;
+    font-size: var(--font-size--sm);
+  }
+
+  .cart-points__message {
+    font-size: var(--font-size--2xs);
+    margin: 0;
+  }
+
+  .cart-points__message--error {
+    color: var(--color-error);
   }
 
   .cart-discount__input {
