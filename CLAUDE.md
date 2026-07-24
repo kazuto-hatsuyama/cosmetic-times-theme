@@ -112,7 +112,11 @@ style: ヒーロースライドショーのフォントサイズ調整
 | `sections/product-list.liquid` | 在庫あり優先ソート・スキーマ修正3件（2026-06-10） |
 | `templates/index.json` | トップページ全体リニューアル・ctFade修正・h1→h2 |
 | `templates/product.json` | icons_style を "arrow" に修正・説明文ブロックを product-description タイプに変更（2026-06-10） |
-| `layout/theme.liquid` | Google Fonts + custom-luxury.css 追加 |
+| `layout/theme.liquid` | Google Fonts + custom-luxury.css 追加。`{% render 'customer-sync' %}` 追加（2026-07-24） |
+| `snippets/cart-summary.liquid` | ポイント使用検証UI追加（入力欄+適用ボタン、`points_used`カート属性セット）（2026-07-23） |
+| `assets/cart-points.js` | 上記UIのAjax Cart API呼び出し処理（新規・2026-07-23） |
+| `snippets/customer-sync.liquid` | ログイン顧客のポイント/ランク連携用データ埋め込み（新規・2026-07-24） |
+| `assets/customer-sync.js` | 顧客ID/emailを外部エンドポイントへ送信（セッション中1回・tokenベタ書き、新規・2026-07-24） |
 
 ---
 
@@ -154,6 +158,8 @@ style: ヒーロースライドショーのフォントサイズ調整
 | バリアント画像割り当て（admin作業） | 商品 `/products/06900044` の全8バリアントで `featured_image: null`。Shopify管理画面でバリアント編集→画像選択が必要。引き継ぎ: `C:\Users\1213\handover.md` |
 | バリアント説明文登録（admin作業） | 同商品のバリアント個別説明文が未登録。管理画面でバリアントの `description` メタフィールドに入力。テーマ側（product-description ブロック）は対応済み。引き継ぎ: `C:\Users\1213\handover.md` |
 | favicon設定 | `favicon.ico 404`（機能影響なし）。対応は管理画面→テーマカスタマイズ→ファビコン設定 |
+| ポイント使用UIのバリデーション | `snippets/cart-summary.liquid` の検証用UIは保有ポイント超過チェック等なし（意図的に最低限）。本格運用前に要実装 |
+| customer-sync の外部エンドポイント | `assets/customer-sync.js` の送信先 `https://arnulfo-fordable-pipingly.ngrok-free.dev/...` はngrok無料枠のため**URLが変わる/停止する可能性あり**。tokenもクライアント側にベタ書き（データ系了承済みだが、本番公開前に恒久的なエンドポイント・認証方式への切替を推奨） |
 
 ---
 
