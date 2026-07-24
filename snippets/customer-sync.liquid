@@ -1,0 +1,16 @@
+{%- doc -%}
+  Syncs the logged-in customer's id/email to the points/rank backend, once per browser session.
+{%- enddoc -%}
+
+{%- if customer -%}
+  <script>
+    window.CosmeticTimesCustomerSync = {
+      customerId: {{ customer.id | json }},
+      email: {{ customer.email | json }}
+    };
+  </script>
+  <script
+    src="{{ 'customer-sync.js' | asset_url }}"
+    defer
+  ></script>
+{%- endif -%}
