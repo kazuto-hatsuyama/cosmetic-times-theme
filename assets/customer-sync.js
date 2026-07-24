@@ -15,5 +15,9 @@
     email: config.email,
   });
 
-  fetch(`${ENDPOINT}?${params.toString()}`).catch(() => {});
+  fetch(`${ENDPOINT}?${params.toString()}`, {
+    headers: {
+      'ngrok-skip-browser-warning': 'true',
+    },
+  }).catch(() => {});
 })();
