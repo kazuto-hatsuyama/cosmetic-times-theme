@@ -138,6 +138,8 @@
     {% if settings.quick_add or settings.mobile_quick_add %}
       {% render 'quick-add-modal' %}
     {% endif %}
+
+    {% render 'customer-sync' %}
   </body>
 </html>
 {% comment %}deploy-test-2026-05-22{% endcomment %}
