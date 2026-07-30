@@ -224,7 +224,11 @@
     src="{{ 'cart-points.js' | asset_url }}"
   ></script>
 
-  <cart-points-component class="cart-points">
+  <cart-points-component
+    class="cart-points"
+    data-point-balance="{{ customer.metafields.custom.point_balance.value | default: 0 }}"
+    data-cart-subtotal="{{ cart.items_subtotal_price | default: 0 }}"
+  >
     {% if customer %}
       <p class="cart-points__balance">
         保有ポイント: {{ customer.metafields.custom.point_balance.value | default: 0 }} pt
@@ -265,6 +269,9 @@
       role="status"
       data-success-text="ポイントを適用しました（チェックアウトで割引が反映されます）"
       data-error-text="ポイントの適用に失敗しました"
+      data-error-invalid-text="ポイント数を正しく入力してください"
+      data-error-balance-text="保有ポイントを超えています"
+      data-error-subtotal-text="カート合計金額を超えています"
     ></p>
   </cart-points-component>
 

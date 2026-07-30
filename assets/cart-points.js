@@ -28,7 +28,43 @@ class CartPoints extends Component {
     event.stopPropagation();
 
     const { pointsInput, pointsMessage } = this.refs;
-    const pointsUsed = pointsInput.value;
+
+    pointsMessage.classList.add('hidden');
+    pointsMessage.classList.remove('cart-points__message--error');
+    pointsMessage.textContent = '';
+
+    const showError = (text) => {
+      pointsMessage.textContent = text ?? '';
+      pointsMessage.classList.remove('hidden');
+      pointsMessage.classList.add('cart-points__message--error');
+    };
+
+    // 空欄・0以下は「未使用」として扱う（エラーにはしない）
+    const rawValue = pointsInput.value.trim();
+    let pointsUsed = 0;
+
+    if (rawValue !== '') {
+      if (!/^-?\d+$/.test(rawValue)) {
+        showError(pointsMessage.dataset.errorInvalidText);
+        return;
+      }
+
+      const parsed = Number(rawValue);
+      pointsUsed = parsed > 0 ? parsed : 0;
+    }
+
+    const pointBalance = Number(this.dataset.pointBalance ?? 0);
+    const cartSubtotal = Number(this.dataset.cartSubtotal ?? 0);
+
+    if (pointsUsed > pointBalance) {
+      showError(pointsMessage.dataset.errorBalanceText);
+      return;
+    }
+
+    if (pointsUsed > cartSubtotal) {
+      showError(pointsMessage.dataset.errorSubtotalText);
+      return;
+    }
 
     if (this.#activeFetch) {
       this.#activeFetch.abort();
@@ -36,10 +72,6 @@ class CartPoints extends Component {
 
     const abortController = new AbortController();
     this.#activeFetch = abortController;
-
-    pointsMessage.classList.add('hidden');
-    pointsMessage.classList.remove('cart-points__message--error');
-    pointsMessage.textContent = '';
 
     try {
       const config = fetchConfig('json', {
