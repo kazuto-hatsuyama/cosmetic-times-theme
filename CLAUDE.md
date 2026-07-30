@@ -114,9 +114,10 @@ style: ヒーロースライドショーのフォントサイズ調整
 | `templates/index.json` | トップページ全体リニューアル・ctFade修正・h1→h2 |
 | `templates/product.json` | icons_style を "arrow" に修正・説明文ブロックを product-description タイプに変更（2026-06-10） |
 | `layout/theme.liquid` | Google Fonts + custom-luxury.css 追加。`{% render 'customer-sync' %}` 追加（2026-07-24） |
-| `snippets/cart-summary.liquid` | ポイント使用検証UI追加（入力欄+適用ボタン、`points_used`カート属性セット）（2026-07-23）。保有ポイント/カート合計をdata属性で渡すよう追加（2026-07-30）。`cart-points-component`に`data-section-id`追加（2026-07-30） |
+| `snippets/cart-summary.liquid` | ポイント使用検証UI追加（入力欄+適用ボタン、`points_used`カート属性セット）（2026-07-23）。保有ポイント/カート合計をdata属性で渡すよう追加（2026-07-30）。`cart-points-component`に`data-section-id`追加（2026-07-30）。`cart-points.js`のscriptタグを削除しグローバル読み込みへ移行（2026-07-30、下記参照） |
 | `assets/cart-points.js` | 上記UIのAjax Cart API呼び出し処理（新規・2026-07-23）。入力値バリデーション（保有ポイント超過・カート合計超過・不正な数値）を追加（2026-07-30）。適用後にセクションを再取得し小計・ディスカウント行・見積もり合計をその場で再描画するよう修正（2026-07-30） |
 | `assets/component-cart-items.js` | カートが空になった際に`points_used`属性・ディスカウントコードをクリア（2026-07-30・※テーマ更新で上書きリスク） |
+| `snippets/scripts.liquid` | `cart-points.js`のグローバル読み込みを追加（2026-07-30）。理由: 元々`cart-summary.liquid`（カートが空でない時のみレンダリング）内にscriptタグがあり、カートが空の状態でページ読込→遷移せず商品追加すると、scriptタグがmorphでDOM挿入されるだけで実行されず`cart-points-component`が never upgrade にならない不具合があったため、`cart-discount.js`と同じくグローバル読み込みに変更 |
 | `snippets/customer-sync.liquid` | ログイン顧客のポイント/ランク連携用データ埋め込み（新規・2026-07-24） |
 | `assets/customer-sync.js` | 顧客ID/emailを外部エンドポイントへ送信（セッション中1回・tokenベタ書き、新規・2026-07-24） |
 
