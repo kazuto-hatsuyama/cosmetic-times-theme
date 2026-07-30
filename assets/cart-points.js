@@ -1,5 +1,7 @@
 import { Component } from '@theme/component';
 import { fetchConfig } from '@theme/utilities';
+import { morphSection } from '@theme/section-renderer';
+import { CartUpdateEvent } from '@theme/events';
 
 /**
  * A custom element that applies a point-usage amount to the cart as a cart attribute
@@ -73,9 +75,14 @@ class CartPoints extends Component {
     const abortController = new AbortController();
     this.#activeFetch = abortController;
 
+    const sectionId = this.dataset.sectionId;
+
     try {
       const config = fetchConfig('json', {
-        body: JSON.stringify({ attributes: { points_used: pointsUsed } }),
+        body: JSON.stringify({
+          attributes: { points_used: pointsUsed },
+          sections: sectionId ? [sectionId] : undefined,
+        }),
       });
 
       const response = await fetch(Theme.routes.cart_update_url, {
@@ -84,6 +91,15 @@ class CartPoints extends Component {
       });
 
       if (!response.ok) throw new Error('Failed to update cart attributes');
+
+      const data = await response.json();
+
+      if (sectionId && data.sections?.[sectionId]) {
+        document.dispatchEvent(
+          new CartUpdateEvent(data, this.id, { source: 'cart-points-component', sections: data.sections })
+        );
+        morphSection(sectionId, data.sections[sectionId]);
+      }
 
       pointsMessage.textContent = pointsMessage.dataset.successText ?? '';
       pointsMessage.classList.remove('hidden');

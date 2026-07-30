@@ -228,6 +228,9 @@
     class="cart-points"
     data-point-balance="{{ customer.metafields.custom.point_balance.value | default: 0 }}"
     data-cart-subtotal="{{ cart.items_subtotal_price | default: 0 }}"
+    {% if section_id != blank %}
+      data-section-id="{{ section_id }}"
+    {% endif %}
   >
     {% if customer %}
       <p class="cart-points__balance">
