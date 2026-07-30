@@ -219,11 +219,6 @@
     </div>
   {% endif %}
 
-  <script
-    type="module"
-    src="{{ 'cart-points.js' | asset_url }}"
-  ></script>
-
   <cart-points-component
     class="cart-points"
     data-point-balance="{{ customer.metafields.custom.point_balance.value | default: 0 }}"
