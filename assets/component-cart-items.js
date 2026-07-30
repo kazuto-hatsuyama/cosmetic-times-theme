@@ -109,6 +109,8 @@ class CartItemsComponent extends Component {
         this.replaceChildren(clone);
       }, [this.isDrawer ? 'empty-cart-drawer' : 'empty-cart-page']);
 
+      this.#clearAppliedExtras();
+
       return;
     }
 
@@ -203,6 +205,20 @@ class CartItemsComponent extends Component {
         this.#enableCartItems();
         cartPerformance.measureFromMarker(cartPerformaceUpdateMarker);
       });
+  }
+
+  /**
+   * Clears the points-used cart attribute and any applied discount codes once the
+   * cart becomes empty, so they don't silently reapply when items are added again
+   * to the same cart session.
+   */
+  #clearAppliedExtras() {
+    fetch(
+      Theme.routes.cart_update_url,
+      fetchConfig('json', {
+        body: JSON.stringify({ attributes: { points_used: '' }, discount: '' }),
+      })
+    ).catch((error) => console.error(error));
   }
 
   /**

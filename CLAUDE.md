@@ -38,6 +38,7 @@
 | ファイル | 変更内容 |
 |---|---|
 | `assets/variant-picker.js` | `buildRequestUrl` に `data-section-id` フォールバックを追加（バリアント切り替え画像更新修正） |
+| `assets/component-cart-items.js` | `onLineItemRemove` でカートが空になった際、`points_used`カート属性とディスカウントコードをクリアする処理を追加（2026-07-30） |
 
 ---
 
@@ -113,8 +114,9 @@ style: ヒーロースライドショーのフォントサイズ調整
 | `templates/index.json` | トップページ全体リニューアル・ctFade修正・h1→h2 |
 | `templates/product.json` | icons_style を "arrow" に修正・説明文ブロックを product-description タイプに変更（2026-06-10） |
 | `layout/theme.liquid` | Google Fonts + custom-luxury.css 追加。`{% render 'customer-sync' %}` 追加（2026-07-24） |
-| `snippets/cart-summary.liquid` | ポイント使用検証UI追加（入力欄+適用ボタン、`points_used`カート属性セット）（2026-07-23）。保有ポイント/カート合計をdata属性で渡すよう追加（2026-07-30） |
-| `assets/cart-points.js` | 上記UIのAjax Cart API呼び出し処理（新規・2026-07-23）。入力値バリデーション（保有ポイント超過・カート合計超過・不正な数値）を追加（2026-07-30） |
+| `snippets/cart-summary.liquid` | ポイント使用検証UI追加（入力欄+適用ボタン、`points_used`カート属性セット）（2026-07-23）。保有ポイント/カート合計をdata属性で渡すよう追加（2026-07-30）。`cart-points-component`に`data-section-id`追加（2026-07-30） |
+| `assets/cart-points.js` | 上記UIのAjax Cart API呼び出し処理（新規・2026-07-23）。入力値バリデーション（保有ポイント超過・カート合計超過・不正な数値）を追加（2026-07-30）。適用後にセクションを再取得し小計・ディスカウント行・見積もり合計をその場で再描画するよう修正（2026-07-30） |
+| `assets/component-cart-items.js` | カートが空になった際に`points_used`属性・ディスカウントコードをクリア（2026-07-30・※テーマ更新で上書きリスク） |
 | `snippets/customer-sync.liquid` | ログイン顧客のポイント/ランク連携用データ埋め込み（新規・2026-07-24） |
 | `assets/customer-sync.js` | 顧客ID/emailを外部エンドポイントへ送信（セッション中1回・tokenベタ書き、新規・2026-07-24） |
 
