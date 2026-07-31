@@ -30,6 +30,8 @@
 - **`backdrop-filter` はヘッダーに使用禁止**
 - `type:hero` のCDN URLはJSONで直接指定不可（別の方法で対応すること）
 - **大きな変更（セクション追加・CSS大幅変更など）はmain直pushではなく、featureブランチを切ってユーザー確認後にマージすること**
+- **Liquidの`{% assign %}`（`{% liquid %}`ブロック内含む）で`==`等の比較演算子を直接使わない**
+  （理由：`assign foo = bar == "baz"`はLiquid構文エラーになる。`shopify theme push --nodelete`はアセット単位でアップロード失敗しても**ジョブ全体は成功扱い（GitHub Actions上は緑✓）になり気づけない**。比較が必要な場合は`{% if bar == "baz" %}{% assign foo = true %}{% endif %}`のようにif文で分岐すること。デプロイ後は必ず実機で表示・動作を確認する）
 
 ## ⚠️ テーマ標準ファイルへの変更（上書きリスクあり）
 
@@ -114,7 +116,7 @@ style: ヒーロースライドショーのフォントサイズ調整
 | `templates/index.json` | トップページ全体リニューアル・ctFade修正・h1→h2 |
 | `templates/product.json` | icons_style を "arrow" に修正・説明文ブロックを product-description タイプに変更（2026-06-10） |
 | `layout/theme.liquid` | Google Fonts + custom-luxury.css 追加。`{% render 'customer-sync' %}` 追加（2026-07-24） |
-| `snippets/cart-summary.liquid` | ポイント使用検証UI追加（入力欄+適用ボタン、`points_used`カート属性セット）（2026-07-23）。保有ポイント/カート合計をdata属性で渡すよう追加（2026-07-30）。`cart-points-component`に`data-section-id`追加（2026-07-30）。`cart-points.js`のscriptタグを削除しグローバル読み込みへ移行（2026-07-30、下記参照） |
+| `snippets/cart-summary.liquid` | ポイント使用検証UI追加（入力欄+適用ボタン、`points_used`カート属性セット）（2026-07-23）。保有ポイント/カート合計をdata属性で渡すよう追加（2026-07-30）。`cart-points-component`に`data-section-id`追加（2026-07-30）。`cart-points.js`のscriptタグを削除しグローバル読み込みへ移行（2026-07-30、下記参照）。ポイント上限チェックの`data-cart-subtotal`単位不一致（セント/円）を修正（2026-07-31）。ポイント入力欄の表示値を、Function（`cosmetic-discount`）と同じランク割引・上限計算式で独立に再計算しキャップするよう修正（`cart.total_price`からの逆算はキャップ時に0にフロアされ機能しないため、`cart.items_subtotal_price`ベースで再現、2026-07-31） |
 | `assets/cart-points.js` | 上記UIのAjax Cart API呼び出し処理（新規・2026-07-23）。入力値バリデーション（保有ポイント超過・カート合計超過・不正な数値）を追加（2026-07-30）。適用後にセクションを再取得し小計・ディスカウント行・見積もり合計をその場で再描画するよう修正（2026-07-30） |
 | `assets/component-cart-items.js` | カートが空になった際に`points_used`属性・ディスカウントコードをクリア（2026-07-30・※テーマ更新で上書きリスク） |
 | `snippets/scripts.liquid` | `cart-points.js`のグローバル読み込みを追加（2026-07-30）。理由: 元々`cart-summary.liquid`（カートが空でない時のみレンダリング）内にscriptタグがあり、カートが空の状態でページ読込→遷移せず商品追加すると、scriptタグがmorphでDOM挿入されるだけで実行されず`cart-points-component`が never upgrade にならない不具合があったため、`cart-discount.js`と同じくグローバル読み込みに変更 |
@@ -162,6 +164,7 @@ style: ヒーロースライドショーのフォントサイズ調整
 | バリアント説明文登録（admin作業） | 同商品のバリアント個別説明文が未登録。管理画面でバリアントの `description` メタフィールドに入力。テーマ側（product-description ブロック）は対応済み。引き継ぎ: `C:\Users\1213\handover.md` |
 | favicon設定 | `favicon.ico 404`（機能影響なし）。対応は管理画面→テーマカスタマイズ→ファビコン設定 |
 | customer-sync の外部エンドポイント | `assets/customer-sync.js` の送信先 `https://arnulfo-fordable-pipingly.ngrok-free.dev/...` はngrok無料枠のため**URLが変わる/停止する可能性あり**。tokenもクライアント側にベタ書き（データ系了承済みだが、本番公開前に恒久的なエンドポイント・認証方式への切替を推奨） |
+| **⚠️ `sections/product-list.liquid`のスキーマがpushの度にサイレント失敗（要修正）** | `icons_shape`設定の`visible_if`（283行目）: `"{{ section.settings.icons_style != 'none' and (section.settings.layout_type == 'carousel' or section.settings.carousel_on_mobile == true) }}"` が「括弧を含む`visible_if`」でLiquid構文エラーとなり、**2026-07-31時点の全pushでこのファイルのアップロードだけが失敗し続けている**（GitHub Actionsのジョブ自体は成功表示のため見た目では気づけない）。2026-06-10の「スキーマ修正3件」を含め、このファイルへの変更が実際にはShopifyへ反映されていない可能性が高い。次回このファイルを触る際は、まず`visible_if`から括弧を除去して構文エラーを解消し、pushログ（`gh run view <id> --log`）で`Asset upload failed`が出ていないか確認すること |
 
 ---
 
