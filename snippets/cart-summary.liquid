@@ -219,10 +219,15 @@
     </div>
   {% endif %}
 
+  {% liquid
+    assign available_before_points = cart.total_price | divided_by: 100.0 | round | plus: cart.attributes.points_used | default: 0
+    assign point_balance = customer.metafields.custom.point_balance.value | default: 0
+    assign displayed_points_used = cart.attributes.points_used | at_most: available_before_points | at_most: point_balance
+  %}
   <cart-points-component
     class="cart-points"
-    data-point-balance="{{ customer.metafields.custom.point_balance.value | default: 0 }}"
-    data-cart-subtotal="{{ cart.total_price | divided_by: 100.0 | round | plus: cart.attributes.points_used | default: 0 }}"
+    data-point-balance="{{ point_balance }}"
+    data-cart-subtotal="{{ available_before_points }}"
     {% if section_id != blank %}
       data-section-id="{{ section_id }}"
     {% endif %}
@@ -252,7 +257,7 @@
         min="0"
         step="1"
         placeholder="使用するポイント数"
-        value="{{ cart.attributes.points_used }}"
+        value="{{ displayed_points_used }}"
       >
       <button
         type="submit"
