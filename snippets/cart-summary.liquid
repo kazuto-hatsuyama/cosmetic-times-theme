@@ -233,6 +233,7 @@
     assign requested_points = cart.attributes.points_used | default: 0
     assign displayed_points_used = requested_points | at_most: point_balance | at_most: max_points_by_subtotal
   %}
+  <!-- DEBUG subtotal={{ subtotal }} is_top_rank={{ is_top_rank }} rank_discount_amount={{ rank_discount_amount }} max_points_by_subtotal={{ max_points_by_subtotal }} requested_points={{ requested_points }} displayed_points_used={{ displayed_points_used }} -->
   <cart-points-component
     class="cart-points"
     data-point-balance="{{ point_balance }}"
