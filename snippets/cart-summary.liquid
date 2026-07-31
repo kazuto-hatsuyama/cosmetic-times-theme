@@ -224,16 +224,14 @@
     assign point_balance = customer.metafields.custom.point_balance.value | default: 0
 
     assign subtotal = cart.items_subtotal_price | divided_by: 100.0 | round
-    assign is_top_rank = customer.metafields.custom.rank.value == "04"
     assign rank_discount_amount = 0
-    if is_top_rank
+    if customer.metafields.custom.rank.value == "04"
       assign rank_discount_amount = subtotal | times: 0.05 | round
     endif
     assign max_points_by_subtotal = subtotal | minus: rank_discount_amount | at_least: 0
     assign requested_points = cart.attributes.points_used | default: 0
     assign displayed_points_used = requested_points | at_most: point_balance | at_most: max_points_by_subtotal
   %}
-  <p style="color:red;font-weight:bold;">ZZZDEBUGZZZ subtotal={{ subtotal }} is_top_rank={{ is_top_rank }} rank_discount_amount={{ rank_discount_amount }} max_points_by_subtotal={{ max_points_by_subtotal }} requested_points={{ requested_points }} displayed_points_used={{ displayed_points_used }}</p>
   <cart-points-component
     class="cart-points"
     data-point-balance="{{ point_balance }}"
