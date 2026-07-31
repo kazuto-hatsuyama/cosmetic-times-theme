@@ -228,7 +228,23 @@
     if customer.metafields.custom.rank.value == "04"
       assign rank_discount_amount = subtotal | times: 0.05 | round
     endif
-    assign max_points_by_subtotal = subtotal | minus: rank_discount_amount | at_least: 0
+
+    assign coupon_discount_amount_cents = 0
+    for discount in cart.cart_level_discount_applications
+      if discount.type == 'discount_code'
+        assign coupon_discount_amount_cents = coupon_discount_amount_cents | plus: discount.total_allocated_amount
+      endif
+    endfor
+    for item in cart.items
+      for allocation in item.line_level_discount_allocations
+        if allocation.discount_application.type == 'discount_code'
+          assign coupon_discount_amount_cents = coupon_discount_amount_cents | plus: allocation.amount
+        endif
+      endfor
+    endfor
+    assign coupon_discount_amount = coupon_discount_amount_cents | divided_by: 100.0 | round
+
+    assign max_points_by_subtotal = subtotal | minus: rank_discount_amount | minus: coupon_discount_amount | at_least: 0
     assign requested_points = cart.attributes.points_used | default: 0
     assign displayed_points_used = requested_points | at_most: point_balance | at_most: max_points_by_subtotal
   %}
