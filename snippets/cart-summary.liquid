@@ -222,7 +222,7 @@
   <cart-points-component
     class="cart-points"
     data-point-balance="{{ customer.metafields.custom.point_balance.value | default: 0 }}"
-    data-cart-subtotal="{{ cart.total_price | plus: cart.attributes.points_used | default: 0 }}"
+    data-cart-subtotal="{{ cart.total_price | divided_by: 100.0 | round | plus: cart.attributes.points_used | default: 0 }}"
     {% if section_id != blank %}
       data-section-id="{{ section_id }}"
     {% endif %}
