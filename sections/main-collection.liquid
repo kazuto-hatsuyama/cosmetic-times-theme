@@ -48,34 +48,35 @@
           assign availability_filter_active = true
         endif
       endfor
-
-      assign debug_unpaginated_count = 0
-      for product in collection.products
-        assign debug_unpaginated_count = debug_unpaginated_count | plus: 1
-      endfor
     %}
-    <p style="color:red;font-weight:bold;">ZZZDEBUGZZZ collection.products_count={{ collection.products_count }} debug_unpaginated_count={{ debug_unpaginated_count }} request_page={{ request.page }} current_page_param={{ current_page }}</p>
+
+    {% comment %}
+      Dedicated counting pass (separate from the rendering pagination below) so the
+      displayed item count reflects the whole collection's in-stock products, not just
+      the current render batch. Uses a large paginate window since Shopify caps
+      `collection.products` at 50 items when accessed outside a {% paginate %} tag.
+      Collections larger than 1000 products (paginate's max) will undercount here.
+    {% endcomment %}
+    {% assign visible_products_count = collection.products_count %}
+    {% unless availability_filter_active %}
+      {% assign visible_products_count = 0 %}
+      {% paginate collection.products by 1000 %}
+        {% for product in collection.products %}
+          {% if product.available %}
+            {% assign visible_products_count = visible_products_count | plus: 1 %}
+          {% endif %}
+        {% endfor %}
+      {% endpaginate %}
+    {% endunless %}
+
+    {% content_for 'block',
+      type: 'filters',
+      id: 'filters',
+      results: collection,
+      results_size: visible_products_count
+    %}
 
     {% paginate collection.products by products_per_page %}
-      {% liquid
-        assign visible_products_count = collection.products_count
-        unless availability_filter_active
-          assign visible_products_count = 0
-          for product in collection.products
-            if product.available
-              assign visible_products_count = visible_products_count | plus: 1
-            endif
-          endfor
-        endunless
-      %}
-
-      {% content_for 'block',
-        type: 'filters',
-        id: 'filters',
-        results: collection,
-        results_size: visible_products_count
-      %}
-
       {% capture children %}
         {% for product in collection.products %}
           {% if availability_filter_active or product.available %}
