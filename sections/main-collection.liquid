@@ -48,10 +48,19 @@
       {% assign products_per_page = section.settings.products_per_page %}
     {% endif %}
 
+    {% liquid
+      assign availability_filter_active = false
+      for collection_filter in collection.filters
+        if collection_filter.param_name contains 'availability' and collection_filter.active_values.size > 0
+          assign availability_filter_active = true
+        endif
+      endfor
+    %}
+
     {% paginate collection.products by products_per_page %}
       {% capture children %}
         {% for product in collection.products %}
-          {% if product.available %}
+          {% if availability_filter_active or product.available %}
             <li
               id="{{ section.id }}-{{ product.id }}"
               class="product-grid__item product-grid__item--{{ forloop.index0 }}"
