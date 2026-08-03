@@ -113,7 +113,8 @@ style: ヒーロースライドショーのフォントサイズ調整
 |---|---|
 | `assets/custom-luxury.css` | Luxury Design System v4.0（section19 は object-fit:cover） |
 | `assets/variant-picker.js` | バリアント切り替え画像更新修正（※テーマ更新で上書きリスク） |
-| `sections/product-list.liquid` | 在庫あり優先ソート・スキーマ修正3件（2026-06-10） |
+| `sections/product-list.liquid` | 在庫あり優先ソート・スキーマ修正3件（2026-06-10）。売り切れ商品を薄く表示する2パス目のフォールバックを削除し、在庫あり商品のみ表示に変更（2026-08-03）。`visible_if`の括弧によるLiquid構文エラーを分配形に書き換えて解消（2026-08-03。詳細は下記参照） |
+| `sections/main-collection.liquid` | カテゴリ一覧ページの商品グリッドループに`product.available`チェックを追加し、売り切れ商品を非表示に変更（新規・2026-08-03） |
 | `templates/index.json` | トップページ全体リニューアル・ctFade修正・h1→h2 |
 | `templates/product.json` | icons_style を "arrow" に修正・説明文ブロックを product-description タイプに変更（2026-06-10） |
 | `layout/theme.liquid` | Google Fonts + custom-luxury.css 追加。`{% render 'customer-sync' %}` 追加（2026-07-24） |
@@ -166,7 +167,7 @@ style: ヒーロースライドショーのフォントサイズ調整
 | バリアント説明文登録（admin作業） | 同商品のバリアント個別説明文が未登録。管理画面でバリアントの `description` メタフィールドに入力。テーマ側（product-description ブロック）は対応済み。引き継ぎ: `C:\Users\1213\handover.md` |
 | favicon設定 | `favicon.ico 404`（機能影響なし）。対応は管理画面→テーマカスタマイズ→ファビコン設定 |
 | customer-sync の外部エンドポイント | `assets/customer-sync.js` の送信先 `https://arnulfo-fordable-pipingly.ngrok-free.dev/...` はngrok無料枠のため**URLが変わる/停止する可能性あり**。tokenもクライアント側にベタ書き（データ系了承済みだが、本番公開前に恒久的なエンドポイント・認証方式への切替を推奨） |
-| **⚠️ `sections/product-list.liquid`のスキーマがpushの度にサイレント失敗（要修正）** | `icons_shape`設定の`visible_if`（283行目）: `"{{ section.settings.icons_style != 'none' and (section.settings.layout_type == 'carousel' or section.settings.carousel_on_mobile == true) }}"` が「括弧を含む`visible_if`」でLiquid構文エラーとなり、**2026-07-31時点の全pushでこのファイルのアップロードだけが失敗し続けている**（GitHub Actionsのジョブ自体は成功表示のため見た目では気づけない）。2026-06-10の「スキーマ修正3件」を含め、このファイルへの変更が実際にはShopifyへ反映されていない可能性が高い。次回このファイルを触る際は、まず`visible_if`から括弧を除去して構文エラーを解消し、pushログ（`gh run view <id> --log`）で`Asset upload failed`が出ていないか確認すること |
+| ~~`sections/product-list.liquid`のスキーマがpushの度にサイレント失敗~~ | ~~`icons_shape`設定の`visible_if`が括弧を含みLiquid構文エラーとなり、2026-06-10以降全pushでこのファイルのアップロードが失敗し続けていた~~ → **2026-08-03 対応済み**（`visible_if`を`X and (Y or Z)`から`(X and Y) or (X and Z)`の分配形に書き換えて解消。pushログで`Asset upload failed`が出ないことを確認済み。これにより2026-06-10の「スキーマ修正3件」も今回初めて実際にShopifyへ反映された） |
 
 ---
 
