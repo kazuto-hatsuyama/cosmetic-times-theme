@@ -35,13 +35,6 @@
   <div
     class="collection-wrapper grid gap-style{% if section.settings.product_grid_width == 'full-width' %} collection-wrapper--grid-full-width{% endif %}"
   >
-    {% content_for 'block',
-      type: 'filters',
-      id: 'filters',
-      results: collection,
-      results_size: collection.products_count
-    %}
-
     {% assign products_per_page = 24 %}
 
     {% if section.settings.enable_infinite_scroll == false %}
@@ -58,6 +51,25 @@
     %}
 
     {% paginate collection.products by products_per_page %}
+      {% liquid
+        assign visible_products_count = collection.products_count
+        unless availability_filter_active
+          assign visible_products_count = 0
+          for product in collection.products
+            if product.available
+              assign visible_products_count = visible_products_count | plus: 1
+            endif
+          endfor
+        endunless
+      %}
+
+      {% content_for 'block',
+        type: 'filters',
+        id: 'filters',
+        results: collection,
+        results_size: visible_products_count
+      %}
+
       {% capture children %}
         {% for product in collection.products %}
           {% if availability_filter_active or product.available %}
