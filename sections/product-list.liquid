@@ -27,10 +27,8 @@
   {% capture list_items %}
     {% if section.settings.collection != blank and section.settings.collection.products_count > 0 %}
       {% assign available_count = 0 %}
-      {% assign unavailable_items = '' %}
-      {% assign unavailable_count = 0 %}
 
-      {%- comment -%} 1パス目: 在庫あり商品を max_items まで表示 {%- endcomment -%}
+      {%- comment -%} 在庫あり商品のみを max_items まで表示（売り切れ商品は非表示） {%- endcomment -%}
       {% for product in section.settings.collection.products limit: 50 %}
         {% if product.available and available_count < max_items %}
           {% if available_count > 0 %}
@@ -44,24 +42,6 @@
           </div>
         {% endif %}
       {% endfor %}
-
-      {%- comment -%} 2パス目: 残りスロットに在庫なし商品を薄く表示 {%- endcomment -%}
-      {% assign remaining_slots = max_items | minus: available_count %}
-      {% if remaining_slots > 0 %}
-        {% for product in section.settings.collection.products limit: 50 %}
-          {% unless product.available %}
-            {% if unavailable_count < remaining_slots %}
-              <!--@list/split-->
-              {% assign unavailable_count = unavailable_count | plus: 1 %}
-              <div class="resource-list__item" style="opacity:0.45;">
-                {% # theme-check-disable UniqueStaticBlockId %}
-                  {% content_for 'block', type: '_product-card', id: 'static-product-card', closest.product: product %}
-                {% # theme-check-enable UniqueStaticBlockId %}
-              </div>
-            {% endif %}
-          {% endunless %}
-        {% endfor %}
-      {% endif %}
     {% else %}
       {% for i in (1..max_items) %}
         <div
