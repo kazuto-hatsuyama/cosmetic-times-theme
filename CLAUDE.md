@@ -114,7 +114,7 @@ style: ヒーロースライドショーのフォントサイズ調整
 | `assets/custom-luxury.css` | Luxury Design System v4.0（section19 は object-fit:cover） |
 | `assets/variant-picker.js` | バリアント切り替え画像更新修正（※テーマ更新で上書きリスク） |
 | `sections/product-list.liquid` | 在庫あり優先ソート・スキーマ修正3件（2026-06-10）。売り切れ商品を薄く表示する2パス目のフォールバックを削除し、在庫あり商品のみ表示に変更（2026-08-03）。`visible_if`の括弧によるLiquid構文エラーを分配形に書き換えて解消（2026-08-03。詳細は下記参照） |
-| `sections/main-collection.liquid` | カテゴリ一覧ページの商品グリッドループに`product.available`チェックを追加し、売り切れ商品を非表示に変更（新規・2026-08-03） |
+| `sections/main-collection.liquid` | カテゴリ一覧ページの商品グリッドループに`product.available`チェックを追加し、売り切れ商品を非表示に変更（新規・2026-08-03）。上記チェックがAvailabilityフィルター（在庫あり/在庫切れチェックボックス）を無効化していた不具合を修正 — `collection.filters`でAvailabilityフィルターが明示的に選択されているか判定し、選択時はShopify側の絞り込み結果をそのまま表示、未選択時（デフォルト）のみ`product.available`で追加フィルタするよう変更（2026-08-03）。**既知の制約**: デフォルト表示（フィルタ未選択）はページネーション後にLiquid側で売り切れをスキップする方式のため、1ページあたりの表示件数が`products_per_page`設定より少なくなる場合があり、画面上部の「n個のアイテム」件数表示も売り切れ込みの総数のまま（例: 実際に見える商品は151点なのに「3100個のアイテム」と表示される）。正確な件数・ページネーションが必要な場合は、Availabilityフィルターの「在庫あり」を明示的に選択させる方式への変更を検討 |
 | `templates/index.json` | トップページ全体リニューアル・ctFade修正・h1→h2 |
 | `templates/product.json` | icons_style を "arrow" に修正・説明文ブロックを product-description タイプに変更（2026-06-10） |
 | `layout/theme.liquid` | Google Fonts + custom-luxury.css 追加。`{% render 'customer-sync' %}` 追加（2026-07-24） |
