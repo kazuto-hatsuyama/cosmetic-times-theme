@@ -33,6 +33,27 @@
     assign variant_images = selected_product.images | where: 'attached_to_variant?', true | map: 'src'
   endif
 
+  # Computed early so slideshow_controls_style/render_slideshow_arrows below can be based on the
+  # actually-displayed media count, not the raw (pre hide_variants filtering) product media count.
+  assign sorted_media = '' | split: ','
+  if selected_variant_media
+    assign sorted_media = sorted_media | concat: selected_product.media | where: 'id', selected_variant_media.id
+
+    for media in selected_product.media
+      if block_settings.hide_variants and variant_images contains media.src and sorted_media.size > 0
+        continue
+      endif
+
+      if media.id != selected_variant_media.id
+        assign found_media = selected_product.media | where: 'id', media.id
+        assign sorted_media = sorted_media | concat: found_media
+      endif
+    endfor
+  else
+    assign sorted_media = selected_product.media
+  endif
+  assign has_image_drop = sorted_media | has: 'media_type', 'image'
+
   if block_settings.slideshow_controls_style == 'thumbnails'
     assign controls_on_media = false
   else
@@ -63,13 +84,13 @@
 
   assign slideshow_controls_style = block_settings.slideshow_controls_style
   # Use a counter instead of dots when there are many images to avoid cropping/overflow.
-  if slideshow_controls_style == 'dots' and selected_product.media.size > 15
+  if slideshow_controls_style == 'dots' and sorted_media.size > 15
     assign slideshow_controls_style = 'counter'
   endif
 
   assign render_slideshow_arrows = false
 
-  if selected_product.media.size <= 1
+  if sorted_media.size <= 1
     assign slideshow_class = 'product-media-gallery__slideshow--single-media slideshow--single-media'
   else
     assign slideshow_class = ''
@@ -100,25 +121,6 @@
       assign icons_position = 'left'
     endif
   endif
-
-  assign sorted_media = '' | split: ','
-  if selected_variant_media
-    assign sorted_media = sorted_media | concat: selected_product.media | where: 'id', selected_variant_media.id
-
-    for media in selected_product.media
-      if block_settings.hide_variants and variant_images contains media.src and sorted_media.size > 0
-        continue
-      endif
-
-      if media.id != selected_variant_media.id
-        assign found_media = selected_product.media | where: 'id', media.id
-        assign sorted_media = sorted_media | concat: found_media
-      endif
-    endfor
-  else
-    assign sorted_media = selected_product.media
-  endif
-  assign has_image_drop = sorted_media | has: 'media_type', 'image'
 
   # Determine if we're in single column mode (carousel or grid with one column)
   assign is_single_column = false
