@@ -36,9 +36,21 @@ export class MediaGallery extends Component {
   /**
    * Handles a variant update event by replacing the current media gallery with a new one.
    *
+   * Skipped when the variant change was triggered by the shopper scrolling/dragging/clicking
+   * through this same gallery (see #handleSlideSelected): replacing the gallery would re-sort
+   * it (selected variant's media moves to the front), which resets the shopper's scroll
+   * position and makes "next slide" jump backwards through images they've already seen.
+   * The shopper can already see the slide they're on; only the price/availability/buy button
+   * (handled by other listeners of this same event) need to catch up.
+   *
    * @param {VariantUpdateEvent} event - The variant update event.
    */
   #handleVariantUpdate = (event) => {
+    if (this.#suppressNextReplace) {
+      this.#suppressNextReplace = false;
+      return;
+    }
+
     const source = event.detail.data.html;
 
     if (!source) return;
@@ -48,6 +60,9 @@ export class MediaGallery extends Component {
 
     this.replaceWith(newMediaGallery);
   };
+
+  /** @type {boolean} */
+  #suppressNextReplace = false;
 
   /**
    * Handles the 'zoom-media:selected' event.
@@ -75,6 +90,7 @@ export class MediaGallery extends Component {
 
     if (!(radio instanceof HTMLInputElement) || radio.checked) return;
 
+    this.#suppressNextReplace = true;
     radio.checked = true;
     radio.dispatchEvent(new Event('change', { bubbles: true }));
   };
