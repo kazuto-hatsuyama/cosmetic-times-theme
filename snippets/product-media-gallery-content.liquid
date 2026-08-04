@@ -386,7 +386,7 @@
         {% liquid
           assign media_variant_id = ''
           for variant in selected_product.variants
-            if variant.featured_image and media.id == variant.featured_image.id
+            if variant.featured_media and media.id == variant.featured_media.id
               assign media_variant_id = variant.id
               break
             endif
