@@ -80,6 +80,12 @@ style: ヒーロースライドショーのフォントサイズ調整
 | 認証 | GitHub Secrets に `SHOPIFY_CLI_THEME_TOKEN` 登録済み。**⚠️ トークンはストア単位で発行されるため、push先をprdストアに切り替えた際は、prdストア用のテーマアクセストークンに再登録が必要**（旧devストア用トークンのままだとpush失敗する） |
 | Actions確認 | https://github.com/kazuto-hatsuyama/cosmetic-times-theme/actions |
 
+**⚠️ 重要な仕様: `config/settings_data.json` はこの自動デプロイでライブテーマに同期されない**（2026-08-04判明）。`shopify theme push`（`--only`なしのフルpush）は、ライブ（公開中）テーマに対してマーチャントの管理画面編集を保護するため`config/settings_data.json`を自動ではアップロードしない。そのため、2026-07-23のdev→prdストア切替以降、Git管理下のカラースキーム定義（`scheme-1`等・タイポグラフィ・ロゴ設定を含む）が長期間ライブに反映されていなかった不具合が発生した（詳細は下記「色スキーム未反映」の顛末を参照）。`config/settings_data.json`を変更した場合は、必ずローカルから明示的に以下を実行して同期すること：
+```
+shopify theme push --only "config/settings_data.json" --allow-live --theme 138815832273 --store cosmetic-times-prd.myshopify.com
+```
+実行前に必ずAdmin Theme Customizer（テーマ設定）で現状を確認し、他の設定を上書きしないか確認すること。
+
 ---
 
 ## サイト概要・デザイン方針
@@ -116,7 +122,7 @@ style: ヒーロースライドショーのフォントサイズ調整
 | `sections/product-list.liquid` | 在庫あり優先ソート・スキーマ修正3件（2026-06-10）。売り切れ商品を薄く表示する2パス目のフォールバックを削除し、在庫あり商品のみ表示に変更（2026-08-03）。`visible_if`の括弧によるLiquid構文エラーを分配形に書き換えて解消（2026-08-03。詳細は下記参照） |
 | `sections/main-collection.liquid` | カテゴリ一覧ページの商品グリッドループに`product.available`チェックを追加し、売り切れ商品を非表示に変更（新規・2026-08-03）。上記チェックがAvailabilityフィルター（在庫あり/在庫切れチェックボックス）を無効化していた不具合を修正 — `collection.filters`でAvailabilityフィルターが明示的に選択されているか判定し、選択時はShopify側の絞り込み結果をそのまま表示、未選択時（デフォルト）のみ`product.available`で追加フィルタするよう変更（2026-08-03）。デフォルト表示時の「n個のアイテム」件数表示を、コレクション全体の在庫あり件数に修正（`{% paginate collection.products by 1000 %}`の専用カウント用パスで算出。`collection.products`はpaginateタグ外だと50件でキャップされるため。**既知の制約**: paginateの上限が1000件のため、1000件を超えるコレクション（例: 全商品「all」＝3,100件）は先頭1000件分までしか集計されず、件数が実際より少なく出る。1ページあたりの表示件数が`products_per_page`設定より少なくなる場合がある点も既知の制約として残る、2026-08-03） |
 | `templates/index.json` | トップページ全体リニューアル・ctFade修正・h1→h2 |
-| `templates/product.json` | icons_style を "arrow" に修正・説明文ブロックを product-description タイプに変更（2026-06-10）。`hide_variants`を無効化し、全バリアントの画像を常にギャラリーに表示するよう変更（2026-08-04、下記参照）。"main"セクションの`color_scheme`が空文字になっておりバリアント選択の色分け・売り切れ表示が効かなくなっていたため`"scheme-1"`に修正（2026-08-04） |
+| `templates/product.json` | icons_style を "arrow" に修正・説明文ブロックを product-description タイプに変更（2026-06-10）。`hide_variants`を無効化し、全バリアントの画像を常にギャラリーに表示するよう変更（2026-08-04、下記参照）。"main"セクションの`color_scheme`が空文字になっておりバリアント選択の色分け・売り切れ表示が効かなくなっていたため`"scheme-1"`に修正（2026-08-04）。→ この修正だけではライブに反映されず、真因は`config/settings_data.json`がライブテーマに一度も同期されていなかったこと（カラースキームの実体が未定義）と判明。`--only`指定で個別pushして解決（2026-08-04、詳細は本ファイル冒頭「GitHub Actions 自動デプロイ」参照） |
 | `snippets/product-media-gallery-content.liquid` | 商品詳細ページのメイン画像スクロール矢印が表示されるのに反応しない不具合を修正（2026-08-04）。`hide_variants`設定が有効かつ全画像がバリアント専用（共通画像なし）の商品では実際の表示枚数が1枚になるが、矢印・サムネイル表示判定がhide_variants適用前の生の画像枚数（`selected_product.media.size`）を見ていたため矢印だけ表示され続けていた。判定をフィルタ後の`sorted_media.size`に統一。各スライドに、対応するバリアントの`featured_media`と一致する場合`data-variant-id`属性を付与する新機能を追加（画像スクロールでバリアントを自動選択、2026-08-04） |
 | `assets/media-gallery.js` | ユーザー操作（スクロール・ドラッグ・クリック）によるスライド変更時、表示中スライドに`data-variant-id`があれば対応するバリアントピッカーのラジオを自動選択し、価格・在庫状況・カートボタンを連動更新する機能を追加（新規・2026-08-04）。バリアント変更のたびにギャラリー自体を丸ごと置き換えると、選択中バリアントの画像が先頭に並び替わりスクロール位置がリセットされる不具合があったため、ギャラリースクロール自身が引き金となった変更の場合はギャラリーの置き換えをスキップするよう修正（2026-08-04） |
 | `snippets/variant-main-picker.liquid` | インポート商品の一部で、バリアントが実質1つのみ（Shopify内部の英語プレースホルダーではなく日本語の literal な「タイトル」/「デフォルト」がオプション名・値として保存されている）にもかかわらず、`has_only_default_variant`が`false`と判定されバリアントピッカー（`variant_style: buttons`設定によりフィールドセット+ボタンとして描画）が表示されてしまう不具合を修正（2026-08-04）。オプション名が`タイトル`かつオプション値・バリアントが1つのみの場合を`has_only_default_variant`同様に扱い、バリアントピッカー全体を非表示にするよう変更 |
