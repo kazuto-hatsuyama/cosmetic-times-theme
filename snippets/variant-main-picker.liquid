@@ -53,9 +53,18 @@
             assign option_id_attribute = 'data-option-id="' | append: fieldset_id | append: '"'
             assign longest_value = 0
           endif
+
+          # Some imported products store the "no real variant" placeholder as a literal
+          # option named タイトル (the Japanese equivalent of Shopify's internal "Title"),
+          # instead of the untranslated English value that has_only_default_variant checks
+          # for. Treat it the same way: don't show it as if it were a real option.
+          assign is_placeholder_option = false
+          if product_option.values.size == 1 and product_option.name == 'タイトル'
+            assign is_placeholder_option = true
+          endif
         -%}
 
-        {%- if product_option.values.size == 1 and variant_style != 'swatch' -%}
+        {%- if product_option.values.size == 1 and variant_style != 'swatch' and is_placeholder_option == false -%}
           <div
             class="variant-option"
             data-testid="variant-option-single"
