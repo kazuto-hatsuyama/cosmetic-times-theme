@@ -383,11 +383,26 @@
             --media-preview-ratio: {{ media.preview_image.aspect_ratio | default: 1.0 }};
           {% endcapture %}
         {% endif %}
-        {% if block_settings.zoom and media.media_type == 'model' %}
-          {%- capture attributes -%}"{% if settings.transition_to_main_product and forloop.first %} data-view-transition-type="product-image-transition"{% endif %}{% endcapture -%}
-        {% elsif block_settings.zoom %}
-          {%- capture attributes -%}on:click="#zoom-dialog-{{ block_id }}/open/{{ forloop.index0 }}"{% if settings.transition_to_main_product and forloop.first %} data-view-transition-type="product-image-transition"{% endif %}{% endcapture -%}
-        {% endif %}
+        {% liquid
+          assign media_variant_id = ''
+          for variant in selected_product.variants
+            if variant.featured_image and media.id == variant.featured_image.id
+              assign media_variant_id = variant.id
+              break
+            endif
+          endfor
+        %}
+
+        {% capture attributes %}
+          {% if media_variant_id != blank %}
+            data-variant-id="{{ media_variant_id }}"
+          {% endif %}
+          {% if block_settings.zoom and media.media_type == 'model' %}
+            {% if settings.transition_to_main_product and forloop.first %} data-view-transition-type="product-image-transition"{% endif %}
+          {% elsif block_settings.zoom %}
+            on:click="#zoom-dialog-{{ block_id }}/open/{{ forloop.index0 }}"{% if settings.transition_to_main_product and forloop.first %} data-view-transition-type="product-image-transition"{% endif %}
+          {% endif %}
+        {% endcapture %}
 
         {% render 'slideshow-slide',
           index: forloop.index0,

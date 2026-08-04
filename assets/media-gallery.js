@@ -1,5 +1,5 @@
 import { Component } from '@theme/component';
-import { ThemeEvents, VariantUpdateEvent, ZoomMediaSelectedEvent } from '@theme/events';
+import { ThemeEvents, VariantUpdateEvent, ZoomMediaSelectedEvent, SlideshowSelectEvent } from '@theme/events';
 
 /**
  * A custom element that renders a media gallery.
@@ -22,6 +22,7 @@ export class MediaGallery extends Component {
     this.refs.zoomDialogComponent?.addEventListener(ThemeEvents.zoomMediaSelected, this.#handleZoomMediaSelected, {
       signal,
     });
+    this.addEventListener(SlideshowSelectEvent.eventName, this.#handleSlideSelected, { signal });
   }
 
   #controller = new AbortController();
@@ -54,6 +55,28 @@ export class MediaGallery extends Component {
    */
   #handleZoomMediaSelected = async (event) => {
     this.slideshow?.select(event.detail.index, undefined, { animate: false });
+  };
+
+  /**
+   * When the shopper scrolls, drags, or clicks to a slide that belongs to a specific variant,
+   * select that variant so the price/availability/buy buttons stay in sync with what's shown.
+   *
+   * @param {SlideshowSelectEvent} event - The slideshow:select event.
+   */
+  #handleSlideSelected = (event) => {
+    if (!event.detail.userInitiated) return;
+
+    const { slide } = event.detail;
+    const variantId = slide instanceof HTMLElement ? slide.dataset.variantId : undefined;
+    if (!variantId) return;
+
+    const container = this.closest('.shopify-section, dialog');
+    const radio = container?.querySelector(`variant-picker input[data-variant-id="${variantId}"]`);
+
+    if (!(radio instanceof HTMLInputElement) || radio.checked) return;
+
+    radio.checked = true;
+    radio.dispatchEvent(new Event('change', { bubbles: true }));
   };
 
   /**
