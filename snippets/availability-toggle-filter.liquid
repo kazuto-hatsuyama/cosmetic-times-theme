@@ -47,6 +47,9 @@
 
   assign available_label = '在庫あり (' | append: available_count | append: ')'
   assign unavailable_label = '在庫切れ (' | append: unavailable_count | append: ')'
+
+  assign available_id = 'AvailabilityToggle-available-' | append: filter_style | append: '-' | append: in_drawer
+  assign unavailable_id = 'AvailabilityToggle-unavailable-' | append: filter_style | append: '-' | append: in_drawer
 %}
 
 {% capture accordion_children %}
@@ -101,7 +104,7 @@
                 value: '1',
                 label: available_label,
                 checked: true,
-                id: 'AvailabilityToggle-available-' | append: filter_style | append: '-' | append: in_drawer,
+                id: available_id,
                 disabled: available_disabled,
                 inputRef: 'facetInputs[]'
               %}
@@ -112,7 +115,7 @@
                 value: '1',
                 label: unavailable_label,
                 checked: false,
-                id: 'AvailabilityToggle-unavailable-' | append: filter_style | append: '-' | append: in_drawer,
+                id: unavailable_id,
                 disabled: unavailable_disabled,
                 inputRef: 'facetInputs[]'
               %}

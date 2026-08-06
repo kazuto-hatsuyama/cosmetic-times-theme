@@ -20,6 +20,24 @@
       { once: true }
     );
   }
+
+  // Defensive self-heal: Shopify's own Availability filter facet is a known-broken
+  // platform bug (returns an incorrect product set whenever `filter.v.availability` is
+  // present in the request — see tasks/20260806-availability-filter-recovery). The
+  // theme no longer renders a control that sends this param (see
+  // snippets/availability-toggle-filter.liquid), but an old bookmarked/shared link
+  // could still contain it. Strip it and reload so collection.products reflects the
+  // full, correct set again.
+  (() => {
+    let changed = false;
+    for (const key of Array.from(url.searchParams.keys())) {
+      if (key.indexOf('filter.') === 0 && key.indexOf('availability') !== -1) {
+        url.searchParams.delete(key);
+        changed = true;
+      }
+    }
+    if (changed) window.location.replace(url.toString());
+  })();
 {% endjavascript %}
 
 {% comment %} We always render this full-width, as the child blocks have width: page/full settings {% endcomment %}
@@ -41,29 +59,6 @@
     {% if section.settings.enable_infinite_scroll == false %}
       {% assign products_per_page = section.settings.products_per_page %}
     {% endif %}
-
-    {% comment %}
-      Defensive self-heal: Shopify's own Availability filter facet is a known-broken
-      platform bug (returns an incorrect product set whenever `filter.v.availability` is
-      present in the request — see tasks/20260806-availability-filter-recovery). The
-      theme no longer renders a control that sends this param (see
-      snippets/availability-toggle-filter.liquid), but an old bookmarked/shared link
-      could still contain it. Strip it and reload so collection.products reflects the
-      full, correct set again.
-    {% endcomment %}
-    {% javascript %}
-      (() => {
-        const url = new URL(window.location.href);
-        let changed = false;
-        for (const key of Array.from(url.searchParams.keys())) {
-          if (key.indexOf('filter.') === 0 && key.indexOf('availability') !== -1) {
-            url.searchParams.delete(key);
-            changed = true;
-          }
-        }
-        if (changed) window.location.replace(url.toString());
-      })();
-    {% endjavascript %}
 
     {% comment %}
       Dedicated counting pass (separate from the rendering pagination below) so the
