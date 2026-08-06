@@ -29,6 +29,7 @@
   style="--padding-block-start: {{ section.settings.padding-block-start }}px; --padding-block-end: {{ section.settings.padding-block-end }}px;"
   section-id="{{ section.id }}"
   infinite-scroll="{{ section.settings.enable_infinite_scroll }}"
+  data-availability-view="available"
 >
   {% render 'skip-to-content-link', href: '#ResultsList', text: 'accessibility.skip_to_results_list' %}
 
@@ -41,57 +42,79 @@
       {% assign products_per_page = section.settings.products_per_page %}
     {% endif %}
 
-    {% liquid
-      assign availability_filter_active = false
-      for collection_filter in collection.filters
-        if collection_filter.param_name contains 'availability' and collection_filter.active_values.size > 0
-          assign availability_filter_active = true
-        endif
-      endfor
-    %}
+    {% comment %}
+      Defensive self-heal: Shopify's own Availability filter facet is a known-broken
+      platform bug (returns an incorrect product set whenever `filter.v.availability` is
+      present in the request — see tasks/20260806-availability-filter-recovery). The
+      theme no longer renders a control that sends this param (see
+      snippets/availability-toggle-filter.liquid), but an old bookmarked/shared link
+      could still contain it. Strip it and reload so collection.products reflects the
+      full, correct set again.
+    {% endcomment %}
+    {% javascript %}
+      (() => {
+        const url = new URL(window.location.href);
+        let changed = false;
+        for (const key of Array.from(url.searchParams.keys())) {
+          if (key.indexOf('filter.') === 0 && key.indexOf('availability') !== -1) {
+            url.searchParams.delete(key);
+            changed = true;
+          }
+        }
+        if (changed) window.location.replace(url.toString());
+      })();
+    {% endjavascript %}
 
     {% comment %}
       Dedicated counting pass (separate from the rendering pagination below) so the
-      displayed item count reflects the whole collection's in-stock products, not just
-      the current render batch. Uses a large paginate window since Shopify caps
-      `collection.products` at 50 items when accessed outside a {% paginate %} tag.
-      Collections larger than 1000 products (paginate's max) will undercount here.
+      displayed item counts reflect the whole collection, not just the current render
+      batch. Uses a large paginate window since Shopify caps `collection.products` at 50
+      items when accessed outside a {% paginate %} tag. Collections larger than 1000
+      products (paginate's max) will undercount here.
+
+      Computed unconditionally from `product.available` (never from Shopify's own
+      Availability filter/count, which is unreliable per the known bug above).
     {% endcomment %}
-    {% assign visible_products_count = collection.products_count %}
-    {% unless availability_filter_active %}
-      {% assign visible_products_count = 0 %}
-      {% paginate collection.products by 1000 %}
-        {% for product in collection.products %}
-          {% if product.available %}
-            {% assign visible_products_count = visible_products_count | plus: 1 %}
-          {% endif %}
-        {% endfor %}
-      {% endpaginate %}
-    {% endunless %}
+    {% assign available_count = 0 %}
+    {% assign unavailable_count = 0 %}
+    {% paginate collection.products by 1000 %}
+      {% for product in collection.products %}
+        {% if product.available %}
+          {% assign available_count = available_count | plus: 1 %}
+        {% else %}
+          {% assign unavailable_count = unavailable_count | plus: 1 %}
+        {% endif %}
+      {% endfor %}
+    {% endpaginate %}
+    {% assign visible_products_count = available_count %}
 
     {% content_for 'block',
       type: 'filters',
       id: 'filters',
       results: collection,
-      results_size: visible_products_count
+      results_size: visible_products_count,
+      available_count: available_count,
+      unavailable_count: unavailable_count
     %}
 
     {% paginate collection.products by products_per_page %}
       {% capture children %}
         {% for product in collection.products %}
-          {% if availability_filter_active or product.available %}
-            <li
-              id="{{ section.id }}-{{ product.id }}"
-              class="product-grid__item product-grid__item--{{ forloop.index0 }}"
-              data-page="{{ paginate.current_page }}"
-              data-product-id="{{ product.id }}"
-              ref="cards[]"
-            >
-              {% # theme-check-disable %}
-              {% content_for 'block', type: '_product-card', id: 'product-card', closest.product: product %}
-              {% # theme-check-enable %}
-            </li>
-          {% endif %}
+          <li
+            id="{{ section.id }}-{{ product.id }}"
+            class="product-grid__item product-grid__item--{{ forloop.index0 }}"
+            data-page="{{ paginate.current_page }}"
+            data-product-id="{{ product.id }}"
+            data-product-available="{{ product.available }}"
+            {% unless product.available %}
+              hidden
+            {% endunless %}
+            ref="cards[]"
+          >
+            {% # theme-check-disable %}
+            {% content_for 'block', type: '_product-card', id: 'product-card', closest.product: product %}
+            {% # theme-check-enable %}
+          </li>
         {% endfor %}
       {% endcapture %}
 

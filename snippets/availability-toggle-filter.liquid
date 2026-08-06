@@ -1,0 +1,135 @@
+{%- doc -%}
+  Renders the custom "在庫あり / 在庫切れ" availability toggle.
+
+  Replaces Shopify's native Availability filter facet. That facet's underlying search
+  index is a known-broken Shopify platform bug (confirmed by Shopify support after a
+  backfill/re-sync attempt did not fix it — see
+  tasks/20260806-availability-filter-recovery/spec.md): selecting it via the
+  `filter.v.availability` query param returns an incorrect product set server-side, not
+  just a miscounted label. This control instead uses non-Shopify-recognized param names
+  (`avail_available` / `avail_unavailable`) so Shopify never applies its broken filtering
+  server-side. The actual show/hide is done entirely client-side
+  (assets/availability-toggle-filter.js) using each product's `data-product-available`
+  attribute, which is derived from the reliable `product.available` in Liquid
+  (sections/main-collection.liquid).
+
+  @param {string} filter_style - The filter style ('horizontal' | 'vertical')
+  @param {number} sectionId - The section ID
+  @param {number} available_count - Real count of in-stock products (product.available == true)
+  @param {number} unavailable_count - Real count of out-of-stock products
+  @param {boolean} [in_drawer] - Whether the filter is in a drawer
+{%- enddoc -%}
+
+<script
+  src="{{ 'availability-toggle-filter.js' | asset_url }}"
+  type="module"
+  fetchpriority="low"
+></script>
+
+{% liquid
+  assign is_horizontal = false
+  assign is_vertical = false
+  if filter_style == 'horizontal'
+    assign is_horizontal = true
+  elsif filter_style == 'vertical'
+    assign is_vertical = true
+  endif
+
+  assign available_disabled = false
+  if available_count == 0
+    assign available_disabled = true
+  endif
+
+  assign unavailable_disabled = false
+  if unavailable_count == 0
+    assign unavailable_disabled = true
+  endif
+
+  assign available_label = '在庫あり (' | append: available_count | append: ')'
+  assign unavailable_label = '在庫切れ (' | append: unavailable_count | append: ')'
+%}
+
+{% capture accordion_children %}
+  <details
+    id="Facet-Details-{{ sectionId }}-availability"
+    class="facets__panel"
+    {% if filter_style == 'horizontal' %}
+      data-auto-close-details="desktop"
+    {% endif %}
+    {% if filter_style == 'vertical' %}
+      open
+    {% endif %}
+  >
+    <summary class="facets__summary">
+      <span class="facets__label">Availability</span>
+
+      <div class="facets__status-wrapper">
+        <facet-status-component
+          class="facets__status"
+          facet-type="list"
+          data-filter-style="{{ filter_style }}"
+        >
+          <span
+            class="hide-when-empty"
+            ref="facetStatus"
+          ></span>
+        </facet-status-component>
+        <span class="svg-wrapper icon-caret icon-animated">
+          {{- 'icon-caret.svg' | inline_asset_content -}}
+        </span>
+      </div>
+    </summary>
+    <floating-panel-component
+      {% unless filter_style == 'vertical' %}
+        data-close-on-resize
+      {% endunless %}
+      class="facets__inputs facets__panel-content details-content{% if filter_style == 'horizontal' %} color-{{ settings.popover_color_scheme }}{% endif %}"
+      id="facet-inputs-availability-{{ sectionId }}-{{ in_drawer }}"
+    >
+      <availability-toggle-inputs-component
+        on:change="/updateFilters"
+        id="availability-toggle-inputs-component-{{ sectionId }}-{{ in_drawer }}"
+      >
+        <div class="facets__inputs-wrapper">
+          <ul
+            id="filters-list-{{ sectionId }}-availability-{{ in_drawer }}"
+            class="facets__inputs-list list-unstyled"
+          >
+            <li class="facets__inputs-list-item{% if available_disabled %} facets__inputs-list-item--disabled{% endif %}">
+              {% render 'checkbox',
+                name: 'avail_available',
+                value: '1',
+                label: available_label,
+                checked: true,
+                id: 'AvailabilityToggle-available-' | append: filter_style | append: '-' | append: in_drawer,
+                disabled: available_disabled,
+                inputRef: 'facetInputs[]'
+              %}
+            </li>
+            <li class="facets__inputs-list-item{% if unavailable_disabled %} facets__inputs-list-item--disabled{% endif %}">
+              {% render 'checkbox',
+                name: 'avail_unavailable',
+                value: '1',
+                label: unavailable_label,
+                checked: false,
+                id: 'AvailabilityToggle-unavailable-' | append: filter_style | append: '-' | append: in_drawer,
+                disabled: unavailable_disabled,
+                inputRef: 'facetInputs[]'
+              %}
+            </li>
+          </ul>
+        </div>
+      </availability-toggle-inputs-component>
+    </floating-panel-component>
+  </details>
+{% endcapture %}
+{% render 'accordion-custom-component',
+  children: accordion_children,
+  class: 'facets__item',
+  open: is_vertical,
+  open_by_default_on_desktop: is_vertical,
+  open_by_default_on_mobile: is_vertical,
+  disable_animation_on_desktop: is_horizontal,
+  close_with_escape: is_horizontal,
+  data_filter_param_name: 'availability'
+%}

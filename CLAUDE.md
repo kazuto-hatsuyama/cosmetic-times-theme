@@ -120,7 +120,11 @@ shopify theme push --only "config/settings_data.json" --allow-live --theme 13881
 | `assets/custom-luxury.css` | Luxury Design System v4.0（section19 は object-fit:cover） |
 | `assets/variant-picker.js` | バリアント切り替え画像更新修正（※テーマ更新で上書きリスク） |
 | `sections/product-list.liquid` | 在庫あり優先ソート・スキーマ修正3件（2026-06-10）。売り切れ商品を薄く表示する2パス目のフォールバックを削除し、在庫あり商品のみ表示に変更（2026-08-03）。`visible_if`の括弧によるLiquid構文エラーを分配形に書き換えて解消（2026-08-03。詳細は下記参照） |
-| `sections/main-collection.liquid` | カテゴリ一覧ページの商品グリッドループに`product.available`チェックを追加し、売り切れ商品を非表示に変更（新規・2026-08-03）。上記チェックがAvailabilityフィルター（在庫あり/在庫切れチェックボックス）を無効化していた不具合を修正 — `collection.filters`でAvailabilityフィルターが明示的に選択されているか判定し、選択時はShopify側の絞り込み結果をそのまま表示、未選択時（デフォルト）のみ`product.available`で追加フィルタするよう変更（2026-08-03）。デフォルト表示時の「n個のアイテム」件数表示を、コレクション全体の在庫あり件数に修正（`{% paginate collection.products by 1000 %}`の専用カウント用パスで算出。`collection.products`はpaginateタグ外だと50件でキャップされるため。**既知の制約**: paginateの上限が1000件のため、1000件を超えるコレクション（例: 全商品「all」＝3,100件）は先頭1000件分までしか集計されず、件数が実際より少なく出る。1ページあたりの表示件数が`products_per_page`設定より少なくなる場合がある点も既知の制約として残る、2026-08-03） |
+| `sections/main-collection.liquid` | カテゴリ一覧ページの商品グリッドループに`product.available`チェックを追加し、売り切れ商品を非表示に変更（新規・2026-08-03）。上記チェックがAvailabilityフィルター（在庫あり/在庫切れチェックボックス）を無効化していた不具合を修正 — `collection.filters`でAvailabilityフィルターが明示的に選択されているか判定し、選択時はShopify側の絞り込み結果をそのまま表示、未選択時（デフォルト）のみ`product.available`で追加フィルタするよう変更（2026-08-03）。デフォルト表示時の「n個のアイテム」件数表示を、コレクション全体の在庫あり件数に修正（`{% paginate collection.products by 1000 %}`の専用カウント用パスで算出。`collection.products`はpaginateタグ外だと50件でキャップされるため。**既知の制約**: paginateの上限が1000件のため、1000件を超えるコレクション（例: 全商品「all」＝3,100件）は先頭1000件分までしか集計されず、件数が実際より少なく出る。1ページあたりの表示件数が`products_per_page`設定より少なくなる場合がある点も既知の制約として残る、2026-08-03）。**2026-08-06: Availabilityフィルターの絞り込み結果自体がShopify側の既知の不具合で誤っている（表示件数だけでなく実際に返る商品リストが壊れている）ことが判明したため、Shopify標準のAvailabilityフィルターに一切依存しない実装に変更**（詳細は`snippets/availability-toggle-filter.liquid`の項・`tasks/20260806-custom-availability-filter/spec.md`参照）。全商品を常にレンダリングし`data-product-available`属性を付与、在庫あり/在庫切れの正確な件数を`{% paginate collection.products by 1000 %}`で常時算出して`filters`ブロックへ渡すよう変更。旧`filter.v.availability`パラメータが付いた古いリンクを検知して自動的にURLから除去・リロードする自己修復スクリプトを追加 |
+| `blocks/filters.liquid` | Availabilityフィルター（`param_name`に`availability`を含むもの）をShopify標準の`list-filter`ではなく独自スニペット`availability-toggle-filter`で描画するよう分岐追加。件数表示（「n個のアイテム」）を新スニペット`collection-item-count`経由に変更し、在庫あり/在庫切れ/両方の3状態をJSで切り替え可能に（新規・2026-08-06。`sections/search-results.liquid`など`available_count`/`unavailable_count`を渡さない他の呼び出し元向けに、渡されない場合は従来の`results_size`にフォールバックする安全策あり） |
+| `snippets/availability-toggle-filter.liquid` | Shopify標準のAvailabilityフィルター（在庫状況の絞り込み）が内部同期の既知の不具合により絞り込み結果自体を誤って返す問題（Shopifyサポートに既知の不具合と認定・恒久修正なし、セルフ回避策も無効と確認済み）に対応するため、`filter.v.availability`というShopify認識パラメータを一切使わない独自の在庫あり/在庫切れチェックボックスを新規作成（2026-08-06）。実際の絞り込みは全て`assets/availability-toggle-filter.js`によるクライアントサイド処理（`product.available`ベース、確実に信頼できる）で行う |
+| `snippets/collection-item-count.liquid` | 「n個のアイテム」表示を在庫あり/在庫切れ/両方の3状態分あらかじめ翻訳付きでレンダリングしておき、JS側でどれを表示するか切り替えるための新規スニペット（Shopifyの件数複数形ルールをJSで再実装せずに済むため、2026-08-06） |
+| `assets/availability-toggle-filter.js` | 上記Availabilityフィルター独自実装のクライアントサイド挙動（チェックボックス変更時の即時表示切り替え、他フィルター変更によるセクション再描画後の状態復元用`updatedCallback`、URLとの同期）を担当する新規Web Component（新規・2026-08-06） |
 | `templates/index.json` | トップページ全体リニューアル・ctFade修正・h1→h2 |
 | `templates/product.json` | icons_style を "arrow" に修正・説明文ブロックを product-description タイプに変更（2026-06-10）。`hide_variants`を無効化し、全バリアントの画像を常にギャラリーに表示するよう変更（2026-08-04、下記参照）。"main"セクションの`color_scheme`が空文字になっておりバリアント選択の色分け・売り切れ表示が効かなくなっていたため`"scheme-1"`に修正（2026-08-04）。→ この修正だけではライブに反映されず、真因は`config/settings_data.json`がライブテーマに一度も同期されていなかったこと（カラースキームの実体が未定義）と判明。`--only`指定で個別pushして解決（2026-08-04、詳細は本ファイル冒頭「GitHub Actions 自動デプロイ」参照） |
 | `snippets/product-media-gallery-content.liquid` | 商品詳細ページのメイン画像スクロール矢印が表示されるのに反応しない不具合を修正（2026-08-04）。`hide_variants`設定が有効かつ全画像がバリアント専用（共通画像なし）の商品では実際の表示枚数が1枚になるが、矢印・サムネイル表示判定がhide_variants適用前の生の画像枚数（`selected_product.media.size`）を見ていたため矢印だけ表示され続けていた。判定をフィルタ後の`sorted_media.size`に統一。各スライドに、対応するバリアントの`featured_media`と一致する場合`data-variant-id`属性を付与する新機能を追加（画像スクロールでバリアントを自動選択、2026-08-04） |
@@ -193,3 +197,26 @@ shopify theme push --only "config/settings_data.json" --allow-live --theme 13881
 - 確認事項: （ユーザーが次に確認・判断すべきこと）
 - 注意点: （あれば）
 ```
+
+<!-- spec-driven:start -->
+## docs/ 運用ルール（全プロジェクト共通・開発手法非依存）
+
+このプロジェクトは `docs/` でプロジェクト知識（product/tech/structure/その他ドメイン知識）を管理している。内容が古くなったと感じたら `spec-steering-init`（core3種）/ `spec-steering-custom`（database/infrastructure/security/glossary/api/integrations）Skillで同期すること。
+
+以下は常に前提知識として参照する:
+@docs/product.md
+@docs/tech.md
+@docs/structure.md
+@docs/glossary.md
+<!-- spec-driven:end -->
+
+<!-- spec-driven-workflow:start -->
+## tasks/ 運用ルール（spec駆動開発を採用するプロジェクトのみ）
+
+このプロジェクトはspec駆動開発を採用している。
+
+- タスク着手前に `task-init` Skillを実行し、「このタスクで何を行うか」を必須クエリとして入力すること
+- `task-init`が `tasks/{YYYYMMDD}-{feature-name}/spec.md` を自動生成する（フォルダ作成・日付採番は自動）
+- 実装完了後、`task-close` Skillを実行し、`spec.md`に完了記録（完了日・AI利用状況・振り返り）を追記すること
+<!-- spec-driven-workflow:end -->
+

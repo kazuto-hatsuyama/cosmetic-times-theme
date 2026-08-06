@@ -1,0 +1,46 @@
+{%- doc -%}
+  Renders the "N items" status text for a collection results list, pre-rendering all 3
+  possible availability-view counts (available / unavailable / all) so that
+  assets/availability-toggle-filter.js can switch between them client-side without
+  re-implementing Shopify's count pluralization/translation rules in JS.
+
+  @param {number} available_count - In-stock only count
+  @param {number} unavailable_count - Out-of-stock only count
+  @param {number} total_count - Combined in-stock + out-of-stock count
+{%- enddoc -%}
+
+<div
+  class="products-count-wrapper"
+  data-testid="products-count"
+  data-item-count-wrapper
+>
+  <span role="status">
+    <span data-item-count-for="available">
+      {%- if available_count > 25000 -%}
+        {{- 'content.item_count_cutoff' | t: count: 25000 -}}
+      {%- else -%}
+        {{- 'content.item_count' | t: count: available_count -}}
+      {%- endif -%}
+    </span>
+    <span
+      data-item-count-for="unavailable"
+      hidden
+    >
+      {%- if unavailable_count > 25000 -%}
+        {{- 'content.item_count_cutoff' | t: count: 25000 -}}
+      {%- else -%}
+        {{- 'content.item_count' | t: count: unavailable_count -}}
+      {%- endif -%}
+    </span>
+    <span
+      data-item-count-for="all"
+      hidden
+    >
+      {%- if total_count > 25000 -%}
+        {{- 'content.item_count_cutoff' | t: count: 25000 -}}
+      {%- else -%}
+        {{- 'content.item_count' | t: count: total_count -}}
+      {%- endif -%}
+    </span>
+  </span>
+</div>
