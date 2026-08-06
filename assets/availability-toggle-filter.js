@@ -1,4 +1,5 @@
 import { Component } from '@theme/component';
+import { ThemeEvents } from '@theme/events';
 
 const SHOW_AVAILABLE_PARAM = 'avail_show_available';
 const SHOW_UNAVAILABLE_PARAM = 'avail_show_unavailable';
@@ -25,10 +26,10 @@ function getBoolParam(params, name, defaultValue) {
 }
 
 /**
- * @param {URLSearchParams} params
  * @returns {AvailabilityState}
  */
-function getStateFromParams(params) {
+function currentStateFromURL() {
+  const params = new URL(window.location.href).searchParams;
   return {
     showAvailable: getBoolParam(params, SHOW_AVAILABLE_PARAM, true),
     showUnavailable: getBoolParam(params, SHOW_UNAVAILABLE_PARAM, false),
@@ -90,14 +91,9 @@ function applyItemCountText(state) {
  * more than one — e.g. a desktop bar version and a mobile drawer version — each in its
  * own `<form>`) to match the given state, and applies its visible effects.
  *
- * Deliberately implemented as a plain function that queries `document` directly, rather
- * than a method relying on a component instance's own `this`/`refs`. Horizon's morph
- * engine (assets/morph.js) invokes its `onAfterUpdate` hook — which is what triggers
- * `updatedCallback()` below — with the *newly parsed, detached* node from the fetched
- * HTML, not the live node that actually stays in the page. Reading/writing through
- * `this.refs` in that context would silently operate on a throwaway clone that's never
- * shown to the shopper, leaving the real, visible checkbox stuck with whatever the morph
- * just wrote into it. Querying `document` sidesteps that entirely.
+ * Deliberately a plain function that queries `document` directly, and deliberately
+ * re-invoked several times after any filter change rather than relying on a single
+ * "morph finished" callback — see `scheduleRestore` for why.
  * @param {AvailabilityState} state
  */
 function restoreAllInstances(state) {
@@ -127,6 +123,44 @@ function restoreAllInstances(state) {
 }
 
 /**
+ * Delays (ms) at which `restoreAllInstances` is re-applied after any filter change.
+ *
+ * Horizon's morph engine (assets/morph.js) always resets our checkboxes' `checked`
+ * property back to Liquid's static default whenever ANY filter change re-renders this
+ * section (not just our own), because it patches plain `HTMLInputElement`s directly —
+ * that isn't gated behind custom-element upgrading. We can't hook the exact moment this
+ * happens: `assets/component.js`'s `updatedCallback()` mechanism (which this component
+ * would otherwise use) never fires for us here, because the "new" node the morph diffs
+ * against comes from `DOMParser`, whose document is inert and never upgrades custom
+ * elements — so `instanceof Component` fails and the hook silently never runs. Section
+ * Rendering API responses can also take over a second depending on collection size and
+ * network conditions, so a single fixed delay isn't reliable either. Re-applying several
+ * times over a generous window is the pragmatic fix without touching the shared,
+ * theme-standard morph engine.
+ */
+const RESTORE_DELAYS_MS = [50, 150, 400, 800, 1500, 2500, 4000];
+
+let filterUpdateListenerRegistered = false;
+
+/**
+ * Schedules re-applications of the current URL's availability state after any facet
+ * changes (price, brand, sort, or this control itself all dispatch the same event).
+ */
+function scheduleRestore() {
+  const state = currentStateFromURL();
+  restoreAllInstances(state);
+  for (const delay of RESTORE_DELAYS_MS) {
+    setTimeout(() => restoreAllInstances(currentStateFromURL()), delay);
+  }
+}
+
+function ensureFilterUpdateListener() {
+  if (filterUpdateListenerRegistered) return;
+  filterUpdateListenerRegistered = true;
+  document.addEventListener(ThemeEvents.FilterUpdate, scheduleRestore);
+}
+
+/**
  * @typedef {Object} AvailabilityToggleInputsRefs
  * @property {HTMLInputElement[]} facetInputs - The two availability checkboxes
  */
@@ -143,20 +177,8 @@ function restoreAllInstances(state) {
 class AvailabilityToggleInputsComponent extends Component {
   connectedCallback() {
     super.connectedCallback();
-    restoreAllInstances(getStateFromParams(new URL(window.location.href).searchParams));
-  }
-
-  /**
-   * Called after this component is re-rendered by the Section Rendering API (e.g. when
-   * another filter like Brand changes and the whole section morphs). Liquid always
-   * re-renders this component with its static default markup — it has no way to know
-   * the shopper's previous availability choice, since that state is intentionally kept
-   * outside Shopify's own (broken) filter system. We restore it here from the URL,
-   * which was already updated correctly by facets-form-component before the morph ran.
-   * See the note on `restoreAllInstances` for why this doesn't use `this`.
-   */
-  updatedCallback() {
-    restoreAllInstances(getStateFromParams(new URL(window.location.href).searchParams));
+    ensureFilterUpdateListener();
+    restoreAllInstances(currentStateFromURL());
   }
 
   /**
@@ -166,7 +188,9 @@ class AvailabilityToggleInputsComponent extends Component {
    * needed, since every product's availability is already present as a data attribute),
    * writes the two flags into their hidden fields so they're the values actually
    * submitted, then defers to the normal facets form update so the URL/history stays in
-   * sync with the rest of the filters (brand, price, etc.) exactly like every other facet.
+   * sync with the rest of the filters (brand, price, etc.) exactly like every other
+   * facet. `scheduleRestore` (triggered by the resulting `filter:update` event) takes
+   * over from here to keep re-asserting this state while the section re-renders.
    */
   updateFilters() {
     if (Array.isArray(this.refs.facetInputs)) {
