@@ -86,10 +86,49 @@ function applyItemCountText(state) {
 }
 
 /**
+ * Restores every *live, currently-attached* availability toggle instance (there can be
+ * more than one — e.g. a desktop bar version and a mobile drawer version — each in its
+ * own `<form>`) to match the given state, and applies its visible effects.
+ *
+ * Deliberately implemented as a plain function that queries `document` directly, rather
+ * than a method relying on a component instance's own `this`/`refs`. Horizon's morph
+ * engine (assets/morph.js) invokes its `onAfterUpdate` hook — which is what triggers
+ * `updatedCallback()` below — with the *newly parsed, detached* node from the fetched
+ * HTML, not the live node that actually stays in the page. Reading/writing through
+ * `this.refs` in that context would silently operate on a throwaway clone that's never
+ * shown to the shopper, leaving the real, visible checkbox stuck with whatever the morph
+ * just wrote into it. Querying `document` sidesteps that entirely.
+ * @param {AvailabilityState} state
+ */
+function restoreAllInstances(state) {
+  document.querySelectorAll('availability-toggle-inputs-component').forEach((component) => {
+    const availableInput = component.querySelector('input[name="avail_available"]');
+    const unavailableInput = component.querySelector('input[name="avail_unavailable"]');
+    const showAvailableInput = component.querySelector('input[name="avail_show_available"]');
+    const showUnavailableInput = component.querySelector('input[name="avail_show_unavailable"]');
+
+    if (availableInput instanceof HTMLInputElement) availableInput.checked = state.showAvailable;
+    if (unavailableInput instanceof HTMLInputElement) unavailableInput.checked = state.showUnavailable;
+    if (showAvailableInput instanceof HTMLInputElement) showAvailableInput.value = state.showAvailable ? 'true' : 'false';
+    if (showUnavailableInput instanceof HTMLInputElement)
+      showUnavailableInput.value = state.showUnavailable ? 'true' : 'false';
+
+    const checkedInputs = [availableInput, unavailableInput].filter(
+      (input) => input instanceof HTMLInputElement && input.checked
+    );
+    const statusComponent = component.closest('details')?.querySelector('facet-status-component');
+    if (statusComponent && typeof (/** @type {any} */ (statusComponent).updateListSummary) === 'function') {
+      /** @type {any} */ (statusComponent).updateListSummary(checkedInputs);
+    }
+  });
+
+  applyAvailabilityState(state);
+  applyItemCountText(state);
+}
+
+/**
  * @typedef {Object} AvailabilityToggleInputsRefs
  * @property {HTMLInputElement[]} facetInputs - The two availability checkboxes
- * @property {HTMLInputElement} [showAvailableInput] - Hidden field mirroring the "available" checkbox
- * @property {HTMLInputElement} [showUnavailableInput] - Hidden field mirroring the "unavailable" checkbox
  */
 
 /**
@@ -104,7 +143,7 @@ function applyItemCountText(state) {
 class AvailabilityToggleInputsComponent extends Component {
   connectedCallback() {
     super.connectedCallback();
-    this.#restoreFromURL();
+    restoreAllInstances(getStateFromParams(new URL(window.location.href).searchParams));
   }
 
   /**
@@ -114,60 +153,10 @@ class AvailabilityToggleInputsComponent extends Component {
    * the shopper's previous availability choice, since that state is intentionally kept
    * outside Shopify's own (broken) filter system. We restore it here from the URL,
    * which was already updated correctly by facets-form-component before the morph ran.
+   * See the note on `restoreAllInstances` for why this doesn't use `this`.
    */
   updatedCallback() {
-    this.#restoreFromURL();
-  }
-
-  /**
-   * Restores checkbox checked state from the URL. Only called when the checkboxes
-   * themselves were just replaced/reset by Liquid (initial load, or after another
-   * filter's section re-render) — never from this component's own `updateFilters`,
-   * where the checkboxes already hold the shopper's just-made choice and must not be
-   * overwritten by a re-derived value.
-   */
-  #restoreFromURL() {
-    const params = new URL(window.location.href).searchParams;
-    const state = getStateFromParams(params);
-
-    if (Array.isArray(this.refs.facetInputs)) {
-      for (const input of this.refs.facetInputs) {
-        if (input.name === 'avail_available') input.checked = state.showAvailable;
-        if (input.name === 'avail_unavailable') input.checked = state.showUnavailable;
-      }
-    }
-
-    this.#applyEffects(state);
-  }
-
-  /**
-   * Applies the given state's visible effects (product visibility, item count text,
-   * hidden form fields, facet summary). Deliberately does not touch the checkboxes'
-   * `checked` state — the caller is responsible for that when appropriate.
-   * @param {AvailabilityState} state
-   */
-  #applyEffects(state) {
-    if (this.refs.showAvailableInput instanceof HTMLInputElement) {
-      this.refs.showAvailableInput.value = state.showAvailable ? 'true' : 'false';
-    }
-    if (this.refs.showUnavailableInput instanceof HTMLInputElement) {
-      this.refs.showUnavailableInput.value = state.showUnavailable ? 'true' : 'false';
-    }
-
-    applyAvailabilityState(state);
-    applyItemCountText(state);
-    this.#updateStatus();
-  }
-
-  #updateStatus() {
-    if (!Array.isArray(this.refs.facetInputs)) return;
-
-    const details = this.closest('details');
-    const statusComponent = details?.querySelector('facet-status-component');
-    if (!statusComponent || typeof (/** @type {any} */ (statusComponent).updateListSummary) !== 'function') return;
-
-    const checked = this.refs.facetInputs.filter((input) => input.checked);
-    /** @type {any} */ (statusComponent).updateListSummary(checked);
+    restoreAllInstances(getStateFromParams(new URL(window.location.href).searchParams));
   }
 
   /**
@@ -189,7 +178,7 @@ class AvailabilityToggleInputsComponent extends Component {
         if (input.name === 'avail_unavailable') state.showUnavailable = input.checked;
       }
 
-      this.#applyEffects(state);
+      restoreAllInstances(state);
     }
 
     const facetsForm = this.closest('facets-form-component');
