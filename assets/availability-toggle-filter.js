@@ -6,21 +6,37 @@ import { Component } from '@theme/component';
 
 const AVAILABLE_PARAM = 'avail_available';
 const UNAVAILABLE_PARAM = 'avail_unavailable';
+/** Single source of truth for the current view, kept in a hidden form field. Using one
+ * explicit field (rather than inferring the view from which of the two checkboxes are
+ * present in the URL) avoids an unresolvable ambiguity: an unchecked checkbox is simply
+ * absent from form data, so "neither box checked" and "fresh page load, untouched" would
+ * otherwise look identical and couldn't be told apart. */
+const VIEW_PARAM = 'avail_view';
 
 /**
- * Determines the desired availability view from the given URL search params.
- * No params present at all (a fresh page load) defaults to hiding out-of-stock
- * products, matching the site's default collection browsing behavior. Checking both
- * boxes is how a shopper opts into seeing everything.
+ * Determines the view from the two checkboxes' current checked state. Both checked (or
+ * neither checked) means "no restriction" — consistent with how Shopify's own other list
+ * facets behave when zero values are selected.
+ * @param {boolean} showAvailable
+ * @param {boolean} showUnavailable
+ * @returns {AvailabilityView}
+ */
+function computeView(showAvailable, showUnavailable) {
+  if (showAvailable && !showUnavailable) return 'available';
+  if (showUnavailable && !showAvailable) return 'unavailable';
+  return 'all';
+}
+
+/**
+ * Reads the desired view from the URL. Absent means a fresh page load (the shopper
+ * hasn't interacted with this control yet), which defaults to hiding out-of-stock
+ * products, matching the site's default collection browsing behavior.
  * @param {URLSearchParams} params
  * @returns {AvailabilityView}
  */
 function getViewFromParams(params) {
-  const hasAvailableParam = params.has(AVAILABLE_PARAM);
-  const hasUnavailableParam = params.has(UNAVAILABLE_PARAM);
-
-  if (hasUnavailableParam && !hasAvailableParam) return 'unavailable';
-  if (hasUnavailableParam && hasAvailableParam) return 'all';
+  const value = params.get(VIEW_PARAM);
+  if (value === 'available' || value === 'unavailable' || value === 'all') return value;
   return 'available';
 }
 
@@ -65,6 +81,7 @@ function applyItemCountText(view) {
 /**
  * @typedef {Object} AvailabilityToggleInputsRefs
  * @property {HTMLInputElement[]} facetInputs - The two availability checkboxes
+ * @property {HTMLInputElement} [viewInput] - Hidden field carrying the authoritative view
  */
 
 /**
@@ -94,12 +111,22 @@ class AvailabilityToggleInputsComponent extends Component {
   #syncFromURL() {
     const params = new URL(window.location.href).searchParams;
     const view = getViewFromParams(params);
+    this.#applyView(view);
+  }
 
+  /**
+   * @param {AvailabilityView} view
+   */
+  #applyView(view) {
     if (Array.isArray(this.refs.facetInputs)) {
       for (const input of this.refs.facetInputs) {
-        if (input.name === AVAILABLE_PARAM) input.checked = view !== 'unavailable';
+        if (input.name === AVAILABLE_PARAM) input.checked = view === 'available' || view === 'all';
         if (input.name === UNAVAILABLE_PARAM) input.checked = view === 'unavailable' || view === 'all';
       }
+    }
+
+    if (this.refs.viewInput instanceof HTMLInputElement) {
+      this.refs.viewInput.value = view;
     }
 
     applyAvailabilityView(view);
@@ -121,25 +148,15 @@ class AvailabilityToggleInputsComponent extends Component {
   /**
    * Handles a checkbox change: applies the new view instantly (no server round-trip
    * needed, since every product's availability is already present as a data attribute),
+   * writes the resolved view into the hidden field so it's the value actually submitted,
    * then defers to the normal facets form update so the URL/history stays in sync with
    * the rest of the filters (brand, price, etc.) exactly like every other facet.
    */
   updateFilters() {
     if (Array.isArray(this.refs.facetInputs)) {
       const checkedNames = new Set(this.refs.facetInputs.filter((input) => input.checked).map((input) => input.name));
-
-      /** @type {AvailabilityView} */
-      let view = 'available';
-      const showAvailable = checkedNames.has(AVAILABLE_PARAM);
-      const showUnavailable = checkedNames.has(UNAVAILABLE_PARAM);
-
-      if (showUnavailable && !showAvailable) view = 'unavailable';
-      else if (showUnavailable && showAvailable) view = 'all';
-      else if (!showAvailable && !showUnavailable) view = 'all';
-
-      applyAvailabilityView(view);
-      applyItemCountText(view);
-      this.#updateStatus();
+      const view = computeView(checkedNames.has(AVAILABLE_PARAM), checkedNames.has(UNAVAILABLE_PARAM));
+      this.#applyView(view);
     }
 
     const facetsForm = this.closest('facets-form-component');

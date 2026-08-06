@@ -93,6 +93,19 @@
         on:change="/updateFilters"
         id="availability-toggle-inputs-component-{{ sectionId }}-{{ in_drawer }}"
       >
+        {% comment %}
+          Single authoritative source of truth for the current view (available /
+          unavailable / all), written by assets/availability-toggle-filter.js. Presence
+          vs. absence of the two checkboxes below can't disambiguate "neither checked"
+          from "fresh page load, never touched" once serialized into a URL, so this
+          hidden field carries the real value instead.
+        {% endcomment %}
+        <input
+          type="hidden"
+          name="avail_view"
+          value="available"
+          ref="viewInput"
+        >
         <div class="facets__inputs-wrapper">
           <ul
             id="filters-list-{{ sectionId }}-availability-{{ in_drawer }}"
