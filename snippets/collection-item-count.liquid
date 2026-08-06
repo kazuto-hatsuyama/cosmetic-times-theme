@@ -1,6 +1,6 @@
 {%- doc -%}
-  Renders the "N items" status text for a collection results list, pre-rendering all 3
-  possible availability-view counts (available / unavailable / all) so that
+  Renders the "N items" status text for a collection results list, pre-rendering all 4
+  possible availability-view counts (available / unavailable / all / none) so that
   assets/availability-toggle-filter.js can switch between them client-side without
   re-implementing Shopify's count pluralization/translation rules in JS.
 
@@ -41,6 +41,12 @@
       {%- else -%}
         {{- 'content.item_count' | t: count: total_count -}}
       {%- endif -%}
+    </span>
+    <span
+      data-item-count-for="none"
+      hidden
+    >
+      {{- 'content.item_count' | t: count: 0 -}}
     </span>
   </span>
 </div>
