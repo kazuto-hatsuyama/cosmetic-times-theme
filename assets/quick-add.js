@@ -183,6 +183,8 @@ export class QuickAddComponent extends Component {
       const responseText = await response.text();
       const html = new DOMParser().parseFromString(responseText, 'text/html');
 
+      this.#ensureStylesheetsLoaded(html);
+
       return html;
     } catch (error) {
       if (error.name === 'AbortError') {
@@ -193,6 +195,33 @@ export class QuickAddComponent extends Component {
     } finally {
       this.#abortController = null;
     }
+  }
+
+  /**
+   * Shopify compiles each page's `{% stylesheet %}` CSS into a per-route bundle
+   * (`compiled_assets/styles.css?...&subset=...`) containing only the styles needed by
+   * sections/snippets actually rendered on that page. The quick-add modal reuses markup
+   * fetched from the product page (see `handleClick`/`fetchProductPage`), but that markup
+   * can depend on styles (e.g. thumbnail-style slideshow controls) that aren't used
+   * anywhere on the current collection/search page and so aren't in ITS bundle. Without
+   * this, such elements render unstyled/mis-sized inside the modal. Adding the product
+   * page's stylesheet link as well (if not already present) covers the gap; loading the
+   * same base file twice with a different `subset` is harmless.
+   * @param {Document} html - The parsed product page document
+   */
+  #ensureStylesheetsLoaded(html) {
+    const currentHrefs = new Set(
+      Array.from(document.querySelectorAll('link[rel="stylesheet"]')).map((link) => link.href)
+    );
+
+    html.querySelectorAll('link[rel="stylesheet"]').forEach((link) => {
+      if (!(link instanceof HTMLLinkElement) || currentHrefs.has(link.href)) return;
+
+      const clone = document.createElement('link');
+      clone.rel = 'stylesheet';
+      clone.href = link.href;
+      document.head.appendChild(clone);
+    });
   }
 
   /**
