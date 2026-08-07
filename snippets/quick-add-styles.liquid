@@ -78,16 +78,16 @@
     }
   }
 
-  /* The shared .button class (add-to-cart-button.liquid/quick-add.liquid both include it)
-     sets a white icon/text color assuming a solid dark fill, which this button doesn't
-     have (it's a light, outlined "ghost" button — see the background/border above). That
-     rule wins over the plain `.quick-add__button` color above since both are single-class
-     selectors and `.button`'s stylesheet loads later. Re-assert the visible color here
-     with the extra `--add`/`--choose` class for higher specificity, so the cart icon is
-     actually visible instead of white-on-white. */
+  /* assets/custom-luxury.css has a broad `[class*="quick-add"] button { color: #fff
+     !important }` rule intended for the solid dark "カートに追加する" buttons inside the
+     quick-add modal, but it also matches this small circular hover button on product
+     cards, which is a light, outlined "ghost" button (see the background/border above) —
+     forcing its icon to white-on-white makes it invisible. `!important` is required to
+     compete with that rule at all (importance is compared before specificity), and the
+     extra `--add`/`--choose` class keeps this selector more specific so it wins. */
   .quick-add__button.quick-add__button--add,
   .quick-add__button.quick-add__button--choose {
-    color: var(--color-foreground);
+    color: var(--color-foreground) !important;
   }
 
   .quick-add__button.add-to-cart-button {
