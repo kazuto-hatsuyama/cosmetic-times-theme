@@ -1,12 +1,28 @@
+{% liquid
+  # collection経由URL（/collections/{handle}/products/{handle}）はストア側の
+  # リダイレクト設定により常に/products/{handle}へ正規化されてしまい、
+  # collectionオブジェクトが渡らないため、商品が所属するコレクションから
+  # 代表コレクションをフォールバックとして選ぶ
+  assign breadcrumb_collection = collection
+  if breadcrumb_collection == blank
+    for c in product.collections
+      unless c.handle == 'all'
+        assign breadcrumb_collection = c
+        break
+      endunless
+    endfor
+  endif
+%}
+
 <div class="section-background color-{{ section.settings.color_scheme }}"></div>
 <nav class="breadcrumbs color-{{ section.settings.color_scheme }} page-width" aria-label="breadcrumb">
   <ol class="breadcrumbs__list">
     <li class="breadcrumbs__item">
       <a class="breadcrumbs__link" href="{{ routes.root_url }}">ホーム</a>
     </li>
-    {% if collection %}
+    {% if breadcrumb_collection %}
       <li class="breadcrumbs__item">
-        <a class="breadcrumbs__link" href="{{ collection.url }}">{{ collection.title }}</a>
+        <a class="breadcrumbs__link" href="{{ breadcrumb_collection.url }}">{{ breadcrumb_collection.title }}</a>
       </li>
     {% endif %}
     <li class="breadcrumbs__item">
