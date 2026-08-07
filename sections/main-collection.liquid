@@ -61,25 +61,30 @@
     {% endif %}
 
     {% comment %}
-      Dedicated counting pass (separate from the rendering pagination below) so the
-      displayed item counts reflect the whole collection, not just the current render
-      batch. Uses a large paginate window since Shopify caps `collection.products` at 50
-      items when accessed outside a {% paginate %} tag. Collections larger than 1000
-      products (paginate's max) will undercount here.
+      Dedicated counting + sorting pass (separate from the rendering pagination below)
+      so the displayed item counts reflect the whole collection, not just the current
+      render batch, and so in-stock products can be moved ahead of out-of-stock ones
+      across the *entire* collection rather than just within a single page. Uses a large
+      paginate window since Shopify caps `collection.products` at 50 items when accessed
+      outside a {% paginate %} tag. Collections larger than 1000 products (paginate's
+      max) will undercount/under-sort here.
 
-      Computed unconditionally from `product.available` (never from Shopify's own
-      Availability filter/count, which is unreliable per the known bug above).
+      Counts are always computed from `product.available` (never from Shopify's own
+      Availability filter/count, which is unreliable per the known bug above). The
+      in-stock-first ordering is applied unconditionally (not just when the shopper has
+      the "show both" availability view active) since it's simply a stable partition —
+      it doesn't change which products are visible in any of the single-category views,
+      only their relative order once both categories share the page.
     {% endcomment %}
     {% assign available_count = 0 %}
     {% assign unavailable_count = 0 %}
+    {% assign sorted_products = collection.products %}
     {% paginate collection.products by 1000 %}
-      {% for product in collection.products %}
-        {% if product.available %}
-          {% assign available_count = available_count | plus: 1 %}
-        {% else %}
-          {% assign unavailable_count = unavailable_count | plus: 1 %}
-        {% endif %}
-      {% endfor %}
+      {% assign available_products = collection.products | where: 'available' %}
+      {% assign unavailable_products = collection.products | where: 'available', false %}
+      {% assign available_count = available_products.size %}
+      {% assign unavailable_count = unavailable_products.size %}
+      {% assign sorted_products = available_products | concat: unavailable_products %}
     {% endpaginate %}
     {% assign visible_products_count = available_count %}
 
@@ -92,9 +97,9 @@
       unavailable_count: unavailable_count
     %}
 
-    {% paginate collection.products by products_per_page %}
+    {% paginate sorted_products by products_per_page %}
       {% capture children %}
-        {% for product in collection.products %}
+        {% for product in sorted_products %}
           <li
             id="{{ section.id }}-{{ product.id }}"
             class="product-grid__item product-grid__item--{{ forloop.index0 }}"
@@ -116,7 +121,7 @@
       {% render 'product-grid',
         section: section,
         children: children,
-        products: collection.products,
+        products: sorted_products,
         paginate: paginate,
         enable_infinite_scroll: section.settings.enable_infinite_scroll
       %}
