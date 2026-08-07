@@ -37,34 +37,40 @@ function currentStateFromURL() {
 }
 
 /**
- * Collapses the two independent flags into a single key, used only to pick which
- * pre-rendered presentation (item count text, `data-availability-view` attribute) to
- * show — never fed back into the flags themselves.
+ * Collapses the two independent flags into a single key, used both to decide product
+ * visibility and to pick which pre-rendered presentation (item count text,
+ * `data-availability-view` attribute) to show. Neither checked means the same thing it
+ * does for every other facet on this site (e.g. Brand): no restriction applied, so
+ * everything shows — not "show nothing". Only the checkboxes themselves keep tracking
+ * the shopper's literal checked/unchecked clicks; this key is a presentation/visibility
+ * concern derived from them, never fed back into the flags.
  * @param {AvailabilityState} state
- * @returns {'available' | 'unavailable' | 'all' | 'none'}
+ * @returns {'available' | 'unavailable' | 'all'}
  */
-function getPresentationKey({ showAvailable, showUnavailable }) {
-  if (showAvailable && showUnavailable) return 'all';
-  if (showAvailable) return 'available';
-  if (showUnavailable) return 'unavailable';
-  return 'none';
+function getEffectiveKey({ showAvailable, showUnavailable }) {
+  if (showAvailable && !showUnavailable) return 'available';
+  if (showUnavailable && !showAvailable) return 'unavailable';
+  return 'all';
 }
 
 /**
  * Shows/hides every product card on the page according to the given state, using the
  * `data-product-available` attribute Liquid already renders on each card
  * (sections/main-collection.liquid). Also marks each `results-list` with the current
- * presentation key for potential styling hooks.
+ * effective key for potential styling hooks.
  * @param {AvailabilityState} state
  */
 function applyAvailabilityState(state) {
+  const key = getEffectiveKey(state);
+
   document.querySelectorAll('[data-product-available]').forEach((card) => {
     const isAvailable = card.getAttribute('data-product-available') === 'true';
-    const shouldShow = isAvailable ? state.showAvailable : state.showUnavailable;
+    let shouldShow = true;
+    if (key === 'available') shouldShow = isAvailable;
+    else if (key === 'unavailable') shouldShow = !isAvailable;
     card.toggleAttribute('hidden', !shouldShow);
   });
 
-  const key = getPresentationKey(state);
   document.querySelectorAll('results-list').forEach((resultsList) => {
     resultsList.setAttribute('data-availability-view', key);
   });
@@ -77,7 +83,7 @@ function applyAvailabilityState(state) {
  * @param {AvailabilityState} state
  */
 function applyItemCountText(state) {
-  const key = getPresentationKey(state);
+  const key = getEffectiveKey(state);
   document.querySelectorAll('[data-item-count-wrapper]').forEach((wrapper) => {
     wrapper.querySelectorAll('[data-item-count-for]').forEach((node) => {
       if (!(node instanceof HTMLElement)) return;
