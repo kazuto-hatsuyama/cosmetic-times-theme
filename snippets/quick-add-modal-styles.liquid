@@ -516,11 +516,13 @@
   }
 
   .quick-add-modal__content .product-information__media .slideshow-controls__thumbnail {
-    /* The quick-add modal's own color scheme otherwise resolves this to white, making the
-       selected thumbnail's outline (which uses currentcolor) invisible against its light
-       background — force it to the theme's normal foreground color, matching the product
-       page. */
-    color: rgb(var(--color-foreground-rgb));
+    /* A second stylesheet (the product page's own bundle, injected by
+       assets/quick-add.js so thumbnail sizing works — see CLAUDE.md) loads after this
+       one and re-sets this to white via a same-or-higher-specificity rule, making the
+       selected thumbnail's outline (which uses currentcolor) invisible against its
+       light background here. !important guarantees this fix always wins regardless of
+       stylesheet load order. */
+    color: rgb(var(--color-foreground-rgb)) !important;
   }
 
   .quick-add-modal__content .sticky-content,
