@@ -64,17 +64,10 @@
       Dedicated counting + sorting pass (separate from the rendering pagination below)
       so the displayed item counts reflect the whole collection, not just the current
       render batch, and so in-stock products can be moved ahead of out-of-stock ones
-      across the *entire* collection rather than just within a single page.
-
-      IMPORTANT: Shopify's {% paginate %} tag hard-caps `by` at 250 regardless of the
-      value requested (a platform limit, not a typo) — a collection larger than 250
-      products can never be counted or sorted as a whole in a single render. For those,
-      `large_collection` is set and we skip the whole-collection sort/count entirely,
-      falling back to sorting only within each rendered page using the real (fully
-      paginateable) `collection.products`, so every product stays reachable through
-      normal pagination/infinite scroll and no Liquid runtime error occurs (previously:
-      `Array 'sorted_products' is not paginateable`, discovered on the "all" collection
-      which has ~3,100 products).
+      across the *entire* collection rather than just within a single page. Uses a large
+      paginate window since Shopify caps `collection.products` at 50 items when accessed
+      outside a {% paginate %} tag. Collections larger than 1000 products (paginate's
+      max) will undercount/under-sort here.
 
       Counts are always computed from `product.available` (never from Shopify's own
       Availability filter/count, which is unreliable per the known bug above). The
@@ -83,108 +76,56 @@
       it doesn't change which products are visible in any of the single-category views,
       only their relative order once both categories share the page.
     {% endcomment %}
-    {% assign large_collection = false %}
     {% assign available_count = 0 %}
     {% assign unavailable_count = 0 %}
-    {% assign total_count = 0 %}
     {% assign sorted_products = collection.products %}
-    {% paginate collection.products by 250 %}
-      {% assign total_count = paginate.items %}
-      {% if total_count > 250 %}
-        {% assign large_collection = true %}
-      {% else %}
-        {% assign available_products = collection.products | where: 'available' %}
-        {% assign unavailable_products = collection.products | where: 'available', false %}
-        {% assign available_count = available_products.size %}
-        {% assign unavailable_count = unavailable_products.size %}
-        {% assign sorted_products = available_products | concat: unavailable_products %}
-      {% endif %}
+    {% paginate collection.products by 1000 %}
+      {% assign available_products = collection.products | where: 'available' %}
+      {% assign unavailable_products = collection.products | where: 'available', false %}
+      {% assign available_count = available_products.size %}
+      {% assign unavailable_count = unavailable_products.size %}
+      {% assign sorted_products = available_products | concat: unavailable_products %}
     {% endpaginate %}
     {% assign visible_products_count = available_count %}
 
-    {% if large_collection %}
-      {% content_for 'block',
-        type: 'filters',
-        id: 'filters',
-        results: collection,
-        results_size: total_count
+    {% content_for 'block',
+      type: 'filters',
+      id: 'filters',
+      results: collection,
+      results_size: visible_products_count,
+      available_count: available_count,
+      unavailable_count: unavailable_count
+    %}
+
+    {% paginate sorted_products by products_per_page %}
+      {% capture children %}
+        {% for product in sorted_products %}
+          <li
+            id="{{ section.id }}-{{ product.id }}"
+            class="product-grid__item product-grid__item--{{ forloop.index0 }}"
+            data-page="{{ paginate.current_page }}"
+            data-product-id="{{ product.id }}"
+            data-product-available="{{ product.available }}"
+            {% unless product.available %}
+              hidden
+            {% endunless %}
+            ref="cards[]"
+          >
+            {% # theme-check-disable %}
+            {% content_for 'block', type: '_product-card', id: 'product-card', closest.product: product %}
+            {% # theme-check-enable %}
+          </li>
+        {% endfor %}
+      {% endcapture %}
+
+      {% render 'product-grid',
+        section: section,
+        children: children,
+        products: sorted_products,
+        paginate: paginate,
+        enable_infinite_scroll: section.settings.enable_infinite_scroll
       %}
-    {% else %}
-      {% content_for 'block',
-        type: 'filters',
-        id: 'filters',
-        results: collection,
-        results_size: visible_products_count,
-        available_count: available_count,
-        unavailable_count: unavailable_count
-      %}
-    {% endif %}
-
-    {% if large_collection %}
-      {% paginate collection.products by products_per_page %}
-        {% assign page_available_products = collection.products | where: 'available' %}
-        {% assign page_unavailable_products = collection.products | where: 'available', false %}
-        {% assign page_sorted_products = page_available_products | concat: page_unavailable_products %}
-
-        {% capture children %}
-          {% for product in page_sorted_products %}
-            <li
-              id="{{ section.id }}-{{ product.id }}"
-              class="product-grid__item product-grid__item--{{ forloop.index0 }}"
-              data-page="{{ paginate.current_page }}"
-              data-product-id="{{ product.id }}"
-              data-product-available="{{ product.available }}"
-              {% unless product.available %}
-                hidden
-              {% endunless %}
-              ref="cards[]"
-            >
-              {% # theme-check-disable %}
-              {% content_for 'block', type: '_product-card', id: 'product-card', closest.product: product %}
-              {% # theme-check-enable %}
-            </li>
-          {% endfor %}
-        {% endcapture %}
-
-        {% render 'product-grid',
-          section: section,
-          children: children,
-          products: page_sorted_products,
-          paginate: paginate,
-          enable_infinite_scroll: section.settings.enable_infinite_scroll
-        %}
-      {% endpaginate %}
-    {% else %}
-      {% paginate sorted_products by products_per_page %}
-        {% capture children %}
-          {% for product in sorted_products %}
-            <li
-              id="{{ section.id }}-{{ product.id }}"
-              class="product-grid__item product-grid__item--{{ forloop.index0 }}"
-              data-page="{{ paginate.current_page }}"
-              data-product-id="{{ product.id }}"
-              data-product-available="{{ product.available }}"
-              {% unless product.available %}
-                hidden
-              {% endunless %}
-              ref="cards[]"
-            >
-              {% # theme-check-disable %}
-              {% content_for 'block', type: '_product-card', id: 'product-card', closest.product: product %}
-              {% # theme-check-enable %}
-            </li>
-          {% endfor %}
-        {% endcapture %}
-
-        {% render 'product-grid',
-          section: section,
-          children: children,
-          products: sorted_products,
-          paginate: paginate,
-          enable_infinite_scroll: section.settings.enable_infinite_scroll
-        %}
-      {% endpaginate %}
-    {% endif %}
+    {% endpaginate %}
   </div>
 </results-list>
 
