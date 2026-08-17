@@ -18,6 +18,7 @@
   @param {number} available_count - Real count of in-stock products (product.available == true)
   @param {number} unavailable_count - Real count of out-of-stock products
   @param {boolean} [in_drawer] - Whether the filter is in a drawer
+  @param {boolean} [counts_unknown] - True for >250-product collections where an accurate available/unavailable split can't be computed in one request. Filtering stays fully functional (per-rendered-page, driven by each product's own product.available); only the count-derived disabled state is suppressed so a checkbox is never falsely grayed out for lack of information. The "(N)" count suffix itself is never shown regardless of this flag (see below).
 {%- enddoc -%}
 
 <script
@@ -36,17 +37,24 @@
   endif
 
   assign available_disabled = false
-  if available_count == 0
-    assign available_disabled = true
-  endif
-
   assign unavailable_disabled = false
-  if unavailable_count == 0
-    assign unavailable_disabled = true
-  endif
+  unless counts_unknown
+    if available_count == 0
+      assign available_disabled = true
+    endif
+    if unavailable_count == 0
+      assign unavailable_disabled = true
+    endif
+  endunless
 
-  assign available_label = '在庫あり (' | append: available_count | append: ')'
-  assign unavailable_label = '在庫切れ (' | append: unavailable_count | append: ')'
+  # The "(N)" count is intentionally never shown next to either checkbox — the
+  # already-visible "N個のアイテム" text above covers this for <=250-product
+  # collections, and for >250-product collections no accurate available/unavailable
+  # split can be computed in one request (see counts_unknown above), so a per-checkbox
+  # number would either be redundant or fabricated depending on collection size. Kept
+  # consistent across all collection sizes rather than showing counts sometimes.
+  assign available_label = '在庫あり'
+  assign unavailable_label = '在庫切れ'
 
   assign available_id = 'AvailabilityToggle-available-' | append: filter_style | append: '-' | append: in_drawer
   assign unavailable_id = 'AvailabilityToggle-unavailable-' | append: filter_style | append: '-' | append: in_drawer

@@ -7,6 +7,7 @@
   @param {object} [filters] - The filters object
   @param {number} [available_count] - Real count of in-stock products (product.available == true), used by the custom availability toggle in place of Shopify's own (unreliable) Availability filter
   @param {number} [unavailable_count] - Real count of out-of-stock products
+  @param {boolean} [counts_unknown] - True when the caller (a >250-product collection) can't compute an accurate available/unavailable split in one request; keeps the availability checkboxes fully functional but hides their "(N)" counts instead of showing a fabricated number
 {%- enddoc -%}
 
 <script
@@ -39,6 +40,12 @@
     assign total_count = available_count | plus: unavailable_count
     assign safe_available_count = available_count
     assign safe_unavailable_count = unavailable_count
+  elsif counts_unknown
+    # >250-product collection: no accurate split is possible, so the item-count text
+    # always shows the honest whole-collection total regardless of which availability
+    # view is active, rather than fabricating an available/unavailable number.
+    assign safe_available_count = total_count
+    assign safe_unavailable_count = total_count
   endif
 
   # Calculate facets margin style
@@ -173,7 +180,7 @@
               {% capture rendered_filters %}
                 {%- for filter in filters -%}
                   {% if filter.param_name contains 'availability' %}
-                    {% render 'availability-toggle-filter', filter_style: block_settings.filter_style, sectionId: section.id, available_count: safe_available_count, unavailable_count: safe_unavailable_count %}
+                    {% render 'availability-toggle-filter', filter_style: block_settings.filter_style, sectionId: section.id, available_count: safe_available_count, unavailable_count: safe_unavailable_count, counts_unknown: counts_unknown %}
                   {% else %}
                     {% case filter.type %}
                       {% when 'price_range' %}
@@ -435,7 +442,7 @@
 
                 {%- for filter in filters -%}
                   {% if filter.param_name contains 'availability' %}
-                    {% render 'availability-toggle-filter', filter_style: 'vertical', sectionId: section.id, available_count: safe_available_count, unavailable_count: safe_unavailable_count, in_drawer: true %}
+                    {% render 'availability-toggle-filter', filter_style: 'vertical', sectionId: section.id, available_count: safe_available_count, unavailable_count: safe_unavailable_count, counts_unknown: counts_unknown, in_drawer: true %}
                   {% else %}
                     {% case filter.type %}
                       {% when 'price_range' %}
