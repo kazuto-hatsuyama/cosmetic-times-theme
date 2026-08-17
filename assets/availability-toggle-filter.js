@@ -115,12 +115,21 @@ function restoreAllInstances(state) {
     if (showUnavailableInput instanceof HTMLInputElement)
       showUnavailableInput.value = state.showUnavailable ? 'true' : 'false';
 
-    const checkedInputs = [availableInput, unavailableInput].filter(
-      (input) => input instanceof HTMLInputElement && input.checked
-    );
+    // Deliberately NOT "whichever checkboxes are literally checked" here: with both
+    // boxes checked, that would be [availableInput, unavailableInput], and the shared
+    // (stock) facet-status-component just counts array length, showing a "2" bubble —
+    // as if two independent filter values were narrowing the results, same as picking
+    // 2 brand checkboxes would. But per getEffectiveKey, both-checked means "all", i.e.
+    // no restriction applied at all, identical to neither-checked. So the status badge
+    // must reflect the *effective* key, not the raw checked count.
+    const key = getEffectiveKey(state);
+    let statusInputs = [];
+    if (key === 'available' && availableInput instanceof HTMLInputElement) statusInputs = [availableInput];
+    else if (key === 'unavailable' && unavailableInput instanceof HTMLInputElement) statusInputs = [unavailableInput];
+
     const statusComponent = component.closest('details')?.querySelector('facet-status-component');
     if (statusComponent && typeof (/** @type {any} */ (statusComponent).updateListSummary) === 'function') {
-      /** @type {any} */ (statusComponent).updateListSummary(checkedInputs);
+      /** @type {any} */ (statusComponent).updateListSummary(statusInputs);
     }
   });
 
