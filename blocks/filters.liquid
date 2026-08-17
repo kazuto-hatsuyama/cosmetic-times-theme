@@ -107,7 +107,16 @@
         <h4 class="facets--filters-title">{{ 'content.filters' | t }}</h4>
       {% endif %}
 
-      {% render 'collection-item-count', available_count: safe_available_count, unavailable_count: safe_unavailable_count, total_count: total_count %}
+      {% comment %}
+        Temporarily hidden (all collection sizes, not just >250-product ones): for
+        >250-product collections the count can't change to reflect the availability
+        toggle state (no accurate split is computable in one request — see
+        sections/main-collection.liquid), which looked like a bug to shoppers even
+        though the actual product filtering was correct. Hidden everywhere for now so
+        behavior is consistent regardless of collection size; revisit once a longer-term
+        approach for the >250 case is decided.
+      {% endcomment %}
+      {% comment %} {% render 'collection-item-count', available_count: safe_available_count, unavailable_count: safe_unavailable_count, total_count: total_count %} {% endcomment %}
 
       {% if block_settings.enable_sorting %}
         {% render 'sorting',
@@ -258,7 +267,16 @@
               {% endif %}
             {% endif %}
             {% if block_settings.filter_style == 'horizontal' %}
-              {% render 'collection-item-count', available_count: safe_available_count, unavailable_count: safe_unavailable_count, total_count: total_count %}
+              {% comment %}
+        Temporarily hidden (all collection sizes, not just >250-product ones): for
+        >250-product collections the count can't change to reflect the availability
+        toggle state (no accurate split is computable in one request — see
+        sections/main-collection.liquid), which looked like a bug to shoppers even
+        though the actual product filtering was correct. Hidden everywhere for now so
+        behavior is consistent regardless of collection size; revisit once a longer-term
+        approach for the >250 case is decided.
+      {% endcomment %}
+      {% comment %} {% render 'collection-item-count', available_count: safe_available_count, unavailable_count: safe_unavailable_count, total_count: total_count %} {% endcomment %}
 
               {% if block_settings.enable_sorting %}
                 {% render 'sorting',
