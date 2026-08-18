@@ -1,0 +1,119 @@
+{% doc %}
+  Shows a one-click "メルマガに登録する" button for logged-in customers who are not
+  yet subscribed to marketing emails. Hidden for logged-out visitors and for customers
+  who are already subscribed.
+
+  Deliberately separate from blocks/email-signup.liquid (the existing all-visitor
+  email-input form, left unchanged): that form's submission fires Shopify's
+  customers/create webhook, which the data team's backend (D:\Inetpub\shopify_data)
+  treats as "brand new signup" and triggers a heavy, unwanted sync (existing customers:
+  bulk order sync; unknown emails: new member record creation). Logged-in customers
+  already have a known Shopify customer record, so this instead submits a plain account
+  update ({% form 'customer', customer %}), which fires customers/update — already
+  handled by the backend (D:\Inetpub\Manage\shopify\webhook_customers_update.cfm).
+
+  See tasks/20260818-footer-newsletter-optin-button/spec.md and
+  D:\Inetpub\shopify_data\theme_instance_request_newsletter_optin.md for the full
+  request from the data team.
+{% enddoc %}
+
+{% if customer and customer.accepts_marketing == false %}
+  <div
+    class="newsletter-optin-button-block spacing-style"
+    style="{% render 'spacing-style', settings: block.settings %}"
+    {{ block.shopify_attributes }}
+  >
+    {% form 'customer', customer, class: 'newsletter-optin-button__form' %}
+      <input type="hidden" name="customer[accepts_marketing]" value="true">
+
+      {% if form.posted_successfully? %}
+        <p class="newsletter-optin-button__message">メルマガに登録しました</p>
+      {% else %}
+        <button
+          type="submit"
+          class="newsletter-optin-button__button {{ block.settings.style_class }}"
+        >
+          {{ block.settings.label }}
+        </button>
+      {% endif %}
+    {% endform %}
+  </div>
+{% endif %}
+
+{% stylesheet %}
+  .newsletter-optin-button-block {
+    display: flex;
+  }
+
+  .newsletter-optin-button__form {
+    display: flex;
+  }
+
+  .newsletter-optin-button__message {
+    margin: 0;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "メルマガ登録ボタン（ログイン会員向け）",
+  "tag": null,
+  "settings": [
+    {
+      "type": "text",
+      "id": "label",
+      "label": "t:settings.label",
+      "default": "メルマガに登録する"
+    },
+    {
+      "type": "select",
+      "id": "style_class",
+      "label": "t:settings.style",
+      "options": [
+        {
+          "value": "button",
+          "label": "t:options.primary"
+        },
+        {
+          "value": "button-secondary",
+          "label": "t:options.secondary"
+        },
+        {
+          "value": "button-unstyled",
+          "label": "t:options.link"
+        }
+      ],
+      "default": "button"
+    },
+    {
+      "type": "header",
+      "content": "t:content.padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "t:settings.top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "t:settings.bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    }
+  ],
+  "presets": [
+    {
+      "name": "メルマガ登録ボタン（ログイン会員向け）"
+    }
+  ]
+}
+{% endschema %}

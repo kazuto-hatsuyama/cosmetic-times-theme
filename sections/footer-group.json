@@ -133,11 +133,22 @@
             "padding-inline-end": 0
           },
           "blocks": {}
+        },
+        "newsletter_optin_button_kT4qWs": {
+          "type": "newsletter-optin-button",
+          "settings": {
+            "label": "メルマガに登録する",
+            "style_class": "button-secondary",
+            "padding-block-start": 8,
+            "padding-block-end": 0
+          },
+          "blocks": {}
         }
       },
       "block_order": [
         "group_H6VpwJ",
-        "email_signup_crihX7"
+        "email_signup_crihX7",
+        "newsletter_optin_button_kT4qWs"
       ],
       "name": "t:names.footer",
       "settings": {
