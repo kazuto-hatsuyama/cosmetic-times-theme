@@ -142,6 +142,7 @@ shopify theme push --only "config/settings_data.json" --allow-live --theme 13881
 | `snippets/customer-sync.liquid` | ログイン顧客のポイント/ランク連携用データ埋め込み（新規・2026-07-24） |
 | `assets/customer-sync.js` | 顧客ID/emailを外部エンドポイントへ送信（セッション中1回・tokenベタ書き、新規・2026-07-24） |
 | `sections/breadcrumbs.liquid` | 商品詳細ページに「ホーム > コレクション名 > 商品名」形式のパンくずリストを表示する新規セクション（新規・2026-08-07、`templates/product.json`の`order`先頭に配置）。**判明した既知の制約**: このストアは`/collections/{handle}/products/{handle}`形式のURLを常に`/products/{handle}`へリダイレクトする設定になっており（原因はテーマコード外・管理画面のURLリダイレクト設定か何らかのSEOアプリと推測、未特定）、Shopify標準の`collection`オブジェクトがproductテンプレートで常に`nil`になる。そのため`collection`が`nil`の場合、`product.collections`から`all`ハンドルを除いた最初のコレクションを代表コレクションとして表示するフォールバックで対応している |
+| `sections/footer.liquid`, `sections/footer-group.json` | フッターの「メールマガジン登録」欄一式（見出し・説明文・メールアドレス入力欄・送信ボタン）を、ログイン状態を問わず常時非表示に変更（2026-08-18）。データ系（`D:\Inetpub\shopify_data`）からの依頼: この送信がShopifyの`customers/create`イベントを発火させ、バックエンド側で意図しない重い処理（既存会員なら過去注文の一括同期、未登録メールなら新規会員レコード作成）を引き起こしていたため。当初は「ログイン中・未登録会員向けボタン化」で対応する予定で`blocks/newsletter-optin-button.liquid`を実装・デプロイしたが、Shopifyの新カスタマーアカウント機能（マイページ）に同等の「マーケティング設定」トグルが標準で用意されていることが判明したため不要となり撤去済み。`footer-group.json`の`footer_m9NzUG`セクションの`blocks`/`block_order`は空に変更（`footer_utilities_jLGE8U`＝著作権表示・利用規約・SNSリンクは変更なし） |
 
 ---
 
