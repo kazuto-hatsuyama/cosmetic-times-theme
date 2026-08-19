@@ -2,22 +2,22 @@ import { Component } from '@theme/component';
 import { debounce, fetchConfig } from '@theme/utilities';
 import { CartUpdateEvent } from '@theme/events';
 
+const WEEKDAY_LABELS = ['日', '月', '火', '水', '木', '金', '土'];
+
 /**
  * A custom element that persists delivery preferences (delivery date / time slot /
  * delivery-box usage) to the cart as cart attributes (`delivery_date`, `delivery_time`,
  * `delivery_box`), so they survive through checkout as order attributes without any
  * checkout customization.
  *
- * The earliest selectable delivery date is calculated on the client from
- * `data-lead-business-days` / `data-blackout-dates`, so operators can adjust lead time and
- * blackout dates (year-end holidays, etc.) from the theme editor without a code change.
+ * The delivery date is chosen from a select box (matching the legacy site's UI) listing
+ * `data-selectable-days` consecutive calendar dates starting `data-lead-days` days from today.
+ * Both are theme settings, so operators can adjust the window (e.g. push it out over year-end)
+ * without a code change.
  *
  * @typedef {Object} CartDeliveryOptionsComponentRefs
- * @property {HTMLInputElement} dateInput - The delivery date input.
- * @property {HTMLElement} datePlaceholder - The "指定しない" text overlaid on the date input while it's empty
- *   (native `<input type="date">` doesn't support a custom placeholder).
+ * @property {HTMLSelectElement} dateSelect - The delivery date select.
  * @property {HTMLSelectElement} timeSelect - The delivery time slot select.
- * @property {HTMLElement} dateHint - The hint text under the date input.
  * @property {HTMLElement} message - The status message element.
  */
 
@@ -25,124 +25,70 @@ import { CartUpdateEvent } from '@theme/events';
  * @extends {Component<CartDeliveryOptionsComponentRefs>}
  */
 class CartDeliveryOptions extends Component {
-  requiredRefs = ['dateInput', 'datePlaceholder', 'timeSelect', 'dateHint', 'message'];
+  requiredRefs = ['dateSelect', 'timeSelect', 'message'];
 
   /** @type {AbortController | null} */
   #activeFetch = null;
 
-  /** @type {Set<string>} */
-  #blackoutDates = new Set();
-
-  /** @type {string} */
-  #minDate = '';
-
-  /** @type {string} */
-  #maxDate = '';
-
-  /** @type {string} */
-  #lastValidDate = '';
-
   connectedCallback() {
     super.connectedCallback();
 
-    const leadBusinessDays = Number(this.dataset.leadBusinessDays ?? 7);
-    const maxAdvanceDays = Number(this.dataset.maxAdvanceDays ?? 90);
+    const leadDays = Number(this.dataset.leadDays ?? 7);
+    const selectableDays = Number(this.dataset.selectableDays ?? 14);
+    const selectedDate = this.dataset.selectedDate ?? '';
 
-    this.#blackoutDates = new Set(
-      (this.dataset.blackoutDates ?? '')
-        .split(',')
-        .map((value) => value.trim())
-        .filter(Boolean)
-    );
+    this.#populateDateOptions(leadDays, selectableDays, selectedDate);
+  }
 
-    const earliest = CartDeliveryOptions.#computeEarliestDate(leadBusinessDays, this.#blackoutDates);
-    const latest = new Date();
-    latest.setHours(0, 0, 0, 0);
-    latest.setDate(latest.getDate() + maxAdvanceDays);
+  /**
+   * Builds the `delivery_date` select's options: one per calendar day in the configured
+   * window, plus the previously saved date if it falls outside that window (so a stale
+   * selection isn't silently discarded).
+   * @param {number} leadDays
+   * @param {number} selectableDays
+   * @param {string} selectedDate - A date in `YYYY-MM-DD` format, or `''` for 指定なし.
+   */
+  #populateDateOptions(leadDays, selectableDays, selectedDate) {
+    const { dateSelect } = this.refs;
 
-    this.#minDate = CartDeliveryOptions.#toISODate(earliest);
-    this.#maxDate = CartDeliveryOptions.#toISODate(latest);
-    this.#lastValidDate = this.refs.dateInput.value;
+    const dates = [];
+    const cursor = new Date();
+    cursor.setHours(0, 0, 0, 0);
+    cursor.setDate(cursor.getDate() + leadDays);
 
-    this.refs.dateInput.min = this.#minDate;
-    this.refs.dateInput.max = this.#maxDate;
-    this.refs.dateHint.textContent = `${CartDeliveryOptions.#toJapaneseDate(earliest)}以降でご指定いただけます`;
+    for (let i = 0; i < selectableDays; i++) {
+      dates.push(CartDeliveryOptions.#toISODate(cursor));
+      cursor.setDate(cursor.getDate() + 1);
+    }
+
+    if (selectedDate && !dates.includes(selectedDate)) {
+      dates.push(selectedDate);
+      dates.sort();
+    }
+
+    for (const isoDate of dates) {
+      const option = document.createElement('option');
+      option.value = isoDate;
+      option.textContent = CartDeliveryOptions.#toLabel(isoDate);
+      if (isoDate === selectedDate) option.selected = true;
+      dateSelect.appendChild(option);
+    }
   }
 
   /**
    * Handles a change on any of the delivery fields (date / time / delivery-box).
-   *
-   * The date input also fires `input` continuously while it's being edited (typing, or while
-   * the native date-picker popover is open) - that's used only to keep the "指定しない" overlay
-   * in sync in real time, without validating/saving until the value is actually committed
-   * (`change`).
-   *
    * @param {Event} event
    */
-  handleChange = (event) => {
-    if (event.target === this.refs.dateInput) {
-      if (event.type === 'input') {
-        this.#syncDatePlaceholder();
-        return;
-      }
-
-      this.#handleDateChange();
-      return;
-    }
-
-    if (event.type !== 'change') return;
-
+  handleChange = () => {
     this.#save();
   };
 
-  #syncDatePlaceholder() {
-    const { dateInput, datePlaceholder } = this.refs;
-    datePlaceholder.classList.toggle('hidden', dateInput.value !== '');
-  }
-
-  #handleDateChange() {
-    const { dateInput, message } = this.refs;
-    const value = dateInput.value;
-
-    if (value === '') {
-      this.#lastValidDate = '';
-      this.#clearMessage();
-      this.#syncDatePlaceholder();
-      this.#save();
-      return;
-    }
-
-    const isInRange = value >= this.#minDate && value <= this.#maxDate;
-    const isValid = isInRange && CartDeliveryOptions.#isBusinessDay(value, this.#blackoutDates);
-
-    if (!isValid) {
-      dateInput.value = this.#lastValidDate;
-      this.#syncDatePlaceholder();
-      message.textContent = message.dataset.errorDateText ?? '';
-      message.classList.remove('hidden');
-      message.classList.add('cart-delivery-options__message--error');
-      return;
-    }
-
-    this.#lastValidDate = value;
-    this.#clearMessage();
-    this.#syncDatePlaceholder();
-    this.#save();
-  }
-
-  #clearMessage() {
-    const { message } = this.refs;
-    message.textContent = '';
-    message.classList.add('hidden');
-    message.classList.remove('cart-delivery-options__message--error');
-  }
-
   #save = debounce(async () => {
-    const { dateInput, timeSelect, message } = this.refs;
+    const { dateSelect, timeSelect, message } = this.refs;
     const checkedBox = this.querySelector('input[name="delivery_box"]:checked');
 
     const attributes = {
-      delivery_date: dateInput.value ?? '',
+      delivery_date: dateSelect.value ?? '',
       delivery_time: timeSelect.value ?? '00',
       delivery_box: checkedBox instanceof HTMLInputElement ? checkedBox.value : '01',
     };
@@ -193,42 +139,6 @@ class CartDeliveryOptions extends Component {
     }
   }, 200);
 
-  /**
-   * @param {string} isoDate - A date in `YYYY-MM-DD` format.
-   * @param {Set<string>} blackoutDates
-   * @returns {boolean}
-   */
-  static #isBusinessDay(isoDate, blackoutDates) {
-    const day = CartDeliveryOptions.#parseISODate(isoDate).getDay();
-    if (day === 0 || day === 6) return false;
-    return !blackoutDates.has(isoDate);
-  }
-
-  /**
-   * Computes the earliest date that is at least `leadBusinessDays` business days from today,
-   * excluding Saturdays, Sundays, and the provided blackout dates.
-   * @param {number} leadBusinessDays
-   * @param {Set<string>} blackoutDates
-   * @returns {Date}
-   */
-  static #computeEarliestDate(leadBusinessDays, blackoutDates) {
-    const cursor = new Date();
-    cursor.setHours(0, 0, 0, 0);
-    cursor.setDate(cursor.getDate() + 1);
-
-    let count = 0;
-    // Safety cap (10 years) to guard against a misconfigured blackout list spanning too wide a range.
-    for (let i = 0; i < 3650; i++) {
-      if (CartDeliveryOptions.#isBusinessDay(CartDeliveryOptions.#toISODate(cursor), blackoutDates)) {
-        count++;
-        if (count >= leadBusinessDays) break;
-      }
-      cursor.setDate(cursor.getDate() + 1);
-    }
-
-    return cursor;
-  }
-
   /** @param {Date} date */
   static #toISODate(date) {
     const year = date.getFullYear();
@@ -238,14 +148,10 @@ class CartDeliveryOptions extends Component {
   }
 
   /** @param {string} isoDate - A date in `YYYY-MM-DD` format. */
-  static #parseISODate(isoDate) {
+  static #toLabel(isoDate) {
     const [year, month, day] = isoDate.split('-').map(Number);
-    return new Date(year, month - 1, day);
-  }
-
-  /** @param {Date} date */
-  static #toJapaneseDate(date) {
-    return `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}日`;
+    const date = new Date(year, month - 1, day);
+    return `${year}/${String(month).padStart(2, '0')}/${String(day).padStart(2, '0')}（${WEEKDAY_LABELS[date.getDay()]}）`;
   }
 }
 

@@ -1780,9 +1780,9 @@
       },
       {
         "type": "range",
-        "id": "delivery_lead_business_days",
-        "label": "お届け希望日として選択可能な最短の営業日数",
-        "info": "発送日（注文の翌営業日）を1営業日目として数えます。土日は営業日に含みません。祝日・臨時休業日は下の「配送不可日」に登録してください。",
+        "id": "delivery_lead_days",
+        "label": "お届け希望日の選択肢の開始日（本日から何日後か）",
+        "info": "選択肢の一番早い日付。年末年始等で通常より配送に時間がかかる場合は、この値を一時的に増やして調整してください。",
         "min": 0,
         "max": 30,
         "step": 1,
@@ -1791,20 +1791,13 @@
       },
       {
         "type": "range",
-        "id": "delivery_max_advance_days",
-        "label": "お届け希望日として選択可能な日数の上限（本日から）",
-        "min": 30,
-        "max": 180,
-        "step": 10,
+        "id": "delivery_selectable_days",
+        "label": "お届け希望日の選択肢に表示する日数",
+        "min": 1,
+        "max": 60,
+        "step": 1,
         "unit": "日",
-        "default": 90,
-        "visible_if": "{{ settings.show_delivery_options == true }}"
-      },
-      {
-        "type": "textarea",
-        "id": "delivery_blackout_dates",
-        "label": "配送不可日（年末年始・臨時休業日など）",
-        "info": "1行に1日、YYYY-MM-DD形式で入力してください（例: 2026-12-31）。土日は自動的に除外されるため入力不要です。",
+        "default": 14,
         "visible_if": "{{ settings.show_delivery_options == true }}"
       },
       {

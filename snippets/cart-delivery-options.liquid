@@ -9,6 +9,11 @@
     delivery_time:  00=指定しない 08=午前中 12=12-14時 14=14-16時 16=16-18時 18=18-20時 19=19-21時
     delivery_box:   00=利用する 01=利用しない
 
+  お届け希望日 (delivery_date) is a plain YYYY-MM-DD string (empty = 指定なし / earliest available),
+  chosen from a select box listing `delivery_selectable_days` consecutive calendar dates starting
+  `delivery_lead_days` days from today (matches the legacy site's date picker; the options
+  themselves are generated client-side since they depend on "today").
+
   @param {string} [section_id] - The section ID, used to keep other cart sections in sync after an update.
 {%- enddoc -%}
 
@@ -17,18 +22,12 @@
   {% assign delivery_time_value = cart.attributes.delivery_time | default: '00' %}
   {% assign delivery_box_value = cart.attributes.delivery_box | default: '01' %}
 
-  {% capture newline %}
-{% endcapture %}
-  {% assign blackout_lines = settings.delivery_blackout_dates | split: newline %}
-  {% assign blackout_csv = blackout_lines | join: ',' %}
-
   <cart-delivery-options-component
     class="cart-delivery-options"
     on:change="/handleChange"
-    on:input="/handleChange"
-    data-lead-business-days="{{ settings.delivery_lead_business_days }}"
-    data-max-advance-days="{{ settings.delivery_max_advance_days }}"
-    data-blackout-dates="{{ blackout_csv | escape }}"
+    data-lead-days="{{ settings.delivery_lead_days }}"
+    data-selectable-days="{{ settings.delivery_selectable_days }}"
+    data-selected-date="{{ delivery_date_value | escape }}"
     {% if section_id != blank %}
       data-section-id="{{ section_id }}"
     {% endif %}
@@ -42,28 +41,16 @@
           class="cart-delivery-options__label"
         >
           お届け希望日
+          <span class="cart-delivery-options__label-note">（指定なしの場合は最短でお届け）</span>
         </label>
-        <div class="cart-delivery-options__date-wrapper">
-          <input
-            type="date"
-            id="cart-delivery-date"
-            ref="dateInput"
-            name="delivery_date"
-            class="cart-delivery-options__input"
-            value="{{ delivery_date_value | escape }}"
-          >
-          <span
-            class="cart-delivery-options__date-placeholder{% if delivery_date_value != blank %} hidden{% endif %}"
-            ref="datePlaceholder"
-            aria-hidden="true"
-          >
-            指定しない
-          </span>
-        </div>
-        <p
-          class="cart-delivery-options__hint"
-          ref="dateHint"
-        ></p>
+        <select
+          id="cart-delivery-date"
+          ref="dateSelect"
+          name="delivery_date"
+          class="cart-delivery-options__select"
+        >
+          <option value="">指定なし</option>
+        </select>
       </div>
 
       <div class="cart-delivery-options__field">
@@ -172,7 +159,6 @@
         role="status"
         data-success-text="配送設定を保存しました"
         data-error-text="配送設定の保存に失敗しました"
-        data-error-date-text="選択できないお届け希望日です。土日・配送不可日以外の日付を選択してください"
       ></p>
     </fieldset>
   </cart-delivery-options-component>
@@ -212,7 +198,10 @@
     font-size: var(--font-size--2xs);
   }
 
-  .cart-delivery-options__input,
+  .cart-delivery-options__label-note {
+    color: rgb(var(--color-foreground-rgb) / var(--opacity-subdued-text));
+  }
+
   .cart-delivery-options__select {
     background-color: var(--color-input-background);
     color: var(--color-input-text);
@@ -223,36 +212,6 @@
     padding: var(--padding-sm) var(--padding-md);
     width: 100%;
     font-size: var(--font-size--sm);
-  }
-
-  .cart-delivery-options__hint {
-    font-size: var(--font-size--2xs);
-    color: rgb(var(--color-foreground-rgb) / var(--opacity-subdued-text));
-    margin: 0;
-  }
-
-  .cart-delivery-options__date-wrapper {
-    position: relative;
-  }
-
-  .cart-delivery-options__date-placeholder {
-    position: absolute;
-    top: var(--style-border-width-inputs, 1px);
-    bottom: var(--style-border-width-inputs, 1px);
-    left: var(--style-border-width-inputs, 1px);
-    /* Leave room on the right for the browser's native calendar-picker icon. */
-    right: 32px;
-    display: flex;
-    align-items: center;
-    padding-inline-start: var(--padding-md);
-    background-color: var(--color-input-background);
-    color: var(--color-input-text);
-    font-size: var(--font-size--sm);
-    pointer-events: none;
-  }
-
-  .cart-delivery-options__date-placeholder.hidden {
-    display: none;
   }
 
   .cart-delivery-options__radio-group {
