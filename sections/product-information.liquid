@@ -4,6 +4,84 @@
   {{ closest.product | structured_data }}
 </script>
 
+{%- comment -%}
+  「SE向け実装指示書_20260817.docx」対応: クチコミの評価点(aggregateRating)と個々のレビュー本文
+  (review配列)をProduct JSON-LDに補足出力する。Shopify標準の`structured_data`フィルタが
+  `reviews.rating`/`reviews.rating_count`メタフィールドから自動でaggregateRatingを含めるかどうかは
+  未確認のため、二重記載のリスクを許容した上でこのブロックで明示的に保証する（値が無ければ何も出力しない）。
+
+  ⚠️ 注意（2026-08-19）: 個々のレビューは`product.metafields.judgeme.review_widget_data`
+  （json）の`reviews`配列から取得している。このメタフィールドはJudge.meアプリが自社ウィジェットの
+  再描画用にキャッシュしている**非公開・内部実装依存のフィールド**であり、Shopifyの標準メタフィールド
+  （`reviews.rating`/`reviews.rating_count`）とは異なりJudge.me側の仕様として公開・保証されたものではない。
+  そのため、Judge.me側のアプリ更新等でこのフィールドの構造やキー名が変わる／提供されなくなる可能性があり、
+  その場合はこのブロックのreview配列部分が静かに空になる（`if`でガードしているため壊れることはないが、
+  レビューJSON-LDが出力されなくなる点は認識しておくこと）。
+{%- endcomment -%}
+{%- liquid
+  assign review_rating = closest.product.metafields.reviews.rating.value.rating
+  assign review_rating_count = closest.product.metafields.reviews.rating_count.value
+
+  assign judgeme_widget_data = closest.product.metafields.judgeme.review_widget_data.value
+  assign judgeme_reviews_raw = judgeme_widget_data.reviews
+  assign judgeme_reviews_limited = judgeme_reviews_raw | slice: 0, 10
+-%}
+{%- if review_rating != blank and review_rating_count != blank and review_rating_count > 0 -%}
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Product",
+      "name": {{ closest.product.title | json }},
+      "url": {{ shop.url | append: closest.product.url | json }},
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": {{ review_rating | json }},
+        "reviewCount": {{ review_rating_count | json }}
+      }
+      {%- if judgeme_reviews_limited != blank -%}
+        ,
+        "review": [
+          {%- assign review_json_count = 0 -%}
+          {%- for rev in judgeme_reviews_limited -%}
+            {%- liquid
+              assign rev_rating = rev.rating
+              assign rev_body = rev.body
+              if rev_body == blank
+                assign rev_body = rev.body_html | strip_html
+              endif
+              assign rev_author = rev.reviewer_name
+              if rev_author == blank
+                assign rev_author = '匿名'
+              endif
+              assign rev_date = rev.created_at
+            -%}
+            {%- if rev_body != blank and rev_rating != blank -%}
+              {%- if review_json_count > 0 -%},{%- endif -%}
+              {
+                "@type": "Review",
+                "reviewRating": {
+                  "@type": "Rating",
+                  "ratingValue": {{ rev_rating | json }}
+                },
+                "author": {
+                  "@type": "Person",
+                  "name": {{ rev_author | json }}
+                },
+                "reviewBody": {{ rev_body | json }}
+                {%- if rev_date != blank -%}
+                  ,
+                  "datePublished": {{ rev_date | json }}
+                {%- endif -%}
+              }
+              {%- assign review_json_count = review_json_count | plus: 1 -%}
+            {%- endif -%}
+          {%- endfor -%}
+        ]
+      {%- endif -%}
+    }
+  </script>
+{%- endif -%}
+
 {% capture media_gallery %}
   {%- content_for 'block',
     type: '_product-media-gallery',
