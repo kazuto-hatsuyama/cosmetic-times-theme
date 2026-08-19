@@ -1,6 +1,5 @@
 import { Component } from '@theme/component';
 import { debounce, fetchConfig } from '@theme/utilities';
-import { CartUpdateEvent } from '@theme/events';
 
 const WEEKDAY_LABELS = ['日', '月', '火', '水', '木', '金', '土'];
 
@@ -100,14 +99,15 @@ class CartDeliveryOptions extends Component {
     const abortController = new AbortController();
     this.#activeFetch = abortController;
 
-    const sectionId = this.dataset.sectionId;
-
     try {
+      // Note: deliberately not requesting `sections` / dispatching a CartUpdateEvent here.
+      // Delivery preferences don't affect totals, item count, or any other rendered cart UI,
+      // and doing so previously caused `component-cart-items.js`'s global cartUpdate listener
+      // to morph this section with the server's raw (pre-JS) <select> markup, wiping out the
+      // client-generated <option> list and making the just-picked date appear to revert to
+      // 指定なし until the next full page load.
       const config = fetchConfig('json', {
-        body: JSON.stringify({
-          attributes,
-          sections: sectionId ? [sectionId] : undefined,
-        }),
+        body: JSON.stringify({ attributes }),
       });
 
       const response = await fetch(Theme.routes.cart_update_url, {
@@ -116,14 +116,6 @@ class CartDeliveryOptions extends Component {
       });
 
       if (!response.ok) throw new Error('Failed to update cart attributes');
-
-      const data = await response.json();
-
-      if (sectionId && data.sections?.[sectionId]) {
-        document.dispatchEvent(
-          new CartUpdateEvent(data, this.id, { source: 'cart-delivery-options-component', sections: data.sections })
-        );
-      }
 
       message.textContent = message.dataset.successText ?? '';
       message.classList.remove('hidden');

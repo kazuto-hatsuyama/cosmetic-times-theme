@@ -219,7 +219,7 @@
     </div>
   {% endif %}
 
-  {% render 'cart-delivery-options', section_id: section_id %}
+  {% render 'cart-delivery-options' %}
 
   {% liquid
     assign available_before_points = cart.total_price | divided_by: 100.0 | round | plus: cart.attributes.points_used | default: 0
