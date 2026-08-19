@@ -23,6 +23,23 @@
 
 ---
 
+## データ系との連携（ハイブリッド運用、2026-08-19〜）
+
+データ系（`D:\Inetpub\shopify_data`）とテーマ系（このインスタンス）は別セッションで直接会話できない。
+そのため以下のハイブリッドで連携する。
+
+- **具体的な実装依頼**（liquid修正・新機能追加など）は、データ系インスタンスが`Agent`ツールで
+  このディレクトリをスコープにしたサブエージェントを直接起動してくることがある
+  （このCLAUDE.mdを読んだ上で依頼してくる想定）。ユーザーが直接このセッションに指示する通常の
+  作業フローと並行して発生しうる
+- **すぐ着手しない情報共有・気づき・仕様確認**は `D:\Inetpub\HANDOFF.md` に非同期メモとして残る
+  （「データ系 → テーマ系」セクション）。作業開始時、未対応項目がないか確認する
+- データ系に伝えたいこと（実装した仕様・データ系側で対応が必要な内容・不具合報告等）は
+  `HANDOFF.md`の「テーマ系 → データ系」セクション先頭に追記する
+- 詳細は`HANDOFF.md`冒頭の使い方を参照
+
+---
+
 ## ⚠️ 禁止事項（必ず守ること）
 
 - **`shopify theme pull` は絶対実行禁止**
@@ -43,6 +60,7 @@
 | `assets/component-cart-items.js` | `onLineItemRemove` でカートが空になった際、`points_used`カート属性とディスカウントコードをクリアする処理を追加（2026-07-30）。同箇所で`delivery_date`/`delivery_time`/`delivery_box`カート属性もクリアするよう追加（2026-08-19。古い配送希望日が次回の注文に残らないようにするため） |
 | `assets/cart-discount.js` | `applyDiscount`にクーポン適用時の`points_used`クリア処理を追加後、削除（2026-07-31。詳細は下記カスタマイズ済みファイル一覧参照） |
 | `assets/quick-add.js` | クイック追加モーダルが商品ページのHTMLを流用する際、そのページ専用の`{% stylesheet %}` CSS（`compiled_assets/styles.css`のsubset）が現在のページに含まれておらずスタイル崩れが起きる問題を修正するため、取得した商品ページのstylesheetリンクを`<head>`に追加注入する処理を追加（2026-08-07） |
+| `sections/product-information.liquid` | Shopify標準の`structured_data`フィルタ出力の直後に、`aggregateRating`補足JSON-LDを追加（2026-08-19。詳細は下記カスタマイズ済みファイル一覧参照） |
 
 ---
 
@@ -149,8 +167,10 @@ shopify theme push --only "config/settings_data.json" --allow-live --theme 13881
 | `assets/cart-delivery-options.js` | 上記UIのカート属性更新処理を担当する新規Web Component（新規・2026-08-19）。値は`points_used`（`cart-points.js`）と同様に`attributes`キー経由で`/cart/update.js`へ送信（Shopifyの仕様上、他のカート属性はマージされ上書きされないため、ランク割引・ポイント利用・クーポン利用への影響はない）。**2026-08-19（再修正・同日中に再々修正）: お届け希望日をLiquid側で静的レンダリングする方式に変更したことに伴い、日付option生成ロジック（`connectedCallback`・最短日算出・営業日判定・配送不可日除外等）を全て撤去し、単純な保存処理のみに簡略化**。保存後の`sections`取得・`CartUpdateEvent`のdispatchも撤去済み（配送設定は他のカートUIに影響しないため不要。以前はこれが原因で保存直後に選択表示が「指定なし」に戻って見える不具合があった） |
 | `snippets/cart-summary.liquid` | `cart-delivery-options`スニペットの呼び出しを追加（新規・2026-08-19）。ポイント入力欄の直前に配置 |
 | `snippets/scripts.liquid` | `cart-delivery-options.js`のグローバル読み込みを追加（`show_delivery_options`が有効な場合のみ、新規・2026-08-19）。理由は既存の`cart-points.js`と同様（カートが空の状態からの遷移でscriptタグがmorph挿入のみとなり実行されない問題を避けるため） |
-
----
+| `sections/product-extra-info.liquid` | 「SE向け実装指示書_20260817.docx」対応の新規セクション（新規・2026-08-19）。悩み・肌タイプ・仕上がりタグ（`custom.skin_concern`/`custom.skin_type`/`custom.finish_type`）、使い方（`custom.usage_steps`）、全成分（`custom.ingredients`）、並行輸入の信頼性説明（`custom.parallel_import_info`、テキストのみ・バナー画像は使用しない）、購買実績（`custom.sales_record`）を縦並び・SSR静的出力する。タブ・アコーディオンは使用しない。いずれも`custom`名前空間のメタフィールドは2026-08-19時点でShopifyストアに未作成（データ系が別途対応予定）のため、各項目を個別にblank判定しており、値が無い項目・全項目が無い場合は何も出力しない。`templates/product.json`の`order`に`main`の直後で追加 |
+| `sections/product-faq.liquid` | 同指示書対応のFAQセクション（新規・2026-08-19）。`custom.faq_items`（json型、`[{"q":...,"a":...}]`想定）を質問・回答セットとして常時表示（タブ・アコーディオン不使用）でSSR出力し、FAQPageのJSON-LD（`mainEntity`にQuestion/Answerを列挙）を付与。メタフィールド未作成・空の場合はセクションごと何も出力しない。データ系が商品ごとにQ&A内容を投入する運用（SE側はメタフィールドを読み取ってSSR表示する仕組みの実装のみが担当範囲）。`templates/product.json`の`order`で`product_extra_info`の直後・`product_recommendations`の手前に配置。**本来は指示書の推奨構成ではクチコミSSRセクションがこの直前に来る想定だが、2026-08-19時点でJudge.meレビューウィジェットが商品ページに未設置のため未実装**（詳細は`D:\Inetpub\HANDOFF.md`参照） |
+| `sections/product-information.liquid` | Shopify標準の`structured_data`フィルタによるProduct JSON-LD出力の直後に、`aggregateRating`（`reviews.rating`/`reviews.rating_count`メタフィールドから算出）を明示的に補足出力するJSON-LDブロックを追加（新規・2026-08-19、初めての本ファイル改変につき上記「テーマ標準ファイルへの変更」表にも追記要）。値が無ければ何も出力しない。個々のレビュー本文をReviewオブジェクト配列としてJSON-LDに含める対応は、レビューデータの格納場所（メタオブジェクトの項目名等）が未確定のため未実装（`D:\Inetpub\HANDOFF.md`参照） |
+| `templates/product.json` | 上記2セクション（`product_extra_info`, `product_faq`）を`order`に追加（新規・2026-08-19） |
 
 ## MCPサーバー設定
 

@@ -276,6 +276,18 @@
         "padding-block-end": 0
       }
     },
+    "product_extra_info": {
+      "type": "product-extra-info",
+      "settings": {
+        "color_scheme": "scheme-1"
+      }
+    },
+    "product_faq": {
+      "type": "product-faq",
+      "settings": {
+        "color_scheme": "scheme-1"
+      }
+    },
     "product_recommendations_qggXJq": {
       "type": "product-recommendations",
       "blocks": {
@@ -421,6 +433,8 @@
   "order": [
     "breadcrumbs",
     "main",
+    "product_extra_info",
+    "product_faq",
     "product_recommendations_qggXJq"
   ]
 }

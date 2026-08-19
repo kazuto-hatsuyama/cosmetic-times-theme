@@ -1,0 +1,122 @@
+{% comment %}
+  「SE向け実装指示書_20260817.docx」対応:
+  FAQ（よくある質問）をクチコミの直下相当の位置に縦並び・常時表示（タブ・アコーディオン不使用）でSSR出力し、
+  FAQPageのJSON-LDを付与するセクション。
+
+  参照メタフィールド: custom.faq_items（json型）
+  想定フォーマット: [{"q": "質問文", "a": "回答文"}, ...]
+  Q&Aの内容自体はデータ系（HY/WEBマネージャー側）が商品ごとに用意して投入する運用のため、
+  現時点ではメタフィールド自体が未作成 = 値がblankになる想定。blankの場合はセクションごと何も出力しない。
+
+  既知の注意点: 個々のクチコミ（Judge.me）のSSRセクションが指示書の推奨構成では本セクションの
+  直上（このセクションより前）に来る想定だが、2026-08-19時点でJudge.meレビューウィジェットが
+  商品ページに未設置のため未実装。詳細は D:\Inetpub\HANDOFF.md 参照。
+{% endcomment %}
+{% liquid
+  assign faq_items = product.metafields.custom.faq_items.value
+%}
+
+{% if faq_items != blank %}
+  <div class="section-background color-{{ section.settings.color_scheme }}"></div>
+  <div class="product-faq color-{{ section.settings.color_scheme }} page-width">
+    <h2 class="product-faq__heading">よくあるご質問</h2>
+    <dl class="product-faq__list">
+      {% for item in faq_items %}
+        {% if item.q != blank and item.a != blank %}
+          <div class="product-faq__item">
+            <dt class="product-faq__question">{{ item.q }}</dt>
+            <dd class="product-faq__answer">{{ item.a }}</dd>
+          </div>
+        {% endif %}
+      {% endfor %}
+    </dl>
+  </div>
+
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {% assign faq_json_count = 0 %}
+        {% for item in faq_items %}
+          {% if item.q != blank and item.a != blank %}
+            {% if faq_json_count > 0 %},{% endif %}
+            {
+              "@type": "Question",
+              "name": {{ item.q | json }},
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": {{ item.a | json }}
+              }
+            }
+            {% assign faq_json_count = faq_json_count | plus: 1 %}
+          {% endif %}
+        {% endfor %}
+      ]
+    }
+  </script>
+{% endif %}
+
+{% stylesheet %}
+  .product-faq {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding-block: 32px;
+  }
+
+  .product-faq__heading {
+    margin: 0;
+  }
+
+  .product-faq__list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin: 0;
+  }
+
+  .product-faq__item {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .product-faq__question {
+    font-weight: var(--font-body-bold--weight, 600);
+  }
+
+  .product-faq__question::before {
+    content: 'Q. ';
+  }
+
+  .product-faq__answer {
+    margin: 0;
+  }
+
+  .product-faq__answer::before {
+    content: 'A. ';
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "FAQ",
+  "enabled_on": {
+    "templates": ["product"]
+  },
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:settings.color_scheme",
+      "default": "scheme-1"
+    }
+  ],
+  "presets": [
+    {
+      "name": "FAQ"
+    }
+  ]
+}
+{% endschema %}

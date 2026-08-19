@@ -4,6 +4,34 @@
   {{ closest.product | structured_data }}
 </script>
 
+{%- comment -%}
+  「SE向け実装指示書_20260817.docx」対応: クチコミの評価点(aggregateRating)をProduct JSON-LDに補足出力。
+  Shopify標準の`structured_data`フィルタが`reviews.rating`/`reviews.rating_count`メタフィールドから
+  自動でaggregateRatingを含めるかどうかは未確認のため、二重記載のリスクを許容した上でこのブロックで
+  明示的に保証する（値が無ければ何も出力しない）。個々のレビュー本文をReviewオブジェクト配列として
+  含める対応は、レビューデータの格納場所（メタオブジェクトの項目名等）が未確定のため未実装。
+  詳細は D:\Inetpub\HANDOFF.md 参照。
+{%- endcomment -%}
+{%- liquid
+  assign review_rating = closest.product.metafields.reviews.rating.value.rating
+  assign review_rating_count = closest.product.metafields.reviews.rating_count.value
+-%}
+{%- if review_rating != blank and review_rating_count != blank and review_rating_count > 0 -%}
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Product",
+      "name": {{ closest.product.title | json }},
+      "url": {{ shop.url | append: closest.product.url | json }},
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": {{ review_rating | json }},
+        "reviewCount": {{ review_rating_count | json }}
+      }
+    }
+  </script>
+{%- endif -%}
+
 {% capture media_gallery %}
   {%- content_for 'block',
     type: '_product-media-gallery',
