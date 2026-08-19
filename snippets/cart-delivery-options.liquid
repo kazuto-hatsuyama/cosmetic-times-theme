@@ -25,6 +25,7 @@
   <cart-delivery-options-component
     class="cart-delivery-options"
     on:change="/handleChange"
+    on:input="/handleChange"
     data-lead-business-days="{{ settings.delivery_lead_business_days }}"
     data-max-advance-days="{{ settings.delivery_max_advance_days }}"
     data-blackout-dates="{{ blackout_csv | escape }}"
@@ -42,7 +43,7 @@
         >
           お届け希望日
         </label>
-        <div class="cart-delivery-options__date-row">
+        <div class="cart-delivery-options__date-wrapper">
           <input
             type="date"
             id="cart-delivery-date"
@@ -50,20 +51,14 @@
             name="delivery_date"
             class="cart-delivery-options__input"
             value="{{ delivery_date_value | escape }}"
-            {% if delivery_date_value == blank %}
-              disabled
-            {% endif %}
           >
-          <label class="cart-delivery-options__checkbox">
-            <input
-              type="checkbox"
-              ref="dateUnspecifiedCheckbox"
-              {% if delivery_date_value == blank %}
-                checked
-              {% endif %}
-            >
+          <span
+            class="cart-delivery-options__date-placeholder{% if delivery_date_value != blank %} hidden{% endif %}"
+            ref="datePlaceholder"
+            aria-hidden="true"
+          >
             指定しない
-          </label>
+          </span>
         </div>
         <p
           class="cart-delivery-options__hint"
@@ -236,27 +231,28 @@
     margin: 0;
   }
 
-  .cart-delivery-options__date-row {
+  .cart-delivery-options__date-wrapper {
+    position: relative;
+  }
+
+  .cart-delivery-options__date-placeholder {
+    position: absolute;
+    top: var(--style-border-width-inputs, 1px);
+    bottom: var(--style-border-width-inputs, 1px);
+    left: var(--style-border-width-inputs, 1px);
+    /* Leave room on the right for the browser's native calendar-picker icon. */
+    right: 32px;
     display: flex;
     align-items: center;
-    gap: var(--gap-sm);
-  }
-
-  .cart-delivery-options__date-row .cart-delivery-options__input {
-    width: auto;
-    flex-grow: 1;
-  }
-
-  .cart-delivery-options__input:disabled {
-    opacity: var(--opacity-disabled, 0.5);
-  }
-
-  .cart-delivery-options__checkbox {
-    display: flex;
-    align-items: center;
-    gap: var(--gap-3xs);
+    padding-inline-start: var(--padding-md);
+    background-color: var(--color-input-background);
+    color: var(--color-input-text);
     font-size: var(--font-size--sm);
-    white-space: nowrap;
+    pointer-events: none;
+  }
+
+  .cart-delivery-options__date-placeholder.hidden {
+    display: none;
   }
 
   .cart-delivery-options__radio-group {

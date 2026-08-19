@@ -14,7 +14,8 @@ import { CartUpdateEvent } from '@theme/events';
  *
  * @typedef {Object} CartDeliveryOptionsComponentRefs
  * @property {HTMLInputElement} dateInput - The delivery date input.
- * @property {HTMLInputElement} dateUnspecifiedCheckbox - The "指定しない" checkbox for the delivery date.
+ * @property {HTMLElement} datePlaceholder - The "指定しない" text overlaid on the date input while it's empty
+ *   (native `<input type="date">` doesn't support a custom placeholder).
  * @property {HTMLSelectElement} timeSelect - The delivery time slot select.
  * @property {HTMLElement} dateHint - The hint text under the date input.
  * @property {HTMLElement} message - The status message element.
@@ -24,7 +25,7 @@ import { CartUpdateEvent } from '@theme/events';
  * @extends {Component<CartDeliveryOptionsComponentRefs>}
  */
 class CartDeliveryOptions extends Component {
-  requiredRefs = ['dateInput', 'dateUnspecifiedCheckbox', 'timeSelect', 'dateHint', 'message'];
+  requiredRefs = ['dateInput', 'datePlaceholder', 'timeSelect', 'dateHint', 'message'];
 
   /** @type {AbortController | null} */
   #activeFetch = null;
@@ -69,48 +70,44 @@ class CartDeliveryOptions extends Component {
   }
 
   /**
-   * Handles a change on any of the delivery fields (date / "指定しない" checkbox / time / delivery-box).
+   * Handles a change on any of the delivery fields (date / time / delivery-box).
+   *
+   * The date input also fires `input` continuously while it's being edited (typing, or while
+   * the native date-picker popover is open) - that's used only to keep the "指定しない" overlay
+   * in sync in real time, without validating/saving until the value is actually committed
+   * (`change`).
+   *
    * @param {Event} event
    */
   handleChange = (event) => {
-    if (event.target === this.refs.dateUnspecifiedCheckbox) {
-      this.#handleDateUnspecifiedToggle();
-      return;
-    }
-
     if (event.target === this.refs.dateInput) {
+      if (event.type === 'input') {
+        this.#syncDatePlaceholder();
+        return;
+      }
+
       this.#handleDateChange();
       return;
     }
 
+    if (event.type !== 'change') return;
+
     this.#save();
   };
 
-  #handleDateUnspecifiedToggle() {
-    const { dateInput, dateUnspecifiedCheckbox } = this.refs;
-
-    if (dateUnspecifiedCheckbox.checked) {
-      dateInput.value = '';
-      dateInput.disabled = true;
-      this.#lastValidDate = '';
-      this.#clearMessage();
-      this.#save();
-      return;
-    }
-
-    dateInput.disabled = false;
-    dateInput.focus();
+  #syncDatePlaceholder() {
+    const { dateInput, datePlaceholder } = this.refs;
+    datePlaceholder.classList.toggle('hidden', dateInput.value !== '');
   }
 
   #handleDateChange() {
-    const { dateInput, dateUnspecifiedCheckbox, message } = this.refs;
+    const { dateInput, message } = this.refs;
     const value = dateInput.value;
 
     if (value === '') {
-      dateUnspecifiedCheckbox.checked = true;
-      dateInput.disabled = true;
       this.#lastValidDate = '';
       this.#clearMessage();
+      this.#syncDatePlaceholder();
       this.#save();
       return;
     }
@@ -120,6 +117,7 @@ class CartDeliveryOptions extends Component {
 
     if (!isValid) {
       dateInput.value = this.#lastValidDate;
+      this.#syncDatePlaceholder();
       message.textContent = message.dataset.errorDateText ?? '';
       message.classList.remove('hidden');
       message.classList.add('cart-delivery-options__message--error');
@@ -128,6 +126,7 @@ class CartDeliveryOptions extends Component {
 
     this.#lastValidDate = value;
     this.#clearMessage();
+    this.#syncDatePlaceholder();
     this.#save();
   }
 
