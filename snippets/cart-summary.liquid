@@ -219,6 +219,8 @@
     </div>
   {% endif %}
 
+  {% render 'cart-delivery-options', section_id: section_id %}
+
   {% liquid
     assign available_before_points = cart.total_price | divided_by: 100.0 | round | plus: cart.attributes.points_used | default: 0
     assign point_balance = customer.metafields.custom.point_balance.value | default: 0

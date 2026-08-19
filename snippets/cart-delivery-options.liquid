@@ -1,0 +1,244 @@
+{%- doc -%}
+  Renders the delivery date / time / delivery-box options on the cart page.
+
+  Values are persisted as cart attributes (delivery_date / delivery_time / delivery_box)
+  via /cart/update.js so they remain available as order attributes after checkout,
+  without customizing the checkout itself.
+
+  Code values (kept in sync with the fulfillment backend's OM_OrderDT table):
+    delivery_time:  00=指定しない 08=午前中 12=12-14時 14=14-16時 16=16-18時 18=18-20時 19=19-21時
+    delivery_box:   00=利用する 01=利用しない
+
+  @param {string} [section_id] - The section ID, used to keep other cart sections in sync after an update.
+{%- enddoc -%}
+
+{% if settings.show_delivery_options %}
+  {% assign delivery_date_value = cart.attributes.delivery_date | default: '' %}
+  {% assign delivery_time_value = cart.attributes.delivery_time | default: '00' %}
+  {% assign delivery_box_value = cart.attributes.delivery_box | default: '01' %}
+
+  {% capture newline %}
+{% endcapture %}
+  {% assign blackout_lines = settings.delivery_blackout_dates | split: newline %}
+  {% assign blackout_csv = blackout_lines | join: ',' %}
+
+  <cart-delivery-options-component
+    class="cart-delivery-options"
+    on:change="/handleChange"
+    data-lead-business-days="{{ settings.delivery_lead_business_days }}"
+    data-max-advance-days="{{ settings.delivery_max_advance_days }}"
+    data-blackout-dates="{{ blackout_csv | escape }}"
+    {% if section_id != blank %}
+      data-section-id="{{ section_id }}"
+    {% endif %}
+  >
+    <fieldset class="cart-delivery-options__fieldset">
+      <legend class="cart-delivery-options__legend cart-primary-typography">配送設定</legend>
+
+      <div class="cart-delivery-options__field">
+        <label
+          for="cart-delivery-date"
+          class="cart-delivery-options__label"
+        >
+          お届け希望日
+        </label>
+        <input
+          type="date"
+          id="cart-delivery-date"
+          ref="dateInput"
+          name="delivery_date"
+          class="cart-delivery-options__input"
+          value="{{ delivery_date_value | escape }}"
+        >
+        <p
+          class="cart-delivery-options__hint"
+          ref="dateHint"
+        ></p>
+      </div>
+
+      <div class="cart-delivery-options__field">
+        <label
+          for="cart-delivery-time"
+          class="cart-delivery-options__label"
+        >
+          お届け希望時間
+        </label>
+        <select
+          id="cart-delivery-time"
+          ref="timeSelect"
+          name="delivery_time"
+          class="cart-delivery-options__select"
+        >
+          <option
+            value="00"
+            {% if delivery_time_value == "00" %}
+              selected
+            {% endif %}
+          >
+            指定しない
+          </option>
+          <option
+            value="08"
+            {% if delivery_time_value == "08" %}
+              selected
+            {% endif %}
+          >
+            午前中
+          </option>
+          <option
+            value="12"
+            {% if delivery_time_value == "12" %}
+              selected
+            {% endif %}
+          >
+            12時〜14時
+          </option>
+          <option
+            value="14"
+            {% if delivery_time_value == "14" %}
+              selected
+            {% endif %}
+          >
+            14時〜16時
+          </option>
+          <option
+            value="16"
+            {% if delivery_time_value == "16" %}
+              selected
+            {% endif %}
+          >
+            16時〜18時
+          </option>
+          <option
+            value="18"
+            {% if delivery_time_value == "18" %}
+              selected
+            {% endif %}
+          >
+            18時〜20時
+          </option>
+          <option
+            value="19"
+            {% if delivery_time_value == "19" %}
+              selected
+            {% endif %}
+          >
+            19時〜21時
+          </option>
+        </select>
+      </div>
+
+      <div class="cart-delivery-options__field">
+        <span class="cart-delivery-options__label">宅配ボックス利用</span>
+        <div class="cart-delivery-options__radio-group">
+          <label class="cart-delivery-options__radio">
+            <input
+              type="radio"
+              name="delivery_box"
+              value="00"
+              {% if delivery_box_value == "00" %}
+                checked
+              {% endif %}
+            >
+            利用する
+          </label>
+          <label class="cart-delivery-options__radio">
+            <input
+              type="radio"
+              name="delivery_box"
+              value="01"
+              {% if delivery_box_value == "01" %}
+                checked
+              {% endif %}
+            >
+            利用しない
+          </label>
+        </div>
+      </div>
+
+      <p
+        class="cart-delivery-options__message hidden"
+        ref="message"
+        role="status"
+        data-success-text="配送設定を保存しました"
+        data-error-text="配送設定の保存に失敗しました"
+        data-error-date-text="選択できないお届け希望日です。土日・配送不可日以外の日付を選択してください"
+      ></p>
+    </fieldset>
+  </cart-delivery-options-component>
+{% endif %}
+
+{% stylesheet %}
+  .cart-delivery-options {
+    display: block;
+    width: 100%;
+    border-block-end: 1px solid var(--color-border);
+    padding-block-end: var(--padding-md);
+    margin-block-end: var(--margin-3xs);
+  }
+
+  .cart-delivery-options__fieldset {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-sm);
+    border: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .cart-delivery-options__legend {
+    padding: 0;
+    font-size: var(--font-size--2xs);
+    font-weight: 500;
+  }
+
+  .cart-delivery-options__field {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-3xs);
+  }
+
+  .cart-delivery-options__label {
+    font-size: var(--font-size--2xs);
+  }
+
+  .cart-delivery-options__input,
+  .cart-delivery-options__select {
+    background-color: var(--color-input-background);
+    color: var(--color-input-text);
+    border-width: var(--style-border-width-inputs);
+    border-color: var(--color-input-border);
+    border-style: solid;
+    border-radius: var(--style-border-radius-inputs);
+    padding: var(--padding-sm) var(--padding-md);
+    width: 100%;
+    font-size: var(--font-size--sm);
+  }
+
+  .cart-delivery-options__hint {
+    font-size: var(--font-size--2xs);
+    color: rgb(var(--color-foreground-rgb) / var(--opacity-subdued-text));
+    margin: 0;
+  }
+
+  .cart-delivery-options__radio-group {
+    display: flex;
+    gap: var(--gap-lg);
+  }
+
+  .cart-delivery-options__radio {
+    display: flex;
+    align-items: center;
+    gap: var(--gap-3xs);
+    font-size: var(--font-size--sm);
+  }
+
+  .cart-delivery-options__message {
+    font-size: var(--font-size--2xs);
+    margin: 0;
+  }
+
+  .cart-delivery-options__message--error {
+    color: var(--color-error);
+  }
+{% endstylesheet %}

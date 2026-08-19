@@ -136,6 +136,13 @@
   type="module"
   fetchpriority="low"
 ></script>
+{% if settings.show_delivery_options %}
+  <script
+    src="{{ 'cart-delivery-options.js' | asset_url }}"
+    type="module"
+    fetchpriority="low"
+  ></script>
+{% endif %}
 
 <script
   src="{{ 'dialog.js' | asset_url }}"
