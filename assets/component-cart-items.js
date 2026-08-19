@@ -208,15 +208,18 @@ class CartItemsComponent extends Component {
   }
 
   /**
-   * Clears the points-used cart attribute and any applied discount codes once the
-   * cart becomes empty, so they don't silently reapply when items are added again
-   * to the same cart session.
+   * Clears the points-used cart attribute, delivery options, and any applied discount
+   * codes once the cart becomes empty, so they don't silently reapply when items are
+   * added again to the same cart session.
    */
   #clearAppliedExtras() {
     fetch(
       Theme.routes.cart_update_url,
       fetchConfig('json', {
-        body: JSON.stringify({ attributes: { points_used: '' }, discount: '' }),
+        body: JSON.stringify({
+          attributes: { points_used: '', delivery_date: '', delivery_time: '', delivery_box: '' },
+          discount: '',
+        }),
       })
     ).catch((error) => console.error(error));
   }

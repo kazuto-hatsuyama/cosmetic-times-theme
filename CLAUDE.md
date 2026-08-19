@@ -40,7 +40,7 @@
 | ファイル | 変更内容 |
 |---|---|
 | `assets/variant-picker.js` | `buildRequestUrl` に `data-section-id` フォールバックを追加（バリアント切り替え画像更新修正） |
-| `assets/component-cart-items.js` | `onLineItemRemove` でカートが空になった際、`points_used`カート属性とディスカウントコードをクリアする処理を追加（2026-07-30） |
+| `assets/component-cart-items.js` | `onLineItemRemove` でカートが空になった際、`points_used`カート属性とディスカウントコードをクリアする処理を追加（2026-07-30）。同箇所で`delivery_date`/`delivery_time`/`delivery_box`カート属性もクリアするよう追加（2026-08-19。古い配送希望日が次回の注文に残らないようにするため） |
 | `assets/cart-discount.js` | `applyDiscount`にクーポン適用時の`points_used`クリア処理を追加後、削除（2026-07-31。詳細は下記カスタマイズ済みファイル一覧参照） |
 | `assets/quick-add.js` | クイック追加モーダルが商品ページのHTMLを流用する際、そのページ専用の`{% stylesheet %}` CSS（`compiled_assets/styles.css`のsubset）が現在のページに含まれておらずスタイル崩れが起きる問題を修正するため、取得した商品ページのstylesheetリンクを`<head>`に追加注入する処理を追加（2026-08-07） |
 
@@ -136,13 +136,19 @@ shopify theme push --only "config/settings_data.json" --allow-live --theme 13881
 | `layout/theme.liquid` | Google Fonts + custom-luxury.css 追加。`{% render 'customer-sync' %}` 追加（2026-07-24） |
 | `snippets/cart-summary.liquid` | ポイント使用検証UI追加（入力欄+適用ボタン、`points_used`カート属性セット）（2026-07-23）。保有ポイント/カート合計をdata属性で渡すよう追加（2026-07-30）。`cart-points-component`に`data-section-id`追加（2026-07-30）。`cart-points.js`のscriptタグを削除しグローバル読み込みへ移行（2026-07-30、下記参照）。ポイント上限チェックの`data-cart-subtotal`単位不一致（セント/円）を修正（2026-07-31）。ポイント入力欄の表示値を、Function（`cosmetic-discount`）と同じランク割引・上限計算式で独立に再計算しキャップするよう修正（`cart.total_price`からの逆算はキャップ時に0にフロアされ機能しないため、`cart.items_subtotal_price`ベースで再現、2026-07-31）。上記キャップ計算にクーポン割引額（cart-level・line-level のdiscount_code割引合算）も考慮するよう追加修正（2026-07-31） |
 | `assets/cart-points.js` | 上記UIのAjax Cart API呼び出し処理（新規・2026-07-23）。入力値バリデーション（保有ポイント超過・カート合計超過・不正な数値）を追加（2026-07-30）。適用後にセクションを再取得し小計・ディスカウント行・見積もり合計をその場で再描画するよう修正（2026-07-30） |
-| `assets/component-cart-items.js` | カートが空になった際に`points_used`属性・ディスカウントコードをクリア（2026-07-30・※テーマ更新で上書きリスク） |
+| `assets/component-cart-items.js` | カートが空になった際に`points_used`属性・ディスカウントコードをクリア（2026-07-30・※テーマ更新で上書きリスク）。同処理で`delivery_date`/`delivery_time`/`delivery_box`属性もクリアするよう追加（2026-08-19） |
 | `assets/cart-discount.js` | クーポン適用時に`points_used`を強制クリアする処理を追加（2026-07-30）→**削除（2026-07-31）**。理由: 当初はクーポン+ポイント併用時の入力欄表示値を正しく計算するのが困難だったための暫定対応だったが、`cart-summary.liquid`にクーポン考慮のキャップ計算を実装したことで不要になった。現在はクーポン適用時もポイントはクリアされず、適用可能な額に自動でキャップ表示される（併用は許可する方針・※テーマ更新で上書きリスク） |
 | `snippets/scripts.liquid` | `cart-points.js`のグローバル読み込みを追加（2026-07-30）。理由: 元々`cart-summary.liquid`（カートが空でない時のみレンダリング）内にscriptタグがあり、カートが空の状態でページ読込→遷移せず商品追加すると、scriptタグがmorphでDOM挿入されるだけで実行されず`cart-points-component`が never upgrade にならない不具合があったため、`cart-discount.js`と同じくグローバル読み込みに変更 |
 | `snippets/customer-sync.liquid` | ログイン顧客のポイント/ランク連携用データ埋め込み（新規・2026-07-24） |
 | `assets/customer-sync.js` | 顧客ID/emailを外部エンドポイントへ送信（セッション中1回・tokenベタ書き、新規・2026-07-24） |
 | `sections/breadcrumbs.liquid` | 商品詳細ページに「ホーム > コレクション名 > 商品名」形式のパンくずリストを表示する新規セクション（新規・2026-08-07、`templates/product.json`の`order`先頭に配置）。**判明した既知の制約**: このストアは`/collections/{handle}/products/{handle}`形式のURLを常に`/products/{handle}`へリダイレクトする設定になっており（原因はテーマコード外・管理画面のURLリダイレクト設定か何らかのSEOアプリと推測、未特定）、Shopify標準の`collection`オブジェクトがproductテンプレートで常に`nil`になる。そのため`collection`が`nil`の場合、`product.collections`から`all`ハンドルを除いた最初のコレクションを代表コレクションとして表示するフォールバックで対応している |
 | `sections/footer.liquid`, `sections/footer-group.json` | フッターの「メールマガジン登録」欄一式（見出し・説明文・メールアドレス入力欄・送信ボタン）を、ログイン状態を問わず常時非表示に変更（2026-08-18）。データ系（`D:\Inetpub\shopify_data`）からの依頼: この送信がShopifyの`customers/create`イベントを発火させ、バックエンド側で意図しない重い処理（既存会員なら過去注文の一括同期、未登録メールなら新規会員レコード作成）を引き起こしていたため。当初は「ログイン中・未登録会員向けボタン化」で対応する予定で`blocks/newsletter-optin-button.liquid`を実装・デプロイしたが、Shopifyの新カスタマーアカウント機能（マイページ）に同等の「マーケティング設定」トグルが標準で用意されていることが判明したため不要となり撤去済み。`footer-group.json`の`footer_m9NzUG`セクションの`blocks`/`block_order`は空に変更（`footer_utilities_jLGE8U`＝著作権表示・利用規約・SNSリンクは変更なし） |
+| `config/settings_data.json` | `cart_type`を`"drawer"`→`"page"`に変更（新規・2026-08-19）。カートアイコン押下時にドロワーを開かず`/cart`へ遷移させるための変更（`snippets/header-actions.liquid`側の分岐は既存のまま、設定値のみで挙動が切り替わる）。配送設定機能の新設定`show_delivery_options`/`delivery_lead_business_days`/`delivery_max_advance_days`/`delivery_blackout_dates`のデフォルト値も追加。**⚠️ このファイルはライブテーマへの自動デプロイで同期されない仕様のため、mainへのpush後、別途`--only`指定での個別pushが必要**（詳細は本ファイル冒頭「GitHub Actions 自動デプロイ」参照。タスク詳細: `tasks/20260819-cart-delivery-options/spec.md`） |
+| `config/settings_schema.json` | カート設定グループに配送設定（お届け希望日・時間・宅配ボックス）の管理画面設定項目を追加（新規・2026-08-19）: `show_delivery_options`（表示有無）、`delivery_lead_business_days`（最短お届け可能日までの営業日数、デフォルト7）、`delivery_max_advance_days`（選択可能な上限日数、デフォルト90）、`delivery_blackout_dates`（配送不可日リスト、YYYY-MM-DD改行区切り）。年末年始等のリード日数・配送不可日をコード修正なしに管理画面から調整可能にするため |
+| `snippets/cart-delivery-options.liquid` | カートページに「お届け希望日」「お届け希望時間」「宅配ボックス利用」の入力UIを追加する新規スニペット（新規・2026-08-19）。値はカート属性`delivery_date`（YYYY-MM-DD）／`delivery_time`（コード値 00=指定しない/08=午前中/12=12-14時/14=14-16時/16=16-18時/18=18-20時/19=19-21時）／`delivery_box`（コード値 00=利用する/01=利用しない）として保持し、基幹DB（`OM_OrderDT.AppointDate`/`AppointTime`/`DeliveryBoxFlg`）との連携を想定してコード値のままカート属性に保持する（ラベル変換はしない）。いずれも任意項目（未入力可）。詳細: `tasks/20260819-cart-delivery-options/spec.md` |
+| `assets/cart-delivery-options.js` | 上記UIのカート属性更新処理を担当する新規Web Component（新規・2026-08-19）。お届け希望日の選択可能最短日を、`delivery_lead_business_days`（土日を除く営業日数）・`delivery_blackout_dates`（配送不可日リスト）から算出し、`<input type="date">`の`min`/`max`に反映。選択された日付が土日・配送不可日・許可範囲外の場合はクライアント側で弾いて直前の値に戻す。値は`points_used`（`cart-points.js`）と同様に`attributes`キー経由で`/cart/update.js`へ送信（Shopifyの仕様上、他のカート属性はマージされ上書きされないため、ランク割引・ポイント利用・クーポン利用への影響はない） |
+| `snippets/cart-summary.liquid` | `cart-delivery-options`スニペットの呼び出しを追加（新規・2026-08-19）。ポイント入力欄の直前に配置 |
+| `snippets/scripts.liquid` | `cart-delivery-options.js`のグローバル読み込みを追加（`show_delivery_options`が有効な場合のみ、新規・2026-08-19）。理由は既存の`cart-points.js`と同様（カートが空の状態からの遷移でscriptタグがmorph挿入のみとなり実行されない問題を避けるため） |
 
 ---
 
@@ -185,6 +191,7 @@ shopify theme push --only "config/settings_data.json" --allow-live --theme 13881
 | バリアント説明文登録（admin作業） | 同商品のバリアント個別説明文が未登録。管理画面でバリアントの `description` メタフィールドに入力。テーマ側（product-description ブロック）は対応済み。引き継ぎ: `C:\Users\1213\handover.md` |
 | favicon設定 | `favicon.ico 404`（機能影響なし）。対応は管理画面→テーマカスタマイズ→ファビコン設定 |
 | customer-sync の外部エンドポイント | `assets/customer-sync.js` の送信先 `https://arnulfo-fordable-pipingly.ngrok-free.dev/...` はngrok無料枠のため**URLが変わる/停止する可能性あり**。tokenもクライアント側にベタ書き（データ系了承済みだが、本番公開前に恒久的なエンドポイント・認証方式への切替を推奨） |
+| 配送不可日リストの初期値未設定 | `config/settings_data.json`の`delivery_blackout_dates`は空で実装（2026-08-19）。運用開始前に、実際の祝日・年末年始等の配送不可日をテーマカスタマイズ画面（配送設定）から運営者側で入力する必要あり。詳細: `tasks/20260819-cart-delivery-options/spec.md` |
 | **⚠️ 商品一覧のAvailabilityフィルター件数が実在庫と乖離する（Shopify既知の不具合・恒久修正なし）** | 在庫状況フィルター（在庫あり/在庫切れ）の表示件数が実データと大きくズレる不具合をShopifyサポートに確認したところ、「在庫ステータスデータの内部同期に関する既知の問題」と回答（2026-08-04）。**本番運用で在庫が頻繁に変動すると再発する可能性があり、恒久修正はされていない**。再発時のセルフ回避策：管理画面 → アプリ → Search & Discovery → フィルター で在庫状況フィルターを削除して保存 → 再度追加して保存（問い合わせなしで同期リセットされる場合がある）。改善しなければShopifyサポートへ追加問い合わせ。テーマ側の実装ミスではないため、コード修正は不要 |
 | ~~`sections/product-list.liquid`のスキーマがpushの度にサイレント失敗~~ | ~~`icons_shape`設定の`visible_if`が括弧を含みLiquid構文エラーとなり、2026-06-10以降全pushでこのファイルのアップロードが失敗し続けていた~~ → **2026-08-03 対応済み**（`visible_if`を`X and (Y or Z)`から`(X and Y) or (X and Z)`の分配形に書き換えて解消。pushログで`Asset upload failed`が出ないことを確認済み。これにより2026-06-10の「スキーマ修正3件」も今回初めて実際にShopifyへ反映された） |
 
