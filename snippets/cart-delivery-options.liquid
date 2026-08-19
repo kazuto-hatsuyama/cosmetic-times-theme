@@ -42,14 +42,29 @@
         >
           お届け希望日
         </label>
-        <input
-          type="date"
-          id="cart-delivery-date"
-          ref="dateInput"
-          name="delivery_date"
-          class="cart-delivery-options__input"
-          value="{{ delivery_date_value | escape }}"
-        >
+        <div class="cart-delivery-options__date-row">
+          <input
+            type="date"
+            id="cart-delivery-date"
+            ref="dateInput"
+            name="delivery_date"
+            class="cart-delivery-options__input"
+            value="{{ delivery_date_value | escape }}"
+            {% if delivery_date_value == blank %}
+              disabled
+            {% endif %}
+          >
+          <label class="cart-delivery-options__checkbox">
+            <input
+              type="checkbox"
+              ref="dateUnspecifiedCheckbox"
+              {% if delivery_date_value == blank %}
+                checked
+              {% endif %}
+            >
+            指定しない
+          </label>
+        </div>
         <p
           class="cart-delivery-options__hint"
           ref="dateHint"
@@ -219,6 +234,29 @@
     font-size: var(--font-size--2xs);
     color: rgb(var(--color-foreground-rgb) / var(--opacity-subdued-text));
     margin: 0;
+  }
+
+  .cart-delivery-options__date-row {
+    display: flex;
+    align-items: center;
+    gap: var(--gap-sm);
+  }
+
+  .cart-delivery-options__date-row .cart-delivery-options__input {
+    width: auto;
+    flex-grow: 1;
+  }
+
+  .cart-delivery-options__input:disabled {
+    opacity: var(--opacity-disabled, 0.5);
+  }
+
+  .cart-delivery-options__checkbox {
+    display: flex;
+    align-items: center;
+    gap: var(--gap-3xs);
+    font-size: var(--font-size--sm);
+    white-space: nowrap;
   }
 
   .cart-delivery-options__radio-group {

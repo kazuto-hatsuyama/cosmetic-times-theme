@@ -14,6 +14,7 @@ import { CartUpdateEvent } from '@theme/events';
  *
  * @typedef {Object} CartDeliveryOptionsComponentRefs
  * @property {HTMLInputElement} dateInput - The delivery date input.
+ * @property {HTMLInputElement} dateUnspecifiedCheckbox - The "指定しない" checkbox for the delivery date.
  * @property {HTMLSelectElement} timeSelect - The delivery time slot select.
  * @property {HTMLElement} dateHint - The hint text under the date input.
  * @property {HTMLElement} message - The status message element.
@@ -23,7 +24,7 @@ import { CartUpdateEvent } from '@theme/events';
  * @extends {Component<CartDeliveryOptionsComponentRefs>}
  */
 class CartDeliveryOptions extends Component {
-  requiredRefs = ['dateInput', 'timeSelect', 'dateHint', 'message'];
+  requiredRefs = ['dateInput', 'dateUnspecifiedCheckbox', 'timeSelect', 'dateHint', 'message'];
 
   /** @type {AbortController | null} */
   #activeFetch = null;
@@ -68,10 +69,15 @@ class CartDeliveryOptions extends Component {
   }
 
   /**
-   * Handles a change on any of the delivery fields (date / time / delivery-box).
+   * Handles a change on any of the delivery fields (date / "指定しない" checkbox / time / delivery-box).
    * @param {Event} event
    */
   handleChange = (event) => {
+    if (event.target === this.refs.dateUnspecifiedCheckbox) {
+      this.#handleDateUnspecifiedToggle();
+      return;
+    }
+
     if (event.target === this.refs.dateInput) {
       this.#handleDateChange();
       return;
@@ -80,11 +86,29 @@ class CartDeliveryOptions extends Component {
     this.#save();
   };
 
+  #handleDateUnspecifiedToggle() {
+    const { dateInput, dateUnspecifiedCheckbox } = this.refs;
+
+    if (dateUnspecifiedCheckbox.checked) {
+      dateInput.value = '';
+      dateInput.disabled = true;
+      this.#lastValidDate = '';
+      this.#clearMessage();
+      this.#save();
+      return;
+    }
+
+    dateInput.disabled = false;
+    dateInput.focus();
+  }
+
   #handleDateChange() {
-    const { dateInput, message } = this.refs;
+    const { dateInput, dateUnspecifiedCheckbox, message } = this.refs;
     const value = dateInput.value;
 
     if (value === '') {
+      dateUnspecifiedCheckbox.checked = true;
+      dateInput.disabled = true;
       this.#lastValidDate = '';
       this.#clearMessage();
       this.#save();
