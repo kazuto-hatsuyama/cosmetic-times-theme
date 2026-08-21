@@ -1,0 +1,14 @@
+{
+  "sections": {
+    "ranking_list": {
+      "type": "ranking-list",
+      "settings": {
+        "heading": "売れ筋ランキング",
+        "color_scheme": "scheme-1"
+      }
+    }
+  },
+  "order": [
+    "ranking_list"
+  ]
+}

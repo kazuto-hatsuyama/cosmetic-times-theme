@@ -54,6 +54,17 @@
               </li>
               {% endunless %}
             {% endfor %}
+            {%- comment -%}
+              2026-08-21: ランキングページ導線の固定リンク追加（詳細はelse分岐のコメント参照）
+            {%- endcomment -%}
+            <li>
+              <a
+                href="/pages/ranking"
+                class="menu-list__item"
+              >
+                ランキング
+              </a>
+            </li>
           </ul>
         </div>
       </div>
@@ -143,6 +154,31 @@
         </li>
         {% endunless %}
       {% endfor %}
+      {%- comment -%}
+        2026-08-21: 「売れ筋ランキング」ページ（/pages/ranking）への導線がAdmin管理の
+        main-menuに含まれていないため、デスクトップのメガメニュー/オーバーフローメニュー
+        末尾に固定リンクとして追加。Admin GraphQL API（menuUpdate）でのメニュー編集は、
+        このストアで使えるAdmin APIトークンのスコープ不足（write_online_store_navigation
+        権限なし、ACCESS_DENIED確認済み）のため実行不可だったための対応。
+        モバイルドロワー側の同等の対応は snippets/header-drawer.liquid 参照。
+      {%- endcomment -%}
+      <li
+        role="presentation"
+        class="menu-list__list-item"
+        on:focus="/activate"
+        on:blur="/deactivate"
+        on:pointerenter="/activate"
+        on:pointerleave="/deactivate"
+      >
+        <a
+          href="/pages/ranking"
+          data-skip-node-update="true"
+          class="menu-list__link"
+          ref="menuitem"
+        >
+          <span class="menu-list__link-title">ランキング</span>
+        </a>
+      </li>
       <li
         class="menu-list__list-item"
         role="presentation"
