@@ -72,7 +72,16 @@
   {% endif %}
 </div>
 
-{% stylesheet %}
+{% comment %}
+  2026-08-21: {% stylesheet %} で書いていたところ、Shopifyのコンパイル済みCSSバンドル
+  （compiled_assets/styles.css、ページ単位のsubsetにも完全版にも）にこのセクションのCSSが
+  一切含まれず、画像サイズ指定などが効かない不具合を確認したため、{% style %}（インライン
+  <style>としてその場に出力される、バンドル依存のない方式）に変更した。
+  他セクションの{% stylesheet %}（product-extra-info.liquid等）は同バンドルに正しく含まれて
+  おり、原因不明のプラットフォーム側の挙動と判断。このセクションは1ページに1つのみ配置する
+  前提のため、{% stylesheet %}のような自動スコープが無くても影響はない。
+{% endcomment %}
+{% style %}
   .ranking-list {
     display: flex;
     flex-direction: column;
@@ -202,7 +211,7 @@
       font-size: 1.1rem;
     }
   }
-{% endstylesheet %}
+{% endstyle %}
 
 {% schema %}
 {

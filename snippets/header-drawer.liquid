@@ -574,6 +574,22 @@
               {% endunless %}
             {%- endfor -%}
           {% endif %}
+          {%- comment -%}
+            2026-08-21: 「売れ筋ランキング」ページ（/pages/ranking）への導線が
+            Online Store > Navigation で管理されているmain-menuに含まれていないため、
+            モバイルドロワーメニューの末尾に固定リンクとして追加。Admin GraphQL API
+            （menuUpdate）でのメニュー編集は、このストアで使えるAdmin APIトークンの
+            スコープ不足（write_online_store_navigation権限なし、ACCESS_DENIED確認済み）
+            のため実行不可だったための対応。上のif/elseどちらの分岐でもここに到達する。
+          {%- endcomment -%}
+          <li class="menu-drawer__list-item--flat">
+            <a
+              href="/pages/ranking"
+              class="menu-drawer__menu-item menu-drawer__menu-item--mainlist menu-drawer__animated-element focus-inset"
+            >
+              <span class="menu-drawer__menu-item-text wrap-text">ランキング</span>
+            </a>
+          </li>
         </ul>
       </nav>
       <div
