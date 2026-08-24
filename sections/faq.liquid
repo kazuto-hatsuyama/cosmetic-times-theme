@@ -1,0 +1,1276 @@
+{% comment %}
+  「よくいただくご質問」静的ページ用セクション（新規・2026-08-24、tasks/20260824-static-guide-legal-pages/spec.md）。
+
+  現行サイト https://www.cosmetic-times.com/guide/faq は質問一覧のみで、実際の回答文は
+  個別の https://www.cosmetic-times.com/guide/faq/detail?faqcd=N ページに分散していたため、
+  8カテゴリ・67件の質問すべてについて対応するdetailページを個別に取得し、質問と回答を
+  このセクションに統合済み（一覧ページ本文だけでは回答が欠落するため、faqcd別ページを
+  全件マージする方式を採用）。
+  各FAQ項目には id="faq-{faqcd}" を付与しており、他ページ（guide-info等）からの
+  「Q.海外製品と国内製品での商品の違いは？」等の個別リンクは "/pages/faq#faq-54" のように
+  アンカー直リンクできる。
+  回答文中の内部リンク（マイページ・パスワード再設定・お問い合わせフォーム等）は本タスクの
+  対象外の機能ページのため旧サイトへの絶対URL（一部は相対パスのまま抽出されたものを
+  https://www.cosmetic-times.com を補って絶対URL化はしていない点に注意。相対パスのまま
+  残っているものは現行サイトのドメインを前提とした相対パスであり、Shopify側では別ドメインの
+  ため意図せずShopify内の存在しないパスに解決される可能性がある。将来的な修正候補として
+  CLAUDE.mdの未対応事項に記録する）。
+{% endcomment %}
+{% render 'static-page-styles' %}
+
+<div class="section-background color-{{ section.settings.color_scheme }}"></div>
+<div class="static-page color-{{ section.settings.color_scheme }} page-width">
+  <h1 class="static-page__heading">{{ section.settings.heading }}</h1>
+
+  <ul class="static-page__toc">
+    <li><a href="#cat1">ログイン・メールトラブルについて</a></li>
+    <li><a href="#cat2">会員登録・各種変更・退会について</a></li>
+    <li><a href="#cat3">ご注文について</a></li>
+    <li><a href="#cat4">お支払いについて</a></li>
+    <li><a href="#cat5">お届け・送料について</a></li>
+    <li><a href="#cat6">返品・交換・キャンセルについて</a></li>
+    <li><a href="#cat7">取扱商品・価格について</a></li>
+    <li><a href="#cat8">ポイント・クーポンについて</a></li>
+  </ul>
+
+  <div class="static-page__body">
+    <div class="faq-category" id="cat1">
+      <h2>ログイン・メールトラブルについて</h2>
+      <div class="faq-item" id="faq-2">
+        <h4 class="faq-item__q">Q. &#x30ed;&#x30b0;&#x30a4;&#x30f3;ID&#xff08;&#x767b;&#x9332;&#x30e1;&#x30fc;&#x30eb;&#x30a2;&#x30c9;&#x30ec;&#x30b9;&#xff09;&#x3092;&#x5fd8;&#x308c;&#x3066;&#x3057;&#x307e;&#x3044;&#x307e;&#x3057;&#x305f;</h4>
+        <div class="faq-item__a"><p>ログインIDは、ネット会員にご登録いただいた際の［メールアドレス］です。<br>
+
+    ご登録いただいたメールアドレスをお忘れの場合は、大変お手数ですが直接お電話にてお問い合わせください。</p>
+
+    ご本人様の確認をさせていただいた上でご案内させていただきます。</p>
+
+    <p>お問い合わせ： 0120-88-7565 平日10:00-17:30（土日祝休）</p>
+
+
+
+    <p>ご登録メールアドレスは、個人情報保護の観点よりメールでのお問い合わせにはお答えできませんので、必ずお電話にてお問い合わせください。</p></div>
+      </div>
+      <div class="faq-item" id="faq-5">
+        <h4 class="faq-item__q">Q. &#x30d1;&#x30b9;&#x30ef;&#x30fc;&#x30c9;&#x3092;&#x5fd8;&#x308c;&#x3066;&#x3057;&#x307e;&#x3044;&#x307e;&#x3057;&#x305f;</h4>
+        <div class="faq-item__a"><p>パスワードはセキュリティーの関係上、お客様ご自身での管理をお願いしております。<br>パスワードをお忘れの場合は、お手数ですが下記ページより再設定をお願いいたします。</p>
+
+    <p><a href="https://www.cosmetic-times.com/inquiry/pwd/entry">パスワードの再設定</a></p></div>
+      </div>
+      <div class="faq-item" id="faq-4">
+        <h4 class="faq-item__q">Q. &#x30e1;&#x30fc;&#x30eb;&#x30a2;&#x30c9;&#x30ec;&#x30b9;&#xff08;&#x30ed;&#x30b0;&#x30a4;&#x30f3;ID&#xff09;&#x3092;&#x5909;&#x66f4;&#x3057;&#x305f;&#x3044;&#x306e;&#x3067;&#x3059;&#x304c;</h4>
+        <div class="faq-item__a"><p>マイページの［メールアドレスの変更］からご変更いただけます。</p>
+
+    <p><a href="https://www.cosmetic-times.com/mypage/mail/edit">マイページ［メールアドレスの変更］はこちら</a></p>
+
+    <p>ご登録いただいたメールアドレスをお忘れの場合は、大変お手数ですが直接お電話にてお問い合わせください。</p>
+
+    ご本人様の確認をさせていただいた上でご案内させていただきます。</p>
+
+    <p>お問い合わせ： 0120-88-7565　　平日10:00-17:30（土日祝休）</p>
+
+    <p>ご登録メールアドレスは、個人情報保護の観点よりメールでのお問い合わせにはお答えできませんので、必ずお電話にてお問い合わせください。</p></div>
+      </div>
+      <div class="faq-item" id="faq-79">
+        <h4 class="faq-item__q">Q. &#x30b3;&#x30b9;&#x30e1;&#x30c6;&#x30a3;&#x30c3;&#x30af;&#x30bf;&#x30a4;&#x30e0;&#x30ba;&#x304b;&#x3089;&#x306e;&#x30e1;&#x30fc;&#x30eb;&#x304c;&#x5c4a;&#x304d;&#x307e;&#x305b;&#x3093;&#x3002;</h4>
+        <div class="faq-item__a"><p>「注文完了メール」「発送完了メール」「問い合わせ受付完了メール」等が届かない場合は、以下の3つの方法をお試しください。</p>
+
+    <h4>1.迷惑メールフォルダをご確認ください</h4>
+
+
+
+    <p>まれに、迷惑メールフォルダに振り分けられてしまう場合がございます。念のためご確認をお願いいたします。<br>ご購入商品の発送状況等は、<a href="https://www.cosmetic-times.com/mypage/orderhistory" class="nopointer">マイページ［購入履歴］</a>からもご確認いただけます。</p>
+
+
+
+
+
+          <h4>2.ご登録メールアドレスに誤りがないかご確認ください</h4>
+
+          <div class="PicText"><img src="https://www.cosmetic-times.com/image/guide/faq_register3.gif" width="430" height="358" alt=""/>
+
+    <p>ログインした状態で、<a href="https://www.cosmetic-times.com/mypage/mail/edit" class="nopointer">マイページ［メールアドレスの変更］</a>からご登録のメールアドレスをご確認ください。</p>
+
+    <p><strong>アルファベットの大文字・小文字の間違い</strong>（coとCOは区別されます）や、<strong>「.（ドット）」が抜けている</strong>など、メールアドレスに間違いがあった場合は、正しいものに訂正をお願いいたします。</p>
+
+    </div>
+
+
+
+    <h4>3.迷惑メール設定等でブロックされていないかご確認ください</h4>
+
+    <p>各種キャリアやフリーメールのメール設定から「ドメイン受信許可」の設定をお願いいたします。<br>
+
+    特にYahoo!メールやGmail、Hotmailなどのフリーメールをご利用の場合、当店からお送りした自動送信メールが迷惑メールとしてブロックされてしまうことが多くあります。</p>
+
+    <p>ドメイン受信設定で【　cosmetic-times.com　】を受信可能にご設定をお願いいたします。</p>
+
+    <p>＜参考サイト＞<br>
+
+    メールの振り分け設定を変える方法（すべて別ウィンドウで開きます）<br>
+
+    <a href="http://www.yahoo-help.jp/app/answers/detail/p/565/a_id/47528" target="_blank">Yahoo!メール</a>　　<a href="http://46mail.net/gmail/index.php?a=" target="_blank">Gmail、Livedoorメール</a>　　<a href="http://46mail.net/windowsmail/index.php?a=" target="_blank">Windows Liveメール・Windowsメール</a><br>
+
+    <a href="http://46mail.net/hotmail/index.php?a=" target="_blank">Homail・Infoseekメール</a>　　<a href="http://46mail.net/outlook/index.php?a=" target="_blank">Outlook2007・Outlook2010</a><br>
+
+    </p></div>
+      </div>
+    </div>
+
+    <div class="faq-category" id="cat2">
+      <h2>会員登録・各種変更・退会について</h2>
+      <div class="faq-item" id="faq-11">
+        <h4 class="faq-item__q">Q. &#x9000;&#x4f1a;&#x65b9;&#x6cd5;&#x3092;&#x6559;&#x3048;&#x3066;&#x304f;&#x3060;&#x3055;&#x3044;</h4>
+        <div class="faq-item__a"><p>マイページに「退会の手続き」をご用意しております。</p>
+
+    <p>・退会されますと、購入履歴やお貯めいただいているポイントが全て無効となります。<br>
+
+    ・退会後、新たにサービスをご利用されるには、改めて新規会員登録が必要になります。<br> 
+
+    ・再度会員登録された場合、退会前の会員ステータスの引き継ぎはされませんのでご了承ください。
+
+    </p>
+
+    <p><a href="https://www.cosmetic-times.com/mypage/withdrawal/confirm">マイページ「退会手続き」</a></p></div>
+      </div>
+      <div class="faq-item" id="faq-13">
+        <h4 class="faq-item__q">Q. &#x643a;&#x5e2f;&#x30e1;&#x30fc;&#x30eb;&#x30a2;&#x30c9;&#x30ec;&#x30b9;&#x3067;&#x3082;&#x4f1a;&#x54e1;&#x767b;&#x9332;&#x3067;&#x304d;&#x307e;&#x3059;&#x304b;&#xff1f;</h4>
+        <div class="faq-item__a"><p>ネット会員のご登録には、パソコンメールアドレスが必要です。<br>
+
+    スマートフォンをご利用であれば、gmailなどのフリーメールや、携帯のアドレスでも<br>
+
+    ご登録が可能ですが、@docomo.ne.jp/@ezweb.ne.jp/@softbank.ne.jpなどのアドレスを<br>ご登録のお客様に関して迷惑メール対策設定やドメイン指定をされておりますと、<br>メールが届かない場合がございます。<br>
+
+    その場合は「@cosmetic-times.com」からのメールアドレスを受信設定をお願いします。</p>
+
+    <p>＜フリーメール参考サイト＞　作成は無料です</p>
+
+    <p><a href="https://accounts.google.com/signup?hl=ja" target="_blank">Gmailを作る</a></p></div>
+      </div>
+      <div class="faq-item" id="faq-8">
+        <h4 class="faq-item__q">Q. &#x4f1a;&#x54e1;&#x767b;&#x9332;&#x3057;&#x305f;&#x306e;&#x306b;&#x300c;&#x767b;&#x9332;&#x5b8c;&#x4e86;&#x30e1;&#x30fc;&#x30eb;&#x300d;&#x304c;&#x5c4a;&#x304b;&#x306a;&#x3044;</h4>
+        <div class="faq-item__a"><p>以下の3つの可能性がございます。<br>
+
+    1.会員登録ができていない可能性、2.メールアドレスに不備がある可能性、3.メールの設定に問題がある可能性</p>
+
+    <h4>1.会員登録ができていない可能性</h4>
+
+          <div class="PicText"><img src="https://www.cosmetic-times.com/image/guide/faq_register2.gif" width="430" height="371" alt=""/>
+
+    <p>会員登録が完了すると、右の画面に推移します。<br>
+
+    <strong>「ご登録完了！ご登録ありがとうございました。」</strong>の文字をご確認いただいていない場合、正常に完了していない可能性があります。</p>
+
+    <p> お手数ですが、再度新規登録フォームよりご登録をお願いいたします。</p>
+
+    <p><a href="https://www.cosmetic-times.com/member/agree">新規会員登録はこちら</a></p>
+
+
+
+    </div>
+
+    <br clear="all">
+
+          <h4>2.メールアドレスに不備がある可能性</h4>
+
+          <div class="PicText"><img src="https://www.cosmetic-times.com/image/guide/faq_register3.gif" width="430" height="358" alt=""/>
+
+    <p>ご登録いただいたメールアドレスに不備がある可能性がございます。</p>
+
+    <p>ログインをします。<br>
+
+    ＊ヘッダー（ページ上部）の右上にログインボタンがなく、お名前と会員ステータスアイコンが表示されていたら、ログインされている状態です。ステータスアイコンをクリックするとマイページへ移動できます。</p>
+
+    <p><a href="https://www.cosmetic-times.com/mypage/mail/edit" class="nopointer">マイページ「メールアドレスの変更」</a>からご登録のメールアドレスを確認の上、正しいメールアドレスに変更をお願いいたします。</p>
+
+    <p>お間違いが多いのは、アルファベットの大文字と小文字の間違い（coとCOは区別されます）、ドットが抜けている（○ co.jp　×cojp）などです。</p>
+
+    </div>
+
+    <br clear="all">
+
+    <h4>3.迷惑メールなどの設定でブロックされている可能性</h4>
+
+    <p>迷惑メールが保存されているフォルダ内をご確認ください。</p>
+
+    <p>コスメティックタイムズからのメールがありましたら「迷惑メールではありません」と申告していただき、配信許可に設定していただくようお願いいたします。<br>
+
+    特にYahoo!メールやGmail、Hotmailなどのフリーメールをご利用の場合、当店からお送りした自動送信メールが迷惑メールとしてブロックされてしまうことが多く発生しております。</p>
+
+    <p>ドメイン受信設定で［cosmetic-times.com］を受信可能にするなど、設定のご変更をお願いいたします。</p>
+
+    <p>＜参考サイト＞<br>
+
+    メールの振り分け設定を変える方法（すべて別ウィンドウで開きます）<br>
+
+    <a href="http://www.yahoo-help.jp/app/answers/detail/p/565/a_id/47528" target="_blank">Yahoo!メール</a>　　<a href="http://46mail.net/gmail/index.php?a=" target="_blank">Gmail、Livedoorメール</a>　　<a href="http://46mail.net/windowsmail/index.php?a=" target="_blank">Windows Liveメール・Windowsメール</a><br>
+
+    <a href="http://46mail.net/hotmail/index.php?a=" target="_blank">Homail・Infoseekメール</a>　　<a href="http://46mail.net/outlook/index.php?a=" target="_blank">Outlook2007・Outlook2010</a><br>
+
+    </p></div>
+      </div>
+      <div class="faq-item" id="faq-10">
+        <h4 class="faq-item__q">Q. &#x4f1a;&#x54e1;&#x767b;&#x9332;&#x3057;&#x306a;&#x304f;&#x3066;&#x3082;&#x304a;&#x8cb7;&#x3044;&#x7269;&#x3067;&#x304d;&#x307e;&#x3059;&#x304b;&#xff1f;</h4>
+        <div class="faq-item__a"><p><strong>コスメティックタイムズでお買い物していただくには「会員登録」が必要です。</strong><br>（会員登録・年会費などは一切掛かりません）</p>
+
+    <p>ご登録いただいた会員様には、特典や便利なショッピング機能をご用意しておりますので、ぜひご活用ください。</p>
+
+    <h4>「ポイント制度」でお得にお買い物</h4>
+
+    <p>ショッピングサイトでご注文いただくと、ご購入金額に応じてポイントが還元されます。1ポイント1円換算でお買い物にご使用いただけます。</p>
+
+    <p>また、ご購入いただいた商品のクチコミを投稿すると1商品つき50ポイント（50円分）プレゼント！<br>
+
+    その他にも、メルマガ購読者限定で、期間限定のポイントアップキャンペーンなど、様々な形でポイントを貯めていただくことができます。</p>
+
+    <p>*クチコミ投稿は、マイページの購入履歴より対象の商品にクチコミされた際に限ります。</p>
+
+    <p><a href="https://www.cosmetic-times.com/mypage/orderhistory">マイページ「購入履歴」へ</a><br>
+
+    <a href="/pages/member-guide#member04">ご利用ガイド「ポイントの使い方」へ</a>　<a href="/pages/member-guide#member03">ご利用ガイド「ポイントのため方」へ</a></p>
+
+    <h4>「専用のマイページ機能」で便利にお買い物</h4>
+
+    <p>会員登録をしていただくと、お客様専用のマイページがご利用いただけます。</p>
+
+    <p><strong>■お届け先の管理ができる</strong><br>
+
+    送付先の登録が可能なので、ご注文時の入力の手間がなくなります。<br>
+
+    <a href="https://www.cosmetic-times.com/mypage/deliverylist/list">マイページ「お届け先リスト」へ</a></p>
+
+    <p><strong>■購入履歴の確認ができる<br>
+
+    </strong>ご注文直後の配達状況を確認したり、過去の購入履歴を確認できます。<br>過去に買った商品をリピートする際に大変便利です。<br>
+
+    <a href="https://www.cosmetic-times.com/mypage/orderhistory">マイページ「購入履歴」へ</a></p>
+
+    <p><strong>■気になる商品をリスト管理できる</strong><br>
+
+    すぐには買わないけど比較検討したい「気になるコスメ」をリスト管理できます。<br>
+
+    リストからそのまま購入もできるので、自分だけのオリジナルのショッピングをお楽しみいただけます。<br>
+
+    <a href="https://www.cosmetic-times.com/mypage/favorite">マイページ「気になる！リスト」へ</a></p>
+
+    <p><strong>■在庫がなかった商品をいち早くゲットできる</strong><br>
+
+    在庫がない商品は、マイページの「入荷待ちリスト」にご登録ください。<br>リストに登録された商品は、在庫が再入荷され次第、メールでお知らせが配信されるので買い逃しはありません。<br>
+
+    <a href="https://www.cosmetic-times.com/mypage/reserve">マイページ「入荷待ちリスト」へ</a></p></div>
+      </div>
+      <div class="faq-item" id="faq-47">
+        <h4 class="faq-item__q">Q. &#x30e1;&#x30fc;&#x30eb;&#x30de;&#x30ac;&#x30b8;&#x30f3;&#x306e;&#x8b1b;&#x8aad;&#x3092;&#x505c;&#x6b62;&#x3057;&#x305f;&#x3044;</h4>
+        <div class="faq-item__a"><p><a href="https://www.cosmetic-times.com/mypage/member/edit" class="nopointer">マイページ［お客様情報の変更］</a>にある、メールマガジン配信を「希望しない」にご変更ください。</p></div>
+      </div>
+      <div class="faq-item" id="faq-7">
+        <h4 class="faq-item__q">Q. &#x4f1a;&#x54e1;&#x767b;&#x9332;&#x306e;&#x4ed5;&#x65b9;&#x304c;&#x5206;&#x304b;&#x3089;&#x306a;&#x3044;</h4>
+        <div class="faq-item__a"><p>各ページのヘッダー（上部）にあるリンクより、新規会員登録ページに移動します。<br>
+
+    <img src="https://www.cosmetic-times.com/image/guide/faq_register.gif" width="650" height="225" alt=""/></p>
+
+    <p>プライバシーポリシーに同意いただき、次に進むとメールアドレス（ログインID）の登録、そして会員情報のご入力をしていただくと登録が完了いたします。</p>
+
+    <p>ご注文の途中でも会員登録が可能ですが、会員登録が完了してもご注文は確定されませんのでご注意ください。<br>会員登録が完了した後、引き続きカートよりご注文のお手続きをお願いいたします。</p>
+
+    <p><a href="https://www.cosmetic-times.com/member/agree">新規会員登録はこちら</a></p>
+
+    <h4>既に郵便、FAX、お電話で当店をご利用されたことがあるお客様</h4>
+
+    <p>会員番号とご登録電話番号で、簡単にご登録いただけるフォームをご用意しております。</p>
+
+    <p><a href="https://www.cosmetic-times.com/member/catalog">かんたんネット会員登録はこちら</a></p></div>
+      </div>
+      <div class="faq-item" id="faq-9">
+        <h4 class="faq-item__q">Q. &#x96fb;&#x8a71;&#x30fb;FAX&#x30fb;&#x90f5;&#x9001;&#x6ce8;&#x6587;&#x3057;&#x3066;&#x3044;&#x305f;&#x304c;&#x4eca;&#x5f8c;&#x306f;&#x30a4;&#x30f3;&#x30bf;&#x30fc;&#x30cd;&#x30c3;&#x30c8;&#x3067;&#x8cfc;&#x5165;&#x3057;&#x305f;&#x3044;</h4>
+        <div class="faq-item__a"><p>既にお電話やご注文用紙（ファックス、郵便）にてご注文いただいたことがある方は、<b>かんたんネット会員登録（専用フォーム）</b>から「会員番号」「ご登録のお電話番号」をお送りいただくだけで簡単にネット会員登録が可能です。<br>
+
+    ネット会員になると、これまでの購入履歴や出荷状況などを「マイページ」からいつでもご確認いただけるようになります。<br>
+
+    <a href="https://www.cosmetic-times.com/member/catalog">かんたんネット会員登録（専用フォーム）はこちら</a><br>
+
+    <a href="https://www.cosmetic-times.com/inquiry/entry?lstCSClassCD=06#frm">会員番号をお忘れの方はこちらよりお問い合わせください</a></p>
+
+    <p>お問い合わせは、お電話でも受け付けております。<br>
+
+    お問い合わせ： 0120-88-7565　　平日10:00-17:30（土日祝休）</p></div>
+      </div>
+      <div class="faq-item" id="faq-12">
+        <h4 class="faq-item__q">Q. &#x767b;&#x9332;&#x60c5;&#x5831;&#xff08;&#x4f4f;&#x6240;&#x30fb;&#x96fb;&#x8a71;&#x756a;&#x53f7;&#x306a;&#x3069;&#xff09;&#x306e;&#x5909;&#x66f4;&#x3092;&#x3057;&#x305f;&#x3044;</h4>
+        <div class="faq-item__a"><p>マイページ［お客様情報の変更］からご変更いただけます。</p>
+
+    <p><a href="https://www.cosmetic-times.com/mypage/member/edit">マイページ［お客様情報の変更］へ</a></p></div>
+      </div>
+      <div class="faq-item" id="faq-46">
+        <h4 class="faq-item__q">Q. &#x30e1;&#x30fc;&#x30eb;&#x30de;&#x30ac;&#x30b8;&#x30f3;&#x3092;&#x8b1b;&#x8aad;&#x3059;&#x308b;&#x306b;&#x306f;&#xff1f;</h4>
+        <div class="faq-item__a"><p>マイページ「お客様情報の変更」から、メールマガジンの配信希望の項目を「希望する」にご変更ください。<br>
+
+    <a href="https://www.cosmetic-times.com/mypage/member/edit" class="nopointer">マイページ「お客様情報の変更」はこちら</a>
+
+    <br>
+
+    <br>
+
+    <h4>ネット会員登録がまだの方へ</h4>
+
+    メールマガジンをご講読いただくには、コスメティックタイムズのネット会員登録が必要です。<br>
+
+    新規会員登録の際に「メールマガジンの配信希望」という項目がございますので、「希望する」をご選択ください。（メルマガ講読で500円相当の期間限定ポイントプレゼント）<br>
+
+    <a href="https://www.cosmetic-times.com/member/agree">新規会員登録はこちら</a></p></div>
+      </div>
+      <div class="faq-item" id="faq-70">
+        <h4 class="faq-item__q">Q. &#x4f1a;&#x54e1;&#x767b;&#x9332;&#x306e;&#x30e1;&#x30ea;&#x30c3;&#x30c8;&#x306f;&#xff1f;</h4>
+        <div class="faq-item__a"><p>会員様には、特典や便利なショッピング機能をご用意しておりますので、ぜひご活用ください。<br>
+
+    会員登録料や年会費は一切いただいておりませんので、安心してご登録ください。</p>
+
+    <h4>「ポイント制度」でお得にお買い物</h4>
+
+    <p>ショッピングサイトでご注文いただくと、ご購入金額に応じてポイントが還元されます。1ポイント1円換算でお買い物にご使用いただけます。</p>
+
+    <p>また、ご購入いただいた商品のクチコミを投稿すると1商品つき50ポイント（50円分）プレゼント！<br>
+
+    その他にも、メルマガ購読者限定で、期間限定のポイントアップキャンペーンなど、様々な形でポイントを貯めていただくことができます。</p>
+
+    <p>*クチコミ投稿は、マイページの購入履歴より対象の商品にクチコミされた際に限ります。</p>
+
+    <p><a href="https://www.cosmetic-times.com/mypage/orderhistory">マイページ「購入履歴」へ</a><br>
+
+    <a href="/pages/member-guide#member04">ご利用ガイド「ポイントの使い方」へ</a>　<a href="/pages/member-guide#member03">ご利用ガイド「ポイントのため方」へ</a><br>
+
+    <a href="https://www.cosmetic-times.com/mypage/introduction/entry">マイページ「紹介キャンペーン」へ</a></p>
+
+    <h4>「専用のマイページ機能」で便利にお買い物</h4>
+
+    <p>会員登録をしていただくと、お客様専用のマイページがご利用いただけます。</p>
+
+    <p><strong>■お届け先の管理ができる</strong><br>
+
+    送付先の登録が可能なので、ご注文時の入力の手間がなくなります。<br>
+
+    <a href="https://www.cosmetic-times.com/mypage/deliverylist/list">マイページ「お届け先リスト」へ</a></p>
+
+    <p><strong>■購入履歴の確認ができる<br>
+
+    </strong>ご注文直後の配達状況を確認したり、過去の購入履歴を確認できます。<br>過去に買った商品をリピートする際に大変便利です。<br>
+
+    <a href="https://www.cosmetic-times.com/mypage/orderhistory">マイページ「購入履歴」へ</a></p>
+
+    <p><strong>■気になる商品をリスト管理できる</strong><br>
+
+    すぐには買わないけど比較検討したい「気になるコスメ」をリスト管理できます。<br>
+
+    リストからそのまま購入もできるので、自分だけのオリジナルのショッピングをお楽しみいただけます。<br>
+
+    <a href="https://www.cosmetic-times.com/mypage/favorite">マイページ「気になる！リスト」へ</a></p>
+
+    <p><strong>■在庫がなかった商品をいち早くゲットできる</strong><br>
+
+    在庫がない商品は、マイページの「入荷待ちリスト」にご登録ください。<br>リストに登録された商品は、在庫が再入荷され次第、メールでお知らせが配信されるので買い逃しはありません。<br>
+
+    <a href="https://www.cosmetic-times.com/mypage/reserve">マイページ「入荷待ちリスト」へ</a></p>
+
+
+
+    <p><a href="https://www.cosmetic-times.com/guide/reason/">安くて安心な商品をおとどけできるワケ</a></p></div>
+      </div>
+    </div>
+
+    <div class="faq-category" id="cat3">
+      <h2>ご注文について</h2>
+      <div class="faq-item" id="faq-15">
+        <h4 class="faq-item__q">Q. &#x6ce8;&#x6587;&#x5b8c;&#x4e86;&#x30e1;&#x30fc;&#x30eb;&#x304c;&#x5c4a;&#x304d;&#x307e;&#x305b;&#x3093;</h4>
+        <div class="faq-item__a"><p>「注文完了メール」「発送完了メール」「問い合わせ受付完了メール」等が届かない場合は、以下の3つの方法をお試しください。</p>
+
+    <h4>1.迷惑メールフォルダをご確認ください</h4>
+
+
+
+    <p>まれに、迷惑メールフォルダに振り分けられてしまう場合がございます。念のためご確認をお願いいたします。<br>ご購入商品の発送状況等は、<a href="https://www.cosmetic-times.com/mypage/orderhistory" class="nopointer">マイページ［購入履歴］</a>からもご確認いただけます。</p>
+
+
+
+
+
+          <h4>2.ご登録メールアドレスに誤りがないかご確認ください</h4>
+
+          <div class="PicText"><img src="https://www.cosmetic-times.com/image/guide/faq_register3.gif" width="430" height="358" alt=""/>
+
+    <p>ログインした状態で、<a href="https://www.cosmetic-times.com/mypage/mail/edit" class="nopointer">マイページ［メールアドレスの変更］</a>からご登録のメールアドレスをご確認ください。</p>
+
+    <p><strong>アルファベットの大文字・小文字の間違い</strong>（coとCOは区別されます）や、<strong>「.（ドット）」が抜けている</strong>など、メールアドレスに間違いがあった場合は、正しいものに訂正をお願いいたします。</p>
+
+    </div>
+
+
+
+    <h4>3.迷惑メール設定等でブロックされていないかご確認ください</h4>
+
+    <p>各種キャリアやフリーメールのメール設定から「ドメイン受信許可」の設定をお願いいたします。<br>
+
+    特にYahoo!メールやGmail、Hotmailなどのフリーメールをご利用の場合、当店からお送りした自動送信メールが迷惑メールとしてブロックされてしまうことが多くあります。</p>
+
+    <p>ドメイン受信設定で【　cosmetic-times.com　】を受信可能にご設定をお願いいたします。</p>
+
+    <p>＜参考サイト＞<br>
+
+    メールの振り分け設定を変える方法（すべて別ウィンドウで開きます）<br>
+
+    <a href="http://www.yahoo-help.jp/app/answers/detail/p/565/a_id/47528" target="_blank">Yahoo!メール</a>　　<a href="http://46mail.net/gmail/index.php?a=" target="_blank">Gmail、Livedoorメール</a>　　<a href="http://46mail.net/windowsmail/index.php?a=" target="_blank">Windows Liveメール・Windowsメール</a><br>
+
+    <a href="http://46mail.net/hotmail/index.php?a=" target="_blank">Homail・Infoseekメール</a>　　<a href="http://46mail.net/outlook/index.php?a=" target="_blank">Outlook2007・Outlook2010</a><br>
+
+    </p></div>
+      </div>
+      <div class="faq-item" id="faq-20">
+        <h4 class="faq-item__q">Q. &#x30d7;&#x30ec;&#x30bc;&#x30f3;&#x30c8;&#x5305;&#x88c5;&#xff08;&#x30e9;&#x30c3;&#x30d4;&#x30f3;&#x30b0;&#xff09;&#x306f;&#x3067;&#x304d;&#x307e;&#x3059;&#x304b;&#xff1f;</h4>
+        <div class="faq-item__a"><p><strong>大変申し訳ございませんが、ラッピングはお受けしておりません。</strong><br>
+
+    弊社は海外から発送を行っていますので、空輸時の安定性と梱包の関係上、ラッピングをした状態での発送は行っておりません。</p>
+
+    また、ショッピングバッグや紙袋等のご用意もなく、商品はダンボールにエアパッキン等で梱包した状態でのお届けとなります。<br>
+
+    <strong>商品の金額が記載された伝票類も同封されますので、贈り物としてご注文いただく場合は、お客様ご自身でのラッピングをお願いいたします。</strong></p></div>
+      </div>
+      <div class="faq-item" id="faq-42">
+        <h4 class="faq-item__q">Q. &#x300c;&#x5165;&#x8377;&#x5f85;&#x3061;&#x30ea;&#x30b9;&#x30c8;&#x300d;&#x3063;&#x3066;&#xff1f;</h4>
+        <div class="faq-item__a"><p><strong>欠品中の商品が再入荷した際に、お知らせが届く便利な機能です。</strong><br>
+
+    欲しい商品が欠品中の時は、「欠品中・再入荷お知らせ希望」ボタンをクリックして入荷待ちリストへご登録ください。<br>
+
+    商品が再入荷すると、ご登録のメールアドレスへお知らせが届きます。</p>
+
+    <p>※人気が高い商品は、再入荷後すぐに品切れとなってしまう場合がございます。予めご了承ください。</p>
+
+    <p>※入荷待ちリストは商品の入荷をお約束する機能ではございません。お待ちいただいている商品が入手困難で「完売」となる場合もございますので予めご了承ください。</p>
+
+
+
+    <h4>入荷待ち商品リストの確認・削除</h4>
+
+    <p>入荷待ち商品リストは、マイページ<a href="https://www.cosmetic-times.com/mypage/reserve" class="nopointer">「入荷待ちリスト」</a>からご確認・削除可能です。<br>
+
+    また、入荷のお知らせは、マイページ<a href="https://www.cosmetic-times.com/mypage" class="nopointer">「CTからのお知らせ」</a>にも表示されますので合わせてご確認ください。</p></div>
+      </div>
+      <div class="faq-item" id="faq-16">
+        <h4 class="faq-item__q">Q. &#x6ce8;&#x6587;&#x3057;&#x305f;&#x5546;&#x54c1;&#x306e;&#x5909;&#x66f4;&#x30fb;&#x30ad;&#x30e3;&#x30f3;&#x30bb;&#x30eb;&#x3092;&#x3057;&#x305f;&#x3044;</h4>
+        <div class="faq-item__a"><p>ご注文確定後は、原則として「注文内容を間違えた」「使ってみたらお肌に合わなかった」「思っていた商品と違う」などのお客様のご都合によるご返品・キャンセルは一切お受けしておりません。十分にご検討の上、ご注文をお願いいたします。<br>
+
+    また、ご注文ボタンを押される前に、必ずご注文内容のご確認をお願いいたします。</p>
+
+    <p>「ご注文完了メールが届かなかった」等の理由によるご返品・キャンセルも承ることができませんので、予めご了承ください。<br>
+
+    メーラーの設定や迷惑メールフィルターなどの原因によって「ご注文完了メール」が届かない場合は、<a href="https://www.cosmetic-times.com/mypage/orderhistory" class="nopointer">マイページ「購入履歴」</a>よりご注文内容のご確認をお願いいたします。</p>
+
+    <h4>クーリングオフ・PL法につきましては適用外となります</h4>
+
+    <p>クーリングオフは、訪問販売など自らの意思がはっきりしないままに契約の申し込みをしてしまうなどの場合に適用される法制度のため、通信販売には適用されません。</p></div>
+      </div>
+      <div class="faq-item" id="faq-19">
+        <h4 class="faq-item__q">Q. &#x30d7;&#x30ec;&#x30bc;&#x30f3;&#x30c8;&#x3068;&#x3057;&#x3066;&#x3001;&#x53cb;&#x4eba;&#x3084;&#x5bb6;&#x65cf;&#x306b;&#x76f4;&#x63a5;&#x9001;&#x308b;&#x3053;&#x3068;&#x306f;&#x3067;&#x304d;&#x307e;&#x3059;&#x304b;&#xff1f;</h4>
+        <div class="faq-item__a"><p>コスメティックタイムズでは、<b>お届けする商品には必ず「納品書」が同封されます。</b><br>
+
+    「納品書」には、ご注文者様のお名前や商品の金額等が記載されておりますので、<b>プレゼントとして直接ご友人様やご家族にお送りすることはお勧めしておりません。</b></p>
+
+
+
+    <p>上記の注意点をご了承いただける場合は、ご注文画面で「お届け先」にご友人様やご家族のご住所をご指定いただき、「クレジットカード決済」にてご注文ください。<br>
+
+    ただし、<b>ラッピング包装は承っておりません</b>ので予めご了承ください。</p></div>
+      </div>
+      <div class="faq-item" id="faq-18">
+        <h4 class="faq-item__q">Q. &#x30a8;&#x30e9;&#x30fc;&#x30e1;&#x30c3;&#x30bb;&#x30fc;&#x30b8;&#x304c;&#x51fa;&#x3066;&#x6ce8;&#x6587;&#x304c;&#x5b8c;&#x4e86;&#x3067;&#x304d;&#x306a;&#x3044;</h4>
+        <div class="faq-item__a"><p>大変お手数ですが、「お問い合わせフォーム」から以下の2点をできるだけ詳しくお知らせください。<br>
+
+    内容を確認した後、できる限り迅速にご対応させていただきます。</p>
+
+    <p>・どんなエラーメッセージが表示されているか<br>
+
+    ・どのような操作を行ったときにトラブルが起こったか</p>
+
+    <p><a href="https://www.cosmetic-times.com/inquiry/entry">お問い合わせフォーム</a></p>
+
+    <br>
+
+    <p>＜お詫び＞<br>システムの関係上、土･日・祝日はご返答にお時間をいただく場合がございます。<br>予めご了承ください。</p></div>
+      </div>
+      <div class="faq-item" id="faq-17">
+        <h4 class="faq-item__q">Q. &#x30ab;&#x30fc;&#x30c8;&#x306b;&#x5165;&#x308c;&#x305f;&#x306e;&#x306b;&#x5546;&#x54c1;&#x304c;&#x5c4a;&#x304b;&#x306a;&#x3044;</h4>
+        <div class="faq-item__a"><p><b>カートに入れただけの状態では、まだご注文が完了しておりません。</b><br>
+
+    カート画面の「レジに進む」からご注文画面へ進み、画面の指示に従ってご注文を完了してください。</p>
+
+    <p><b>ご注文が完了いたしますと、「ご注文ありがとうございます」というタイトルで注文完了メールが届きます</b>ので、そちらの内容をご確認ください。</p>
+
+    <p>ご注文がきちんと完了しているかご不安な時は、<a href="https://www.cosmetic-times.com/mypage/orderhistory" class="nopointer">マイページ「購入履歴」</a>にてご確認ください。</p></div>
+      </div>
+      <div class="faq-item" id="faq-41">
+        <h4 class="faq-item__q">Q. &#x300c;&#x6c17;&#x306b;&#x306a;&#x308b;&#xff01;&#x30ea;&#x30b9;&#x30c8;&#x300d;&#x3068;&#x306f;&#xff1f;</h4>
+        <div class="faq-item__a"><p>掲載商品それぞれについている「気になる！リスト」ボタンをクリックすることで、マイページ「気になる！リスト」に、リストとして表示させる機能です。<br>
+
+    <strong>まだ購入するか迷っている商品や、複数の商品と比較検討したい場合に便利な機能です。</strong></p>
+
+    <img src="https://www.cosmetic-times.com/image/guide/okiniiri.jpg" width="650" height="500" alt="" ></div>
+      </div>
+      <div class="faq-item" id="faq-21">
+        <h4 class="faq-item__q">Q. &#x5c4a;&#x3051;&#x5148;&#x306f;&#x6bce;&#x56de;&#x5165;&#x529b;&#x3059;&#x308b;&#x5fc5;&#x8981;&#x304c;&#x3042;&#x308a;&#x307e;&#x3059;&#x304b;&#xff1f;</h4>
+        <div class="faq-item__a"><p>会員登録時にご登録いただいた配送先以外にも、<a href="https://www.cosmetic-times.com/mypage/deliverylist/list" class="nopointer">マイページ「お届け先リスト」</a>から、お届け先を追加することが可能です。<br>
+
+    ご注文の際に、ご登録いただいているご住所の中から選択することができるので、ご注文の度に配送先を入力する必要はありません。</p></div>
+      </div>
+      <div class="faq-item" id="faq-87">
+        <h4 class="faq-item__q">Q. &#x3044;&#x304f;&#x3089;&#x304b;&#x3089;&#x6ce8;&#x6587;&#x3067;&#x304d;&#x307e;&#x3059;&#x304b;&#xff1f;</h4>
+        <div class="faq-item__a"><p>カート内の商品合計金額が3,000円以上でご注文いただけます。</div>
+      </div>
+    </div>
+
+    <div class="faq-category" id="cat4">
+      <h2>お支払いについて</h2>
+      <div class="faq-item" id="faq-24">
+        <h4 class="faq-item__q">Q. &#x30b3;&#x30f3;&#x30d3;&#x30cb;&#x5f8c;&#x6255;&#x3044;&#x306e;&#x632f;&#x8fbc;&#x671f;&#x9650;&#x3092;&#x904e;&#x304e;&#x3066;&#x3057;&#x307e;&#x3063;&#x305f;&#x3089;&#xff1f;</h4>
+        <div class="faq-item__a"><p><strong>「コンビニ後払い（ミライバライ）」は、振込用紙に記載された期限までにお支払いをお願いいたします。（通常 請求書発行から14日）</strong><br>
+
+    請求書は、商品お受け取り後7日程度で別途ご郵送いたします。<br>
+
+    <br>
+
+    期限が切れてしまった場合は、お手数ですがAGミライバライ(株)へ直接ご確認ください。<br>
+
+    <br>
+
+    <strong>ミライバライ 後払いサービスセンター</strong><br>
+
+    電話番号：045-393-4319 （月-金 10:00-17:30 土日・祝日・1/1～1/3は休業）</div>
+      </div>
+      <div class="faq-item" id="faq-86">
+        <h4 class="faq-item__q">Q. &#xff44;&#x6255;&#x3044;&#x6c7a;&#x6e08;&#x3092;&#x9014;&#x4e2d;&#x3067;&#x4e2d;&#x65ad;&#x3057;&#x305f;&#x5834;&#x5408;&#x30ad;&#x30e3;&#x30f3;&#x30bb;&#x30eb;&#x3055;&#x308c;&#x307e;&#x3059;&#x304b;&#xff1f;</h4>
+        <div class="faq-item__a"><p>レジページにてお支払方法「ｄ払い」をご選択いただき、【注文を確定する】ボタンを押すとｄ払い決済画面に移動します。（この時点でご注文は確定となりますが決済は完了していません。）<br>
+
+    <br>
+
+    その後、ｄ払い決済画面にてご決済が完了しますと支払済みとなり出荷準備が進みます。<br>
+
+    ｄ払い決済画面にてご決済が完了されずに終了した場合は、3～4時間後に『決済未完』としてご注文自体が自動キャンセルされます。<br>
+
+    <br>
+
+    決済画面を途中で閉じてしまった場合や時間が経過してセッションが切れてしまった場合、決済未完により自動キャンセルされますが、自動キャンセルまでには3～4時間のタイムラグが発生しますので予めご了承ください。（使用したクーポンやポイントは自動キャンセル時に返還されます。）</div>
+      </div>
+      <div class="faq-item" id="faq-28">
+        <h4 class="faq-item__q">Q. &#x652f;&#x6255;&#x65b9;&#x6cd5;&#x306e;&#x5909;&#x66f4;&#x306f;&#x3067;&#x304d;&#x307e;&#x3059;&#x304b;&#xff1f;</h4>
+        <div class="faq-item__a"><p><strong>ご注文完了後のお支払方法変更は、システム上承ることができません。</strong>
+
+    <br>
+
+    出荷手続き前（ピッキング完了前）のご注文であれば、一度キャンセルさせていただき改めてご注文いただく方法をご案内しております。<br>
+
+    キャンセルをご希望の場合は、問い合わせフォームまたはお電話にてご連絡ください。
+
+    尚、カスタマーサポートがお休みの場合は、キャンセル対応ができない場合がございますので予めご了承ください。<br>
+
+
+
+    <p><a href="https://www.cosmetic-times.com/inquiry/entry">お問い合わせフォーム</a></p>
+
+    <br>
+
+    ※出荷後（ピッキング完了後）のご注文に関してはキャンセルが承れませんのでご注意ください。</div>
+      </div>
+      <div class="faq-item" id="faq-23">
+        <h4 class="faq-item__q">Q. &#x6d88;&#x8cbb;&#x7a0e;&#x306f;&#x304b;&#x304b;&#x308a;&#x307e;&#x3059;&#x304b;&#xff1f;</h4>
+        <div class="faq-item__a"><p>消費税は一切かかりません。<br>
+
+    表示されている商品価格が、そのままお支払い金額となります。</p></div>
+      </div>
+      <div class="faq-item" id="faq-26">
+        <h4 class="faq-item__q">Q. &#x9818;&#x53ce;&#x8a3c;&#x306e;&#x767a;&#x884c;&#x306f;&#x3067;&#x304d;&#x307e;&#x3059;&#x304b;&#xff1f;</h4>
+        <div class="faq-item__a"><p>領収証をご希望のお客様には、ご入金確認後に領収証をお送りいたします。<br>
+
+    領収証をご希望の場合は、<a href="https://www.cosmetic-times.com/inquiry/entry" class="nopointer">お問い合わせフォーム</a>にて、必ず以下の項目を明記してご送信ください。</p>
+
+    <p>・ご登録のお名前<br>
+
+    ・ご注文番号<br>
+
+    ・領収証のお宛名<br>
+
+    ・但し書き</p>
+
+    <h4>「振込み」でお支払いの場合</h4>
+
+    <p>お支払いいただいてから弊社でご入金確認ができるまで、1週間程度お時間をいただく場合がございますので、予めご了承ください。</p></div>
+      </div>
+      <div class="faq-item" id="faq-25">
+        <h4 class="faq-item__q">Q. &#x632f;&#x8fbc;&#x7528;&#x7d19;&#x306e;&#x518d;&#x767a;&#x884c;&#x306f;&#x3067;&#x304d;&#x307e;&#x3059;&#x304b;&#xff1f;</h4>
+        <div class="faq-item__a"><p>紛失等で振込用紙の再発行をご希望の場合は、お手数ですがAGミライバライ(株)へ直接ご確認ください。<br>
+
+    <br>
+
+    <strong>ミライバライ後払いサービスセンター</strong><br>
+
+    電話番号：045-393-4319 （月-金 9:30-17:30 土日・祝日・1/1～1/3は休業）</div>
+      </div>
+      <div class="faq-item" id="faq-83">
+        <h4 class="faq-item__q">Q. &#x632f;&#x8fbc;&#x7528;&#x7d19;&#x304c;&#x5c4a;&#x304b;&#x306a;&#x3044;</h4>
+        <div class="faq-item__a"><p><strong>「コンビニ後払い（ミライバライ）」の請求書は、商品お受け取り後7日程度で別途ご郵送いたします。</strong><br>
+
+    ※お届けしたお荷物には同梱されません。
+
+    <br>
+
+    商品お受け取りから7日を過ぎても請求書が届かない場合は、お手数ですがAGミライバライ(株)へ直接ご確認ください。<br>
+
+    <br>
+
+    <strong>ミライバライ 後払いサービスセンター</strong><br>
+
+    電話番号：045-393-4319 （月-金 10:00-17:30 土日・祝日・1/1～1/3は休業）</div>
+      </div>
+      <div class="faq-item" id="faq-82">
+        <h4 class="faq-item__q">Q. &#x624b;&#x6570;&#x6599;&#x306f;&#x304b;&#x304b;&#x308a;&#x307e;&#x3059;&#x304b;&#xff1f;</h4>
+        <div class="faq-item__a"><p>「代金引換」をご選択いただいた場合は一律324円のお手数料がかかります。</p>
+
+
+
+    <h4>クレジットカード・コンビニ後払い</h4>
+
+    <p>手数料無料</p>
+
+    <h4>代金引換</h4>
+
+    <p>一律 324円</p></div>
+      </div>
+      <div class="faq-item" id="faq-88">
+        <h4 class="faq-item__q">Q. AmazonPay&#x6c7a;&#x6e08;&#x304c;&#x5b8c;&#x4e86;&#x3057;&#x305f;&#x306e;&#x306b;&#x6ce8;&#x6587;&#x5b8c;&#x4e86;&#x30e1;&#x30fc;&#x30eb;&#x304c;&#x5c4a;&#x304b;&#x306a;&#x3044;</h4>
+        <div class="faq-item__a"><p>通常、AmazonPay決済画面にて決済完了後、再びコスメティックタイムズのレジページへ遷移しご注文を確定していただくとすぐに「ご注文完了メール」が送信されます。<br>
+
+    <br>
+
+    AmazonPay決済画面にて何らかの操作を行ったことが原因で、決済完了後にコスメティックタイムズの注文情報が正しく作成されないケースが稀に発生いたします。<br>
+
+    <br>
+
+    その場合は、弊社側で決済キャンセル処理を行いますので、大変お手数ですがお電話かお問い合わせフォームよりお問い合わせください。<br>
+
+    尚、コスメティックタイムズのご注文は完了しておりませんので、再度ご注文のお手続きをお願いいたします。<br>
+
+    <br>
+
+    ＜必要な情報＞<br>
+
+    ・コスメティックタイムズの会員番号もしくは、ご登録いただいたお電話番号<br>
+
+    ・AmazonPayリファレンスID（決済コード）<br>
+
+    ・決済日</div>
+      </div>
+    </div>
+
+    <div class="faq-category" id="cat5">
+      <h2>お届け・送料について</h2>
+      <div class="faq-item" id="faq-32">
+        <h4 class="faq-item__q">Q. &#x6ce8;&#x6587;&#x304b;&#x3089;&#x3069;&#x306e;&#x304f;&#x3089;&#x3044;&#x3067;&#x5c4a;&#x304d;&#x307e;&#x3059;&#x304b;&#xff1f;</h4>
+        <div class="faq-item__a"><p><strong>ご注文完了から、3日～1週間程でお届けいたします。</strong>（佐川急便）<br>
+
+     年末年始及びご注文混雑などの影響で遅れが出る場合がございます。<br>
+
+    また、商品の入荷状況や梱包状況などにより、何口かに分けて配送する場合がございますのでご了承ください。
+
+    </p>
+
+
+
+    <h4>ご注文から1週間以降であれば、配送希望日時をご指定いただけます</h4>
+
+    <p>ご注文画面で、ご希望の配達日時をご指定ください。</p>
+
+
+
+    <p><strong>●配達日指定サービスがご利用いただけない地域がございます</strong><br>
+
+    離島等、一部ご利用いただけない地域がございます。詳しくは担当営業所へお問い合わせください。</p>
+
+    <p><a href="http://www.sagawa-exp.co.jp/send/branch_search/tanto/" target="_blank">佐川急便：担当営業所検索</a>（別ウインドウで開きます）</p></div>
+      </div>
+      <div class="faq-item" id="faq-35">
+        <h4 class="faq-item__q">Q. &#x9001;&#x6599;&#x306f;&#x304b;&#x304b;&#x308a;&#x307e;&#x3059;&#x304b;&#xff1f;</h4>
+        <div class="faq-item__a"><p><strong>8,000円以上のご注文で全国送料無料で配送いたします。</strong></p>
+
+    <p>8,000円以上（代引手数料除く）のご注文で全国送料無料。<br>
+
+    7,999円以下のご注文は、一律500円の送料がお客様負担となります。</p></div>
+      </div>
+      <div class="faq-item" id="faq-31">
+        <h4 class="faq-item__q">Q. &#x300c;&#x914d;&#x9001;&#x5e0c;&#x671b;&#x65e5;&#x6642;&#x300d;&#x306e;&#x5909;&#x66f4;&#x306f;&#x3067;&#x304d;&#x307e;&#x3059;&#x304b;&#xff1f;</h4>
+        <div class="faq-item__a"><p><strong>ご注文完了後は「配送希望日時」のご変更はお受けできません。</strong><br>
+
+    配達日時のご指定は、慎重にお願いいたします。</p>
+
+
+
+    <h4>配達希望日時に、ご不在のため商品を受け取れなかった場合</h4>
+
+    <p>ポストに投函された不在票に記載された集配所・ドライバーへご連絡いただき、再配達のお手続きをお願いいたします。</p>
+
+
+
+    <h4>ご不在時におけるお荷物の保管期間</h4>
+
+    <p>最初のお届け日より1週間です。<br>
+
+    <strong>保管期間を過ぎますと、商品は一旦弊社に返送され再配達の配送料がお客様負担となりますのでご注意ください。</strong><br>
+
+    また、お客様ご指定のお届け先住所に誤りがあり商品が返送されてしまった場合でも同様です。</p></div>
+      </div>
+      <div class="faq-item" id="faq-33">
+        <h4 class="faq-item__q">Q. &#x51fa;&#x8377;&#x3055;&#x308c;&#x305f;&#x8377;&#x7269;&#x306e;&#x914d;&#x9001;&#x72b6;&#x6cc1;&#x3092;&#x77e5;&#x308a;&#x305f;&#x3044;</h4>
+        <div class="faq-item__a"><p>配達状況の確認は、佐川急便の「お荷物問い合わせサービス」をご利用ください。</p>
+
+    <p>弊社から商品を出荷した際に、メールにて「お問い合わせ伝票番号（お荷物番号）」をお知らせしております。<br>
+
+    出荷前の状況は、<a href="https://www.cosmetic-times.com/mypage/orderhistory" class="nopointer">マイページの購入履歴の詳細</a>よりご確認いただけます。</p></div>
+      </div>
+      <div class="faq-item" id="faq-37">
+        <h4 class="faq-item__q">Q. &#x4e0d;&#x5728;&#x3067;&#x5546;&#x54c1;&#x3092;&#x53d7;&#x3051;&#x53d6;&#x308c;&#x306a;&#x304b;&#x3063;&#x305f;</h4>
+        <div class="faq-item__a"><p><strong>ポストに投函された「ご不在連絡票」をご確認の上、担当営業所または、担当ドライバーへ直接ご連絡いただき再配達の手配をお願いいたします。</strong></p>
+
+    <h4>お荷物の保管期間について</h4>
+
+    <p>不在時における保管期間は、最初のお届け日より1週間となっております。<br>
+
+    商品お届け時にご不在の場合は「ご不在連絡票」が必ずポストに入りますので、担当営業所に直接再配達のご依頼をお願いいたします。</p>
+
+    <h4>保管期間を過ぎてしまった場合</h4>
+
+    <p>万が一保管期間を過ぎてしまった場合には、一度弊社に返送されます。<br>
+
+    <strong>再度配達をご希望される場合の送料につきましては、お客様のご負担となりますのでご注意ください。</strong><br>
+
+
+
+    <strong>◆万が一、保管期限内に再配達のご連絡がなく弊社に商品が返送された際は、<br>配送にかかっております送料1500円～をご請求させていただくことがございますので<br>長期ご不在などの場合は、予めご注文時にお届け日時をご指定いただき必ずお受け取りいただけますよう、<br>お願い致します。</strong><br>
+
+
+
+    （ご指定の住所に誤りがあり、宛先不明で返送されてしまった場合も同じ）</p></div>
+      </div>
+      <div class="faq-item" id="faq-39">
+        <h4 class="faq-item__q">Q. &#x5b85;&#x914d;BOX&#x306b;&#x5c4a;&#x3051;&#x3066;&#x3082;&#x3089;&#x3046;&#x3053;&#x3068;&#x306f;&#x3067;&#x304d;&#x307e;&#x3059;&#x304b;&#xff1f;</h4>
+        <div class="faq-item__a"><p>ご注文画面で「宅配ボックス」を利用するかどうかお選びいただけます。<br>
+
+    ただし、お支払い方法が「代金引換」の場合は、宅配ボックスへの配送はご指定いただけません。</p>
+
+    <p><strong>「利用しない」をお選びいただいた場合でも、稀にご不在時の状況によって宅配ボックスへ投函されることがございます。</strong></p></div>
+      </div>
+      <div class="faq-item" id="faq-38">
+        <h4 class="faq-item__q">Q. &#x6d77;&#x5916;&#x767a;&#x9001;&#x306f;&#x3067;&#x304d;&#x307e;&#x3059;&#x304b;&#xff1f;</h4>
+        <div class="faq-item__a"><p>日本国内のみお届けが可能です。</p></div>
+      </div>
+      <div class="faq-item" id="faq-30">
+        <h4 class="faq-item__q">Q. &#x914d;&#x9001;&#x65e5;&#x6642;&#x306f;&#x6307;&#x5b9a;&#x3067;&#x304d;&#x307e;&#x3059;&#x304b;&#xff1f;</h4>
+        <div class="faq-item__a"><p>はい、承っております。ご注文画面でご希望の配達日時をご指定ください。</p>
+
+    <p>※天候や配送事情により、ご希望日時にお届けできない場合がございます。<br>
+
+    ※配送日時のご指定がない場合は、最短（3日～1週間程）でのお届けとなります。<br>
+
+    ※お届けの際にご不在の場合は、不在連絡票がポストに投函されますのでご対応をお願いいたします。</p>
+
+
+
+    <h4>●配達日指定サービスがご利用いただけない地域</h4>
+
+    <p>離島など、一部配達日指定サービスがご利用いただけない地域がございます。<br>詳しくは担当営業所へお問い合わせください。</p>
+
+    <p><a href="http://www.sagawa-exp.co.jp/send/branch_search/tanto/" target="_blank">佐川急便：担当営業所検索</a>（別ウインドウで開きます）</p></div>
+      </div>
+      <div class="faq-item" id="faq-34">
+        <h4 class="faq-item__q">Q. &#x5225;&#x306e;&#x5c4a;&#x3051;&#x5148;&#x306b;&#x8ee2;&#x9001;&#x306f;&#x3067;&#x304d;&#x307e;&#x3059;&#x304b;&#xff1f;</h4>
+        <div class="faq-item__a"><p>原則として、出荷後に商品の転送を承ることはできません。<br>
+
+    やむをえない事情により転送を希望される場合は、<strong>転送にかかる配送料がお客様ご負担（送料着払い）となります</strong>ので予めご了承ください。</p></div>
+      </div>
+      <div class="faq-item" id="faq-73">
+        <h4 class="faq-item__q">Q. &#x5546;&#x54c1;&#x304c;&#x5fc5;&#x8981;&#x306a;&#x304f;&#x306a;&#x3063;&#x305f;&#x306e;&#x3067;&#x53d7;&#x3051;&#x53d6;&#x308a;&#x8f9e;&#x9000;&#x3057;&#x305f;&#x3044;</h4>
+        <div class="faq-item__a"><p><b>お客様都合での受け取り辞退は一切お受付しておりません。</b><br>
+
+    ご注文の際は、よくご検討いただき慎重にご注文いただけますようお願い致します。<br>
+
+
+
+    万が一、ご注文商品をお受け取りいただけず、返送された場合、
+
+    配送にかかります送料を後程ご請求させて<br>
+
+    いただく場合がございますので予めご了承ください。<br></div>
+      </div>
+    </div>
+
+    <div class="faq-category" id="cat6">
+      <h2>返品・交換・キャンセルについて</h2>
+      <div class="faq-item" id="faq-53">
+        <h4 class="faq-item__q">Q. &#x6ce8;&#x6587;&#x3092;&#x30ad;&#x30e3;&#x30f3;&#x30bb;&#x30eb;&#x3092;&#x3057;&#x305f;&#x3044;</h4>
+        <div class="faq-item__a"><p>注文履歴にキャンセルボタンが表示されている場合はお客様ご自身でキャンセルを行っていただく事が可能です。
+
+    キャンセルボタンが表示されていない場合は出荷状況によってキャンセルを承れない場合がございますの
+
+    ご了承ください。
+
+    ご不明な点がございましたらお問い合わせフォームよりお問い合わせください。</p>
+
+
+
+
+
+    <p><a href="https://www.cosmetic-times.com/inquiry/entry">お問い合わせフォーム</a></p>
+
+    <p>お問い合わせ： 0120-88-7565　　平日10:00-17:30（土日祝休）</p>
+
+    <p>ただし、すでに出荷準備が進んでいる場合は、キャンセルをお受けできませんのでご注文の際は十分ご注意ください。</p></div>
+      </div>
+      <div class="faq-item" id="faq-51">
+        <h4 class="faq-item__q">Q. &#x5546;&#x54c1;&#x304c;&#x5c4a;&#x3044;&#x305f;&#x304c;&#x3084;&#x3063;&#x3071;&#x308a;&#x8fd4;&#x54c1;&#x3057;&#x305f;&#x3044;</h4>
+        <div class="faq-item__a"><p><strong>「お肌に合わない・違和感がある・思っていた商品と違う・商品を間違えてしまった」など、お客様のご都合によるご返品は一切お受けしておりません。</strong><br>
+
+    また、未使用未開封であっても、一度お客様の元へ届けられた商品は、再度販売することができません為、ご返品・キャンセル・交換など承ることができません。ご注文の際は十分に内容をご確認ください。<br>
+
+    万が一、お届け時に商品が破損していた等の場合は、交換（在庫切れの場合キャンセル）のご対応が可能です。</p></div>
+      </div>
+      <div class="faq-item" id="faq-50">
+        <h4 class="faq-item__q">Q. &#x672a;&#x958b;&#x5c01;&#x306e;&#x5546;&#x54c1;&#x3092;&#x8fd4;&#x54c1;&#x3059;&#x308b;&#x3053;&#x3068;&#x306f;&#x3067;&#x304d;&#x307e;&#x3059;&#x304b;&#xff1f;</h4>
+        <div class="faq-item__a"><p><strong>未使用未開封であってもお客様のご都合によるご返品は一切お受けしておりません。</strong><br>
+
+    一度お客様のお手元に届いた商品は、未使用未開封であっても再度販売することができないため返品キャンセルを承ることができません。ご理解いただけますようお願い申し上げます。</p></div>
+      </div>
+      <div class="faq-item" id="faq-52">
+        <h4 class="faq-item__q">Q. &#x5199;&#x771f;&#x306e;&#x8272;&#x5473;&#x3068;&#x9055;&#x3063;&#x305f;&#x304b;&#x3089;&#x8fd4;&#x54c1;&#x3057;&#x305f;&#x3044;</h4>
+        <div class="faq-item__a"><p><strong>掲載画像と実物の色の違いが理由でのご返品は、一切お受けしておりません。</strong><br>
+
+    商品のお色は、ご覧いただくディスプレイや環境により見え方が異なるため、掲載画像はあくまでも参考としていただけますようお願いいたします。</p>
+
+
+
+    また、<strong>「お肌に合わない・違和感がある・思っていた商品と違う」など、お客様のご都合によるご返品も一切お受けしておりませんので予めご了承ください。</strong></p></div>
+      </div>
+      <div class="faq-item" id="faq-48">
+        <h4 class="faq-item__q">Q. &#x6ce8;&#x6587;&#x3057;&#x305f;&#x5546;&#x54c1;&#x3068;&#x9055;&#x3046;&#x3082;&#x306e;&#x304c;&#x5c4a;&#x3044;&#x305f;</h4>
+        <div class="faq-item__a"><p>商品の品質・配送については万全を期しておりますが、万が一お届けした商品に不備があった場合は、大変お手数ですが品到着から<strong>1週間以内に<a href="https://www.cosmetic-times.com/inquiry/entry" class="nopointer">お問い合わせフォーム</a>よりご連絡ください。</strong></strong></p>
+
+    在庫がある場合については交換、在庫がない場合にはご返品対応とさせていただきます。<br>
+
+    <p>お申し込み内容確認のため、お電話番号・ご住所などのご記入もお願いいたします。</p>
+
+    <p>下記フリーダイヤルでも承っております。</p>
+
+    <p>お問い合わせ： 0120-88-7565　　平日10:00-17:30（土日祝休）</p></div>
+      </div>
+      <div class="faq-item" id="faq-74">
+        <h4 class="faq-item__q">Q. &#x30af;&#x30fc;&#x30ea;&#x30f3;&#x30b0;&#x30aa;&#x30d5;&#x5236;&#x5ea6;&#x306f;&#x3042;&#x308a;&#x307e;&#x3059;&#x304b;&#xff1f;</h4>
+        <div class="faq-item__a"><p>通信販売においてはクーリングオフ制度は適用されません。<br>ご注文前によくご検討のうえ、ご購入をお願い致します。<br>ご注文後のお客様都合による返品キャンセルはお受けできませんので予めご了承の程お願い申し上げます。</div>
+      </div>
+    </div>
+
+    <div class="faq-category" id="cat7">
+      <h2>取扱商品・価格について</h2>
+      <div class="faq-item" id="faq-54">
+        <h4 class="faq-item__q">Q. &#x6d77;&#x5916;&#x88fd;&#x54c1;&#x3068;&#x56fd;&#x5185;&#x88fd;&#x54c1;&#x3067;&#x306e;&#x5546;&#x54c1;&#x306e;&#x9055;&#x3044;&#x306f;&#xff1f;</h4>
+        <div class="faq-item__a"><p><strong>海外製品と国内製品では、処方や成分、パッケージ、使用感などが異なる場合がございます。</strong><br>弊社で販売している商品は、国内メーカーの製品であっても国内製品とは若干異なります。<br>
+
+    ご理解いただいた上でのご購入をお願いいたします。</p>
+
+
+
+    <p>また、商品の梱包などは十分に注意しておりますが、外装箱や容器などに少々キズや汚れが発生する場合がございます。<br>
+
+    上記の事情での返品交換やキャンセルはお受けしておりませんので予めご了承ください。</p>
+
+
+
+    <p>ご使用不可能な程の破損等のトラブルが発生した場合には、恐れ入りますが商品到着から<strong>1週間以内に<a href="https://www.cosmetic-times.com/inquiry/entry" class="nopointer">お問い合わせフォーム</a>よりご連絡ください。</strong><br>早急にご対応させいていただきます。（土日祝日、年末年始等は対応にお時間をいただく場合がございます）</p>
+
+
+
+    <p>お問い合わせ： 0120-88-7565　　平日10:00-17:30（土日祝休）</p>
+
+    <p><a href="https://www.cosmetic-times.com/guide/reason/">安くて安心な商品をおとどけできるワケ</a></p></div>
+      </div>
+      <div class="faq-item" id="faq-61">
+        <h4 class="faq-item__q">Q. &#x6b20;&#x54c1;&#x4e2d;&#x306e;&#x5546;&#x54c1;&#x306f;&#x3044;&#x3064;&#x9803;&#x5165;&#x8377;&#x3059;&#x308b;&#x306e;&#xff1f;</h4>
+        <div class="faq-item__a"><p>欠品商品の入荷時期についての具体的なご案内はできかねます。<br>
+
+    恐れ入りますが、以下のいずれかの方法でご対応いただけますようお願い申し上げます。</p>
+
+
+
+    <h4>再入荷のお知らせをメールで受け取る</h4>
+
+    <p>欠品中の商品に付いている「再入荷お知らせ希望」ボタンをクリックしていただくと、<a href="https://www.cosmetic-times.com/mypage/reserve" class="nopointer">マイページ「入荷待ちリスト」</a>へ登録され、ご希望の商品が再入荷した際にご登録メールアドレスへお知らせが届きます。<br>
+
+    また、マイページトップ「CTからのお知らせ」にも表示されますので、合わせてご確認ください。</p>
+
+    <p>※人気の商品は、再入荷後すぐに売り切れとなる場合がございますので、お早めにご確認をお願いいたします。<br>
+
+    ※入荷待ちリストは商品の入荷をお約束する機能ではございません。お待ちいただいている商品が入手困難で「完売」となる場合もございますので予めご了承ください。<br>
+
+    ※再入荷時の商品確保や、自動購入はできかねますのでご注意ください。</p></div>
+      </div>
+      <div class="faq-item" id="faq-58">
+        <h4 class="faq-item__q">Q. CT&#x901a;&#x5e38;&#x4fa1;&#x683c;&#x3068;&#x306f;&#xff1f;</h4>
+        <div class="faq-item__a"><p><strong>コスメティックタイムズの通常販売価格を指します。</strong><br>
+
+    コスメティックタイムズを略して［CT］と表記しております。</p></div>
+      </div>
+      <div class="faq-item" id="faq-55">
+        <h4 class="faq-item__q">Q. &#x56fd;&#x5185;&#x3067;&#x8cfc;&#x5165;&#x3057;&#x305f;&#x88fd;&#x54c1;&#x3068;&#x30c6;&#x30af;&#x30b9;&#x30c1;&#x30e3;&#x30fc;&#x3084;&#x9999;&#x308a;&#x304c;&#x9055;&#x3046;&#x3088;&#x3046;&#x306b;&#x611f;&#x3058;&#x308b;</h4>
+        <div class="faq-item__a"><p><strong>海外製品と国内製品では、処方や成分、パッケージ、使用感などが異なる場合がございます。</strong><br>弊社で販売している商品は、国内メーカーの製品であっても国内製品とは若干異なります。<br>
+
+    ご理解いただいた上でのご購入をお願いいたします。</p>
+
+    <p>天然成分を主にしているオーガニック・自然派商品は、原料の収穫時期やロットによって香りに違いを感じる場合が多くございます。<br>
+
+    また、気候やお客様の体調などによっても、テクスチャーや香りに違いが発生いたします。<br>上記の理由による返品交換、キャンセルはお受けできませんので、十分にご検討の上ご購入ください。</p>
+
+    <p>商品の品質に関しては、品質の劣化している物や粗悪品がお客様の元へ届かないよう検品や保存管理を徹底しておりますのでどうぞご安心ください。詳しくは<a href="https://www.cosmetic-times.com/guide/reason/#hinshitsu" class="nopointer">安心の品質管理</a>をご覧ください。</p></div>
+      </div>
+      <div class="faq-item" id="faq-57">
+        <h4 class="faq-item__q">Q. &#x30d1;&#x30c3;&#x30b1;&#x30fc;&#x30b8;&#x3084;&#x5546;&#x54c1;&#x540d;&#x304c;&#x7570;&#x306a;&#x3063;&#x3066;&#x3044;&#x305f;</h4>
+        <div class="faq-item__a"><p><strong>海外製品と国内製品では、処方や成分、パッケージ、使用感などが異なる場合がございます。</strong><br>弊社で販売している商品は、国内メーカーの製品であっても国内製品とは若干異なります。<br>
+
+    ご理解いただいた上でのご購入をお願いいたします。</p>
+
+
+
+    <p><strong>●同じ商品でも、流通している国によってパッケージのデザインが複数存在します。</strong><br>
+
+    また、海外製品には、もともと箱に入っていない商品や、フィルムでカバーされていない商品も多数ございますので、ご理解いただいた上でご購入いただけますようお願いいたします。</p>
+
+
+
+    <p><strong>●当店で同じ商品ご購入いただいた場合でも、入荷時期によって表記やパッケージが異なる場合がございます。</strong><br>
+
+    流通している国が異なっている、メーカーサイドでリニューアルがあった等の理由がございます。</p>
+
+
+
+    <p>上記の理由による返品交換、キャンセルはお受けできませんので、十分にご検討の上ご購入ください。</p>
+
+
+
+    <p><a href="https://www.cosmetic-times.com/guide/reason/#hinshitsu">安心の品質管理</a></p></div>
+      </div>
+      <div class="faq-item" id="faq-81">
+        <h4 class="faq-item__q">Q. &#x30d6;&#x30e9;&#x30f3;&#x30c9;&#x306e;&#x30b7;&#x30e7;&#x30c3;&#x30d4;&#x30f3;&#x30b0;&#x30d0;&#x30c3;&#x30b0;&#x306f;&#x3064;&#x3044;&#x3066;&#x304d;&#x307e;&#x3059;&#x304b;&#xff1f;</h4>
+        <div class="faq-item__a"><p>ブランドのショッピングバッグ（ショッパー）は付属いたしません。<br>
+
+    また、ブランド直営や代理店などで配布しているカタログ等も付属いたしませんのでご了承ください。</div>
+      </div>
+      <div class="faq-item" id="faq-56">
+        <h4 class="faq-item__q">Q. &#x8ca9;&#x58f2;&#x3057;&#x3066;&#x3044;&#x308b;&#x30b5;&#x30d7;&#x30ea;&#x30e1;&#x30f3;&#x30c8;&#x306e;&#x5b89;&#x5168;&#x6027;&#x306f;&#xff1f;</h4>
+        <div class="faq-item__a"><p>弊社で取り扱っているサプリメントは、販売国で広く販売されている食品レベルのサプリメントです。<br>
+
+    <strong>サプリメントは特定の疾病を治療することを目的とした製品ではありません。</strong>あくまでも食品であることにご留意ください。</p>
+
+    <p>医師による治療・投薬を受けている場合、医薬品との相互作用が生じる可能性がありますので、<strong>サプリメントを使用する場合は必ず担当医師の指導を受けてください。<br>
+
+    医師の判断を経ずにサプリメントを使用するような行為は、絶対におやめください。</strong></p>
+
+    <h4>メーカーの示す用法容量を必ず守ってご使用ください。</h4>
+
+    <p>食品にもアレルギー反応や食べ合わせなどがあるように、サプリメントにもご使用者の体調や体質によっては身体に合わないことがございます。<br>万が一、体調に合わない場合はすぐに使用を中止し、医師にご相談ください。</p>
+
+    <p>医師の処方で服用する薬ではありませんので、選択から使用まで、全てご自身の責任となることをあらかじめご了承ください。体質に合わない・効果が感じられないなどの理由での返品・交換は一切お受けしておりません。</p></div>
+      </div>
+      <div class="faq-item" id="faq-60">
+        <h4 class="faq-item__q">Q. &#x5bb9;&#x91cf;&#x63db;&#x7b97;&#x4fa1;&#x683c;&#x3068;&#x306f;&#xff1f;</h4>
+        <div class="faq-item__a"><p>同じ商品でも、海外でのみ発売しているサイズ（容量）もございます。<br>
+
+    <strong>「容量換算価格」とは、国内で販売しているサイズ（容量）から算出した参考価格です。</strong></p>
+
+    <p>例えば、国内の希望小売価格が［100ml／10,000円］の場合、国内未発売の200mlサイズは、［100ml／10,000円］の2倍となり、【容量換算価格：20,000円】と表示されます。</p>
+
+
+
+    <p>なお、弊社で販売を開始した際に調査した価格ですので、販売店によって異なる場合がございます。<br>あくまで「参考」として掲載しておりますので、予めご了承ください。</p></div>
+      </div>
+      <div class="faq-item" id="faq-59">
+        <h4 class="faq-item__q">Q. &#x5e0c;&#x671b;&#x5c0f;&#x58f2;&#x4fa1;&#x683c;&#x3068;&#x306f;&#xff1f;</h4>
+        <div class="faq-item__a"><p><strong>日本国内で一般的に販売されている「参考価格」です。</strong><br> 
+
+    弊社で販売を開始した際に調査した価格ですので、販売店によって異なる場合がございます。<br>
+
+    あくまで「参考」として掲載しておりますので、予めご了承ください。</p>
+
+    <p>また、国内未発売の商品も多数ございますので「希望小売価格」の表記がないものもございます。</p></div>
+      </div>
+      <div class="faq-item" id="faq-71">
+        <h4 class="faq-item__q">Q. &#x8868;&#x793a;&#x4fa1;&#x683c;&#x306f;&#x7a0e;&#x8fbc;&#x307f;&#x3067;&#x3059;&#x304b;&#xff1f;</h4>
+        <div class="faq-item__a"><p><strong>消費税は一切かかりません。</strong><br>
+
+    表示されている商品価格が、そのままお支払金額となります。</p></div>
+      </div>
+    </div>
+
+    <div class="faq-category" id="cat8">
+      <h2>ポイント・クーポンについて</h2>
+      <div class="faq-item" id="faq-43">
+        <h4 class="faq-item__q">Q. &#x30af;&#x30c1;&#x30b3;&#x30df;&#x3092;&#x6295;&#x7a3f;&#x3059;&#x308b;&#x306b;&#x306f;&#xff1f;&#x30af;&#x30c1;&#x30b3;&#x30df;&#x7279;&#x5178;&#x306e;50&#x30dd;&#x30a4;&#x30f3;&#x30c8;&#x7372;&#x5f97;&#x3059;&#x308b;&#x306b;&#x306f;&#xff1f;</h4>
+        <div class="faq-item__a"><p>コスメティックタイムズのネット会員様であれば、どなたでもクチコミをご投稿いただけます。<br>
+
+    <a href="https://www.cosmetic-times.com/mypage/orderhistory" class="nopointer">マイページ[購入履歴]</a>または、各商品ページからご投稿ください。</p>
+
+
+
+    <h4>クチコミ投稿で50ポイントゲット</h4>
+
+    <p><a href="https://www.cosmetic-times.com/mypage/orderhistory" class="nopointer">マイページ［購入履歴］</a>からクチコミをご投稿いただいた方には、【50ポイント（50円分）】をプレゼントいたします。</p>
+
+
+
+    ※購入履歴以外からのクチコミ投稿にはポイントが付与されませんのでご注意ください。</p>
+
+    ※商品と関係のないクチコミや、クチコミとみなされない書き込みについては弊社で判断し、非表示にさせていただく場合がございますので予めご了承ください。</p>
+
+
+
+    <p>ポイント対象の区別は、ボタンの種類でご判断いただけますので下記をご確認いただき、お間違いのないようお願いいたします。</p>
+
+
+
+    <p><img src="https://www.cosmetic-times.com/image/mypage/b_kuchikomi_point.gif" class="TextIcon" align="left">このボタンからの投稿は「クチコミポイント対象」です</p>
+
+    <br clear="all">
+
+    <p><img src="https://www.cosmetic-times.com/image/mypage/b_kuchikomi.gif" class="TextIcon" align="left">このボタンからの投稿は「クチコミポイント対象外」です<br>（すでにクチコミポイントを付与された商品にも、このボタンが表示されます）</p>
+
+    <br>
+
+    <h4>ポイント付与についての条件</h4>
+
+    <ol>
+
+    <li>ポイントは、1商品あたり初回のクチコミのみが付与対象</spanng>となります。同じ商品に何度でもクチコミできますが、2回目以降はポイント付与対象外となりますのでご了承ください。</li>
+
+    <li>以下の場合、クチコミはできますが、ポイント付与の対象とはなりません。<ol>
+
+    <li>ご注文いただいた商品で、出荷が完了していない商品。</li>
+
+    <li>商品代金にお振り込みをお選びいただいた場合、未入金の商品。<br>
+
+    お振り込みでご入金いただいた場合、弊社でご入金確認が完了するまで数日程度かかるため、ポイント付与の対象となるまでお時間をいただく場合がございます。</li>
+
+    <li>購入していない商品。</li>
+
+    <li>同じ注文番号の商品対し、2回目以上クチコミを書いた場合。</li>
+
+    </ol>
+
+    <li>完売商品など一部対象外の商品もございます。（クチコミ投稿ボタンにポイント対象の有無が記載されています）</li>
+
+    </ol>
+
+    <br>
+
+    <p>※ポイント付与の対象は、出荷済かつ入金済商品の初回クチコミに限ります。</p>
+
+    <p>※お振り込みでご入金いただいた場合、弊社でご入金確認が完了するまで数日程度かかるため、 ポイント付与の対象となるまでお時間をいただく場合がございます。</p></div>
+      </div>
+      <div class="faq-item" id="faq-29">
+        <h4 class="faq-item__q">Q. &#x30af;&#x30fc;&#x30dd;&#x30f3;&#xff08;&#x30af;&#x30fc;&#x30dd;&#x30f3;&#x30b3;&#x30fc;&#x30c9;&#xff09;&#x3063;&#x3066;&#xff1f;</h4>
+        <div class="faq-item__a"><p><strong>クーポン（クーポンコード）とは、会員ステータス特典やキャンペーンなどで発行している割引クーポンのことです。</strong><br>
+
+    レジページでクーポンコードをご入力いただくことでご利用いただけます。</p>
+
+
+
+    <div class="listArea">
+
+    <ul>
+
+    <li>■ご注文完了後の割引適用は致しかねます。</li>
+
+    <li>■ご利用期限が過ぎたクーポンはご利用いただけません。</li>
+
+    <li>■ご利用可能回数や条件は、クーポンによって異なります。</li>
+
+    </ul></div></div>
+      </div>
+      <div class="faq-item" id="faq-40">
+        <h4 class="faq-item__q">Q. &#x4f1a;&#x54e1;&#x30b9;&#x30c6;&#x30fc;&#x30bf;&#x30b9;&#x3068;&#x306f;&#xff1f;</h4>
+        <div class="faq-item__a"><p>インターネット会員様にはステータスがあり、<strong>前月より6ヶ月前までのご購入累計金額（入金済）によって5段階に変動します。</strong><br>
+
+    ステータスが上がるほど<strong>ポイント還元率</strong>が高くなり、その他のお得なクーポンが受け取れる仕組みです。<br>
+
+    <a href="https://www.cosmetic-times.com/mypage">［マイページ］にてステータスの確認が可能です</a>
+
+    </p>
+
+
+
+    <div class="guideContent" id="member02">
+
+    <h4>ステータスが上がるごとに様々な特典が！</h4>
+
+    <p>会員ステータスは、メンバー、フレンド、ハートフル、ラブリー、CT VIPの5段階あり、ステータスが上がるごとにお得にお買い物していただけます。</p>
+
+
+
+    <img src="https://www.cosmetic-times.com/image/guide/member02_hyo.gif" alt="" /> 
+
+    <h4>会員ステータス変動のタイミング</h4>
+
+    <p><strong>会員ステータスは、前月より6ヶ月前までのご購入累計金額（入金済）によって、翌月1日に確定します。</strong>※手数料や割引された金額は含みません。<br><img src="https://www.cosmetic-times.com/image/guide/member02_hyo2.gif" alt=""/></p>
+
+    <div class="onepoint">
+
+    <h4>ステータスアップでポイントを稼ごう！</h4>
+
+    <p>会員ステータスは、前月より6ヶ月前までのご購入累計金額（入金済）によって、毎月1日に更新されます。<br>
+
+    高額でなくても毎月定期的にご購入いただくと、ステータスアップやランクを保つことができます。</p>
+
+    <p>ポイント還元率の高いラブリーを目指して、自分なりのお買い物をお楽しみください。</p>
+
+    </div>
+
+
+
+    <h4>ご注意事項</h4>
+
+    <ul>
+
+    <li>■ステータス変動は、ご入金済の購入金額が対象となります。（基本的に出荷日）</li>
+
+    <li>■ステータス更新の際、ご入金済の購入金額の条件を満たしていない場合は、ステータスがダウンします。</li>
+
+    <li>■ステータス更新対象のご注文金額は、インターネットからのご注文に限ります。電話、ファックス、郵便でのご注文金額は、ステータス更新対象に含みません。</li>
+
+    <li>■キャンセルや返品があった場合、ご利用ポイントはお戻しいたします。また、付与ポイントは自動的に差し引かせていただきます。</li>
+
+    <li>■既にご利用になった場合は、累計ポイントから差し引かせていただきますのでご注意ください。</li>
+
+    <li>■累計ポイントから減算することができない場合は、以降のご注文で獲得されたポイントから差し引かせていただきます。この場合のお客様のご利用可能ポイントはマイナスとなり、ご利用いただけるポイントはありません。</li>
+
+    </ul></div>
+      </div>
+      </div>
+      <div class="faq-item" id="faq-78">
+        <h4 class="faq-item__q">Q. &#x9031;&#x9593;&#x30af;&#x30c1;&#x30b3;&#x30df;&#x5927;&#x8cde;&#x3063;&#x3066;&#xff1f;</h4>
+        <div class="faq-item__a"><p>週間クチコミ大賞は毎週火曜日に1名選出され、受賞者には「300円OFFクーポン」をプレゼントいたします。
+
+    <h4>◆受賞発表は毎週火曜日！</h4>
+
+    週間で反響が多かったクチコミを「クチコミ大賞」として1つ選出！<br>
+
+    素敵なクチコミを投稿していただいたお礼として、受賞された会員様には「300円OFFクーポン」をプレゼントいたします。<br>
+
+    ※クーポンは、ご登録メールアドレスに配信されます。<br>
+
+    ※投稿から一年未満のクチコミが対象となります<br>
+
+
+
+    <h4>◆選考基準</h4>
+
+    クチコミ大賞は「役に立った数」や商品を選ぶ上で参考になるクチコミかどうかなど、様々な基準で選考します。（1年以内の投稿のみ対象）<br>
+
+    <br>
+
+    ヒント：『商品を検討中の方が参考になったかどうか』が、大きな選考基準となります。<br></div>
+      </div>
+      <div class="faq-item" id="faq-45">
+        <h4 class="faq-item__q">Q. &#x30dd;&#x30a4;&#x30f3;&#x30c8;&#x306e;&#x4f7f;&#x3044;&#x65b9;&#x306f;&#xff1f;</h4>
+        <div class="faq-item__a"><p><strong>貯まったポイントは、ご注文画面で「1ポイント＝1円」としてお使いいただけます。</strong></p>
+
+    <p>ご注文画面［ポイントのご利用］欄に、使用するポイントをご入力ください。<br>
+
+    確認画面でご使用ポイント分が、合計金額から差し引かれていることをご確認の上、ご注文を完了してください。</p></div>
+      </div>
+      <div class="faq-item" id="faq-44">
+        <h4 class="faq-item__q">Q. &#x30dd;&#x30a4;&#x30f3;&#x30c8;&#x306e;&#x305f;&#x3081;&#x65b9;&#x306f;&#xff1f;</h4>
+        <div class="faq-item__a"><p>いろいろな方法でポイントを貯めることができますので、お得にお買い物をお楽しみください。</p>
+
+
+
+    <h4>お買い物金額に応じてポイント還元</h4>
+
+    <p>会員様には、半年のご購入金額に応じてステータスが設定されています。<br><strong>ステータスによって、お買い物の度に購入金額の1％から5％のポイント還元（ポイントキャッシュバック）が受けられます。</strong><br>ステータスがアップするごとにポイント還元率が上がり、ポイントが貯まりやすくなります。</p>
+
+
+
+    <h4>クチコミ投稿で【50ポイント（50円分）】プレゼント</h4>
+
+    <p><a href="https://www.cosmetic-times.com/mypage/orderhistory" class="nopointer">マイページ［購入履歴］</a>からクチコミをご投稿いただいた方には、【50ポイント（50円分）】をプレゼントいたします。</p>
+
+    <p>※購入履歴以外からのクチコミ投稿にはポイントが付与されませんのでご注意ください。</p>
+
+
+
+    <p>ポイント対象の区別は、ボタンの種類でご判断いただけますので下記をご確認いただき、お間違いのないようお願いいたします。</p>
+
+
+
+    <p><img src="https://www.cosmetic-times.com/image/mypage/b_kuchikomi_point.gif" class="TextIcon" align="left">このボタンからの投稿は「クチコミポイント対象」です</p>
+
+    <br clear="all">
+
+    <p><img src="https://www.cosmetic-times.com/image/mypage/b_kuchikomi.gif" class="TextIcon" align="left">このボタンからの投稿は「クチコミポイント対象外」です<br>（すでにクチコミポイントを付与された商品にも、このボタンが表示されます）</p>
+
+
+
+    <h4>ポイント還元率アップキャンペーンも</h4>
+
+    <p>時おりポイント還元率アップする「ポイントアップキャンペーン」を開催しております。<br>期間中は、通常よりも貰えるポイントが大幅アップしますのでお楽しみに。</p></div>
+      </div>
+      <div class="faq-item" id="faq-76">
+        <h4 class="faq-item__q">Q. &#x6761;&#x4ef6;&#x3092;&#x6e80;&#x305f;&#x3057;&#x3066;&#x3044;&#x308b;&#x306f;&#x305a;&#x306a;&#x306e;&#x306b;&#x30b9;&#x30c6;&#x30fc;&#x30bf;&#x30b9;&#x30a2;&#x30c3;&#x30d7;&#x3057;&#x306a;&#x304b;&#x3063;&#x305f;</h4>
+        <div class="faq-item__a"><p><strong>会員ステータスは、前月より6ヶ月前までのご購入累計金額（入金済）によって翌月1日に確定し切り替わります。出荷月のご入金として計上されるため、タイミングによっては翌月の入金分ととてカウントされますのでご注意ください。</strong><br>
+
+    <br>
+
+    29日 ご注文完了「コンビニ後払い（ミライバライ）」<br>
+
+    ※審査のため出荷まで少々お時間がかかります<br>
+
+    　↓<br>
+
+    翌月1日に出荷された場合は、出荷月のお支払金額として計上されます。<br></div>
+      </div>
+      <div class="faq-item" id="faq-75">
+        <h4 class="faq-item__q">Q. &#x7372;&#x5f97;&#x30dd;&#x30a4;&#x30f3;&#x30c8;&#x3068;&#x5b9f;&#x969b;&#x306b;&#x4ed8;&#x4e0e;&#x3055;&#x308c;&#x305f;&#x30dd;&#x30a4;&#x30f3;&#x30c8;&#x304c;&#x9055;&#x3046;</h4>
+        <div class="faq-item__a"><p><strong>ポイント還元制度は、ご入金金額（お支払い金額）が対象となります。</strong><br>
+
+    そのため、<strong>クーポンやポイント値引をご利用の場合は、値引後の金額（お支払い金額）に対してポイント還元が適用されます。</strong><br>
+
+    ※手数料はポイント還元対象外</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "よくいただくご質問",
+  "enabled_on": {
+    "templates": ["page"]
+  },
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "見出し",
+      "default": "よくいただくご質問"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:settings.color_scheme",
+      "default": "scheme-1"
+    }
+  ],
+  "presets": [
+    {
+      "name": "よくいただくご質問"
+    }
+  ]
+}
+{% endschema %}

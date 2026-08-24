@@ -1,0 +1,14 @@
+{
+  "sections": {
+    "shipping_guide": {
+      "type": "shipping-guide",
+      "settings": {
+        "heading": "商品のお届けと送料",
+        "color_scheme": "scheme-1"
+      }
+    }
+  },
+  "order": [
+    "shipping_guide"
+  ]
+}

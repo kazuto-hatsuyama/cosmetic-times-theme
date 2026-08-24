@@ -1,0 +1,350 @@
+{% comment %}
+  「会員サービス・ポイント」静的ページ用セクション（新規・2026-08-24、tasks/20260824-static-guide-legal-pages/spec.md）。
+
+  現行サイト https://www.cosmetic-times.com/guide/member?id=guideTop の本文を忠実に転記。
+  会員ステータス早見表・シミュレーション表は元ページではGIF画像2枚（member02_hyo.gif/hyo2.gif）
+  として表示されていたが、抽出時に画像内容を目視確認のうえ<table>として再現している
+  （数値は元画像どおりだが、公開前に業務側での数値確認を推奨）。
+  マイページ配下の機能（お気に入り管理・会員情報変更等）は本タスクの対象外のため
+  旧サイトへの絶対URLのまま残している。
+  **注意**: このページで説明する「会員ステータス」（Member/Friend/Heartful/Lovely/CT VIP、
+  半年間の利用金額に応じたポイント還元率1〜5%の変動制）は、DB側のRankCD（00〜04、
+  RankCD=04が5%OFF自動適用のランク割引）とは別の概念。混同しないよう転記のみに留めている。
+{% endcomment %}
+{% render 'static-page-styles' %}
+
+<div class="section-background color-{{ section.settings.color_scheme }}"></div>
+<div class="static-page color-{{ section.settings.color_scheme }} page-width">
+  <h1 class="static-page__heading">{{ section.settings.heading }}</h1>
+
+  <ul class="static-page__toc">
+    <li><a href="#member01">会員サービスとは</a></li>
+    <li><a href="#member02">会員ステータス</a></li>
+    <li><a href="#member03">ポイントのため方</a></li>
+    <li><a href="#member04">ポイントの使い方</a></li>
+    <li><a href="#member06">ハッピーバースデーポイント</a></li>
+    <li><a href="#member08">メールマガジン講読・配信停止</a></li>
+  </ul>
+
+  <div class="static-page__body">
+    <div class="static-page__section" id="member01">
+      <h3>会員サービスとは</h3>
+      <p>コスメティックタイムズにてお買い物を楽しむためには、会員登録が必要です。</p>
+      <p>登録無料・年会費無料・ポイント永久不滅</p>
+      <p>CT会員になると、お買い物やクチコミなどサービスを利用することができ、ポイント付与、割引クーポンの特典など、様々なサービスをご利用いただけます。<br>
+      たまったポイントは1ポイント1円として、お買い物をする際に利用することができます。</p>
+      <p>また、お買い物をより便利にお楽しみいただくために、たくさんの便利な機能をご用意しております。</p>
+
+      <p><strong>気になる！リストを活用してより賢い買い物を！</strong></p>
+      <p>各商品の近くには、気になるボタンがあります。あとで買い物したいときや、他の商品と比較したいときなど、どんどん登録して、マイページでいつでも確認できます。！<br>
+      <a href="https://www.cosmetic-times.com/mypage/favorite">マイページ「気になる！リスト」</a></p>
+
+      <p><strong>お気に入りブランドを管理しよう</strong></p>
+      <p>ブランド情報の近くには、お気に入りブランド登録ボタンがあります。好きなブランドを登録して、マイページでそのブランドの新着チェック！<br>
+      <a href="https://www.cosmetic-times.com/mypage/brand">マイページ「お気に入りブランドリスト」</a></p>
+      <p>そのほか、会員様専用のマイページでは、購入履歴の閲覧、ポイント照会など、多数便利機能をご用意しております。</p>
+      <p><a href="https://www.cosmetic-times.com/mypage">マイページはこちら（要ログイン）</a><br>
+      <a href="https://www.cosmetic-times.com/inquiry/pwd/entry">パスワードを忘れた方へ</a></p>
+
+      <h4>すでにカタログ会員で、ネットでのご注文が始めての方へ</h4>
+      <p>既にお電話・ファックス・郵便でご注文されたことがあり、ネットでのお買い物が始めての会員様は、ネット会員登録をすることで、今までの購入履歴などマイページ上でご確認いただけるようになります。<br>
+      ご登録は、会員番号・お電話番号をご入力いただくだけで、簡単に登録完了します。</p>
+      <p><a href="https://www.cosmetic-times.com/member/catalog">かんたんネット会員登録はこちら</a><br>
+      <a href="https://www.cosmetic-times.com/inquiry/entry">会員番号をお忘れの方はこちらよりお問い合わせいただけます</a></p>
+    </div>
+
+    <div class="static-page__section" id="member02">
+      <h3>会員ステータス</h3>
+      <p>お客様の過去6ヶ月間のご購入累計金額によって特典が変動する 会員ステータスをご用意しております。</p>
+
+      <h4>会員ステータスは5種類</h4>
+      <p>会員ステータスは、メンバー、フレンド、ハートフル、ラブリー、CT VIPの5種類があり、全てのお客様は、メンバーからスタートします。</p>
+      <p>割引クーポンは、「メルマガ講読者限定」で配布しております。</p>
+
+      <table>
+        <caption>会員ステータス別 特典一覧</caption>
+        <thead>
+          <tr>
+            <th scope="col"></th>
+            <th scope="col">Member（メンバー）</th>
+            <th scope="col">Friend（フレンド）</th>
+            <th scope="col">Heartful（ハートフル）</th>
+            <th scope="col">Lovely（ラブリー）</th>
+            <th scope="col">CT VIP</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">半年間のご利用金額</th>
+            <td>0円〜14,999円</td>
+            <td>15,000円〜24,999円</td>
+            <td>25,000円〜39,999円</td>
+            <td>40,000円〜99,999円</td>
+            <td>10万円以上</td>
+          </tr>
+          <tr>
+            <th scope="row">ポイント還元率</th>
+            <td>1%</td>
+            <td>2%</td>
+            <td>3%</td>
+            <td>5%</td>
+            <td>5%</td>
+          </tr>
+          <tr>
+            <th scope="row">お誕生月特典（有効期限1ヶ月）</th>
+            <td>200ポイント</td>
+            <td>500ポイント</td>
+            <td>700ポイント</td>
+            <td>1000ポイント</td>
+            <td>2000ポイント</td>
+          </tr>
+          <tr>
+            <th scope="row">クーポンや特典（メルマガ購読者限定）</th>
+            <td></td>
+            <td>割引クーポン</td>
+            <td>割引クーポン</td>
+            <td>割引クーポン、その他特典</td>
+            <td>割引クーポン、その他特典、常に5%オフ</td>
+          </tr>
+        </tbody>
+      </table>
+      <p>クーポンや特典は不定期で配信していますので楽しみにお待ちください</p>
+
+      <h4>会員ステータス変動のタイミング</h4>
+      <p><strong>前月より6ヶ月前までのご購入累計金額に応じて、翌月1日に会員ステータスが決定します。</strong><br>
+      ※ご購入金額の反映タイミングは、ご注文日ではなく出荷日となります。</p>
+
+      <p>会員ステータスの変動シミュレーション例（過去6ヶ月間の累計購入金額により毎月1日にステータスが更新される例）:</p>
+
+      <table>
+        <caption>会員ステータス変動シミュレーション例：Aさんの場合</caption>
+        <thead>
+          <tr>
+            <th scope="col"></th>
+            <th scope="col">4月</th>
+            <th scope="col">5月</th>
+            <th scope="col">6月</th>
+            <th scope="col">7月</th>
+            <th scope="col">8月</th>
+            <th scope="col">9月</th>
+            <th scope="col">10月</th>
+            <th scope="col">11月</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">ご購入金額</th>
+            <td>4/15 10,000円（お支払い済・初回注文）</td>
+            <td>5/20 10,000円（お支払い済）</td>
+            <td></td>
+            <td>7/8 10,000円（お支払い済）</td>
+            <td></td>
+            <td>9/15 10,000円（お支払い済）</td>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr>
+            <th scope="row">当月のステータス</th>
+            <td>メンバー</td>
+            <td>メンバー</td>
+            <td>フレンド</td>
+            <td>フレンド</td>
+            <td>ハートフル</td>
+            <td>ハートフル</td>
+            <td>ラブリー</td>
+            <td>ハートフル</td>
+          </tr>
+          <tr>
+            <th scope="row">ステータス変動</th>
+            <td></td>
+            <td></td>
+            <td>過去半年間の合計金額20,000円でUP</td>
+            <td></td>
+            <td>過去半年間の合計金額30,000円でUP</td>
+            <td></td>
+            <td>過去半年間の合計金額40,000円でUP</td>
+            <td>過去半年間の合計金額30,000円でDOWN</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <table>
+        <caption>会員ステータス変動シミュレーション例：Bさんの場合</caption>
+        <thead>
+          <tr>
+            <th scope="col"></th>
+            <th scope="col">4月</th>
+            <th scope="col">5月</th>
+            <th scope="col">6月</th>
+            <th scope="col">7月</th>
+            <th scope="col">8月</th>
+            <th scope="col">9月</th>
+            <th scope="col">10月</th>
+            <th scope="col">11月</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">ご購入金額</th>
+            <td>4/1 40,000円（お支払い済・初回注文）</td>
+            <td></td>
+            <td></td>
+            <td>7/20 10,000円（お支払い済）</td>
+            <td>8/10 10,000円（お支払い済）</td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr>
+            <th scope="row">当月のステータス</th>
+            <td>メンバー</td>
+            <td>ラブリー</td>
+            <td>ラブリー</td>
+            <td>ラブリー</td>
+            <td>ラブリー</td>
+            <td>ラブリー</td>
+            <td>ラブリー</td>
+            <td>フレンド</td>
+          </tr>
+          <tr>
+            <th scope="row">ステータス変動</th>
+            <td></td>
+            <td>過去半年間の合計金額40,000円でUP</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>過去半年間の合計金額20,000円でDOWN</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h4>ステータスアップでポイントを稼ごう！</h4>
+      <p>会員ステータスは、前月より6ヶ月前までのご購入累計金額によって、毎月1日に更新されます。<br>
+      高額でなくても毎月定期的にご購入いただくと、ステータスアップやランクを保つことができます。</p>
+      <p>コスメティックタイムズは、1品からでも、いつでも8,000円以上全国送料無料！<br>
+      ポイント還元率の高いラブリーを目指して、自分なりのお買い物をお楽しみください。</p>
+
+      <h4>会員ステータスの確認方法</h4>
+      <p>会員ステータスは、以下の場所で確認できます。</p>
+      <p><strong>ページヘッダー部分</strong><br>
+      ログイン後、全ページの共通ヘッダー（ページ上部）に会員ステータスアイコンが表示されます。アイコンクリックで<a href="https://www.cosmetic-times.com/mypage">マイページトップ</a>に移動もできます。</p>
+      <p><strong>マイページトップ</strong><br>
+      <a href="https://www.cosmetic-times.com/mypage">マイページトップ</a>にて、現在の会員ステータスアイコンが表示されます。</p>
+      <p><strong>マイページトップ</strong><br>
+      <a href="https://www.cosmetic-times.com/mypage">マイページトップ</a>にて、翌月のステータスの変動予定が表示されます。</p>
+
+      <h4>ご注意事項</h4>
+      <ul>
+        <li>ご購入金額の反映タイミングは、ご注文日ではなく出荷日となります。</li>
+        <li>ステータス更新の際、ご購入累計金額の条件を満たしていない場合は、ステータスがダウンします。</li>
+        <li>ステータス更新対象のご注文金額は、インターネットからのご注文に限ります。電話、ファックス、郵便でのご注文金額は、ステータス更新対象に含みません。</li>
+        <li>キャンセルや返品があった場合、ご利用ポイントはお戻しいたします。また、付与ポイントは自動的に差し引かせていただきます。</li>
+        <li>既にご利用になった場合は、累計ポイントから差し引かせていただきますのでご注意ください。</li>
+        <li>累計ポイントから減算することができない場合は、以降のご注文で獲得されたポイントから差し引かせていただきます。この場合のお客様のご利用可能ポイントはマイナスとなり、ご利用いただけるポイントはありません。</li>
+      </ul>
+    </div>
+
+    <div class="static-page__section" id="member03">
+      <h3>ポイントのため方</h3>
+      <p>様々な方法でポイントをためることができます。</p>
+      <p>・お買い物（ご入金後）をしてご購入金額、会員ステータスに応じてポイントゲット！</p>
+      <p>・ご購入いただいた商品にクチコミで、1商品につき50ポイントゲット！（<a href="https://www.cosmetic-times.com/mypage/orderhistory">マイページ 購入履歴</a>より投稿）</p>
+      <p>・ポイント還元率アップキャンペーンなどの期間限定セールに参加してポイントゲット！</p>
+      <p>その他、たくさんの企画やキャンペーンをご用意して参ります。</p>
+      <p>ポイントはご利用期限のない永久不滅ポイントです。</p>
+    </div>
+
+    <div class="static-page__section" id="member04">
+      <h3>ポイントの使い方</h3>
+      <p>お買い物の際に、1ポイント＝1円として換算され、1ポイントごとにお使いいただけます。</p>
+      <p><strong>■ポイント使用のサービス改定</strong><br>
+      ポイントでのお支払いがご利用可能な商品を限定させていただくこととなりました。<br>
+      ページ内にて、ポイントご利用可能な商品は「P可」のラベルを、ポイントご利用不可の商品は「P不可」のラベルをそれぞれ表示しております。<br>
+      ポイント可の商品のみをご注文の場合、ポイントがご利用いただけます。</p>
+    </div>
+
+    <div class="static-page__section" id="member06">
+      <h3>ハッピーバースデーポイント</h3>
+      <p>会員ステータスに応じて、お誕生月1日にハッピーバースデーポイントをプレゼントいたします。ハッピーバースデーポイントの有効期限は1ヶ月です。ご自身のお誕生日のお買い物にご活用ください。</p>
+
+      <table>
+        <caption>ハッピーバースデーポイント（会員ステータス別）</caption>
+        <thead>
+          <tr>
+            <th scope="col">Member（メンバー）</th>
+            <th scope="col">Friend（フレンド）</th>
+            <th scope="col">Heartful（ハートフル）</th>
+            <th scope="col">Lovely（ラブリー）</th>
+            <th scope="col">CT VIP</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>200ポイント</td>
+            <td>500ポイント</td>
+            <td>700ポイント</td>
+            <td>1000ポイント</td>
+            <td>2000ポイント</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h4>ハッピーバースデーポイントご注意事項</h4>
+      <ul>
+        <li><strong>お誕生月の前月までにご登録いただいている方が対象</strong>です。（お誕生月 当月に新規登録をされても付与されませんのでご了承ください。）</li>
+        <li>ハッピーバースデーポイントの有効期限は、<strong>お誕生月当月のみ</strong>ご利用可能です。</li>
+        <li>マイページにて付与された旨をお知らせいたします。</li>
+        <li>ハッピーバースデーポイント以外のポイントを保持していて、お買い物時にポイントをご利用になる際は、優先的にハッピーバースデーポイントから減算されます。</li>
+        <li>有効期限内に使えなかったなどのポイントの戻しは承れませんのでご了承ください。</li>
+      </ul>
+    </div>
+
+    <div class="static-page__section" id="member08">
+      <h3>メールマガジンの講読・配信停止</h3>
+      <p>コスメティックタイムズでは、<strong>セール情報</strong>、<strong>割引きクーポン</strong>、<strong>新着コスメ情報</strong>など、お得な情報をいち早くお届けするため、メールマガジンサービスを行っております。</p>
+      <p>メールマガジン講読希望の場合は、<a href="https://www.cosmetic-times.com/mypage/member/edit">マイページの会員情報</a>から［メールマガジンの講読（無料）］を『配信を希望する』にご変更ください。</p>
+      <p><a href="https://www.cosmetic-times.com/mypage/member/edit">マイページ 会員情報の確認・変更へ（要ログイン）</a></p>
+
+      <h4>割引きクーポンはメールマガジンで配信！</h4>
+      <p>「割引きクーポン」や「期間限定セール開催のお知らせ」など、<strong>お得なセール情報やクーポンはメールマガジンにて配信</strong>されます。<br>
+      メールマガジンの講読を解除すると、クーポンもお受け取りできなくなりますのでご注意ください。</p>
+    </div>
+
+    <div class="static-page__section" id="member09">
+      <h3>他サービスの情報を利用した会員登録について</h3>
+      <p>LINEに登録している情報とコスメティックタイムズの会員登録情報を連携することにより、LineIDを使ってログインすることができます。<br>
+      またログイン時に認証画面にて許可をいただいた場合、Lineに登録されている情報を取得し会員登録時の入力項目に連携します。</p>
+      <p>ID連携を解除したい場合は、マイページから可能です。</p>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "会員サービス・ポイント",
+  "enabled_on": {
+    "templates": ["page"]
+  },
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "見出し",
+      "default": "会員サービス・ポイント"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:settings.color_scheme",
+      "default": "scheme-1"
+    }
+  ],
+  "presets": [
+    {
+      "name": "会員サービス・ポイント"
+    }
+  ]
+}
+{% endschema %}

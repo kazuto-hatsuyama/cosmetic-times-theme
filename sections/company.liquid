@@ -1,0 +1,236 @@
+{% comment %}
+  「会社概要」＋「特定商取引に基づく表示」統合ページ用セクション
+  （新規・2026-08-24、tasks/20260824-static-guide-legal-pages/spec.md）。
+
+  現行サイト https://www.cosmetic-times.com/guide/company（#company / #transaction の
+  2アンカーセクション）を、ユーザー指示どおり分割せず1ページ内の2セクションとして再現。
+  法的必須事項（特定商取引法に基づく表示）のため要約せず全項目を転記している。
+{% endcomment %}
+{% render 'static-page-styles' %}
+
+<div class="section-background color-{{ section.settings.color_scheme }}"></div>
+<div class="static-page color-{{ section.settings.color_scheme }} page-width">
+  <h1 class="static-page__heading">{{ section.settings.heading }}</h1>
+
+  <ul class="static-page__toc">
+    <li><a href="#company">会社概要</a></li>
+    <li><a href="#transaction">特定商取引法に基づく表示</a></li>
+  </ul>
+
+  <div class="static-page__body">
+    <div class="static-page__section" id="company">
+      <h2>会社概要</h2>
+      <table>
+        <tbody>
+          <tr>
+            <th>商号</th>
+            <td>Cosmetic Times</td>
+          </tr>
+          <tr>
+            <th>販売事業者</th>
+            <td>SHOP INTERNATIONAL 株式会社</td>
+          </tr>
+          <tr>
+            <th>会社所在地</th>
+            <td>〒135-0063<br>東京都江東区有明三丁目７番２６号有明フロンティアビルB棟９階</td>
+          </tr>
+          <tr>
+            <th>Eメールアドレス</th>
+            <td>info@cosmetic-times.com</td>
+          </tr>
+          <tr>
+            <th>URL</th>
+            <td><a href="https://www.cosmetic-times.com">www.cosmetic-times.com</a></td>
+          </tr>
+          <tr>
+            <th>お電話によるお問い合わせ</th>
+            <td>0120-88-7565 10:00〜17:00（土日祝休み）</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="static-page__section" id="transaction">
+      <h2>特定商取引法に基づく表示</h2>
+      <table>
+        <tbody>
+          <tr>
+            <th>販売業者名</th>
+            <td>SHOP INTERNATIONAL 株式会社</td>
+          </tr>
+          <tr>
+            <th>店舗運営者</th>
+            <td>笹岡 直人</td>
+          </tr>
+          <tr>
+            <th>所在地</th>
+            <td>〒135-0063<br>東京都江東区有明三丁目７番２６号有明フロンティアビルB棟９階</td>
+          </tr>
+          <tr>
+            <th>営業時間</th>
+            <td>平日午前10時00分〜午後5時00分<br>※土日・祝日 休業</td>
+          </tr>
+          <tr>
+            <th>電話番号</th>
+            <td>03‐5759‐6911<br>営業を目的としたお問合わせはご遠慮ください。お問合せは上記フリーダイヤルへお掛けください。</td>
+          </tr>
+          <tr>
+            <th>Eメールアドレス</th>
+            <td>info@cosmetic-times.com</td>
+          </tr>
+          <tr>
+            <th>業務内容</th>
+            <td>化粧品の通信販売</td>
+          </tr>
+          <tr>
+            <th rowspan="6">お支払い金額</th>
+            <td>
+              <strong>(1) カード払い</strong><br>
+              VISA、Master、JCB、AMEX、Diners　　支払い回数は各カードにより異なります。<br>
+              ・1回払い⇒全てのカード<br>
+              ・2回払い⇒アメリカンエキスプレス以外のカード<br>
+              ・リボ払い⇒アメリカンエキスプレス以外のカード
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <strong>(2) ｄ払い</strong><br>
+              手数料は無料です。<br>
+              お支払い額に応じて、ｄポイントがたまる！つかえる！<br>
+              かんたん、便利、おトクなドコモのサービスです。<br>
+              お支払い方法は、便利な電話料金合算払いとクレジットカード払いも可能ですので、<br>
+              ドコモ以外の方でもご利用いただけます。<br>
+              10万円を超えるお支払にはご利用いただけません。<br>
+              詳しくは<a href="https://service.smt.docomo.ne.jp/keitai_payment/" target="_blank">NTTドコモのサイト</a>でご確認ください。
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <strong>(3)Amazon Pay</strong><br>
+              手数料は無料です。<br>
+              Amazon Payとは、Amazon アカウントを連携させ、Amazonに登録したクレジットカード情報でお支払いいただける決済方法です。<br>
+              詳しくは、<a href="https://pay.amazon.co.jp/help/202030010" target="_blank">「AmazonPay」WEBサイト</a>でご確認ください。<br>
+              ※ご利用になるにはAmazon.co.jpのアカウントが必要です。
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <strong>(4)PayPay</strong><br>
+              手数料は無料です。<br>
+              PayPayは事前にチャージした電子マネー(PayPay残高)を使ってお支払いができるサービスです。<br>
+              街のお店だけではなく、オンラインショップでも利用いただけます。<br>
+              詳しくは、<a href="https://paypay.ne.jp/guide/" target="_blank">「PayPay」WEBサイト</a>でご確認ください。
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <strong>(5) コンビニ後払い</strong><br>
+              手数料は200円です。<br>
+              商品を受け取った後にコンビニ・電子決済からお支払い頂くことができる便利なサービスです。<br>
+              ご利用代金明細書兼払込票は、商品を受け取ってから5日程度でAGペイメントサービス（株）より別送でお送りいたします。<br>
+              請求書発行日より14日以内にお支払いをお願いいたします。<br>
+              払込受領書は、領収書としてご利用いただけますので大切に保管してください（再発行不可）。<br>
+              ご利用限度額は累計残高で55,000円（税込）迄です。<br>
+              ご注文後の住所変更・転送は承れませんので予めご了承ください。<br>
+              審査に必要な範囲でお客様情報をAGペイメントサービス（株）へ提供します。<br>
+              ご本人様確認のため、AGペイメントサービス（株）からSMSやお電話をさせていただく場合がございます。<br>
+              利用者ご本人様が未成年の場合、法定代理人（親権者）の利用同意を得てご利用ください。<br>
+              お客様は、以下の利用規約に記載の内容をご確認・ご承諾のうえ本サービスに申込むものとします。<br>
+              お支払可能なコンビニエンスストア・電子決済につきましては、利用規約に記載しております。<br>
+              ▼ペイメントサービス利用規約<br>
+              <a href="https://www.mirai-barai.co.jp/kiyaku/atobarai" target="_blank">https://www.mirai-barai.co.jp/kiyaku/atobarai</a>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <strong>(6) 代金引換</strong><br>
+              手数料一律 324円<br>
+              商品お届け時に配達員に代金をお支払いください。
+            </td>
+          </tr>
+          <tr>
+            <th>商品の支払期限</th>
+            <td>商品到着後7日以内</td>
+          </tr>
+          <tr>
+            <th>送料</th>
+            <td>8,000円以上全国送料無料</td>
+          </tr>
+          <tr>
+            <th>商品のお届け</th>
+            <td>
+              <strong>出荷後、注文受付後3日〜1週間後にご指定のお届け先へお届け</strong>いたします。（土日・祝日を除く）<br>
+              <br>
+              WEBからのご注文に限り、配達日時の指定ができます。<br>
+              配達日のご指定は、ご注文日より6営業日以降、10日以内で承ります。<br>
+              ご希望の配達日時は、清算画面(ご購入フォーム)でご指定いただけます。<br>
+              <br>
+              ※お急ぎの場合は、お届け日時を指定されないほうが早く到着するケースが多いです。<br>
+              ※年末年始につきましては、配送事情によりお届けが多少遅れる場合がございます。<br>
+              ※<strong>商品の配達状況は、『お荷物お問い合わせシステム』よりお問い合わせ伝票番号でご確認いただけます</strong><br>
+              ※お荷物のお問い合わせ伝票番号と、お問い合わせ先のURLおよび連絡先は、 「出荷完了メール」又は商品出荷後、<a href="https://www.cosmetic-times.com/mypage/orderhistory">マイページの「購入履歴」</a>でご確認いただけます。<br>
+              ※お客様のメールアドレス変更・迷惑メールなどの受信設定などにより、メールが届かない場合がございます。メールが届かない場合は、 こちらの<a href="https://www.cosmetic-times.com/inquiry/entry">お問い合わせフォーム</a>より、ご連絡ください。<br>
+              ※配送先をご自宅以外（勤務先等）でご指定いただく場合は、お手数をおかけいたしますが、 購入手続きページ内の「お届け先情報」にご希望のお届け先をご指定いただき、会員登録のご住所は、必ずご自宅の住所でお願いいたします。<br>
+              ※<strong>ご注文に不備がありお届けできずに転送する場合、又は出荷後に商品をお受け取りにならなかった場合、送料と転送料金1,500円〜が発生いたします</strong>ので、予めご了承ください。
+            </td>
+          </tr>
+          <tr>
+            <th>商品価格の表示</th>
+            <td>商品毎に表示しております。<br>商品価格は、仕入価格や為替の状況により価格が変わる場合がございます。</td>
+          </tr>
+          <tr>
+            <th>返品・交換・キャンセル</th>
+            <td>
+              (1) 商品の返品・交換には初期不良の場合以外では応じられません。<br>
+              (2) 初期不良、発送商品間違いの場合は弊社着払いにて対応いたします。<br>
+              (3) クーリングオフ・PL法につきましては適用外となっております。<strong>お肌に合わない、思っていた商品と違うなどのお客様のご都合によるご返品は一切お受けしておりませんので十分にご検討の上ご注文をお願いいたします。</strong><br>
+              ご注文ボタンを押される前に、必ずご注文内容のご確認をお願いいたします。<br>
+              <br>
+              ※クーリングオフは消費者がつい申し込んだりしてしまう恐れのある訪問販売などに適用されるシステムであり、通信販売には適用されません。<br>
+              ※<strong>配送時の受け取り拒否など、お客様のご都合で商品をお受け取りいただけない場合、送料および返送料などの実費をお支払いいただきます</strong>のであらかじめご了承ください。
+            </td>
+          </tr>
+          <tr>
+            <th>商品の発送</th>
+            <td>
+              配送担当営業所での商品保管期間は、一週間です。<br>
+              <br>
+              商品お届け時にご不在の場合は、「ご不在通知」が必ずポストに入りますので、そちらに記載のお電話番号にご連絡いただき、配達希望日をお伝えください。<br>
+              <br>
+              ■保管期間を過ぎた場合<br>
+              弊社に返送されます。<strong>保管期間内に商品をお受取いただけない場合、又はお届け先のご住所に誤りがあり弊社に返送されてしまう場合、再送をご希望される際には送料と転送料金1,500円〜が発生いたします</strong>ので、予めご了承ください。
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "会社概要・特定商取引法",
+  "enabled_on": {
+    "templates": ["page"]
+  },
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "見出し",
+      "default": "会社概要・特定商取引法に基づく表示"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:settings.color_scheme",
+      "default": "scheme-1"
+    }
+  ],
+  "presets": [
+    {
+      "name": "会社概要・特定商取引法"
+    }
+  ]
+}
+{% endschema %}

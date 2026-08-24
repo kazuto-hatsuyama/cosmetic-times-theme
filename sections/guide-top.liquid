@@ -1,0 +1,147 @@
+{% comment %}
+  「ご利用ガイド トップ」静的ページ用セクション（新規・2026-08-24、tasks/20260824-static-guide-legal-pages/spec.md）。
+
+  現行サイト https://www.cosmetic-times.com/guide/top の本文を忠実に転記して静的にLiquidへ埋め込む。
+  内部リンクのうち、今回まとめて移行する他のガイド/法務ページ（guide/orderflow, guide/payment,
+  guide/carriage, guide/return, guide/member, guide/info, guide/faq）は、それぞれ本タスクで新設した
+  Shopifyページ（/pages/order-guide 等）のアンカー付きURLへ張り替えている。
+  guide/mypage（マイページ機能の説明）は本タスクの対象外（マイページ自体がまだ移行されていないため）
+  のため、旧サイトへの絶対URLのまま残し、旧サイトが稼働している間はリンクとして機能する。
+{% endcomment %}
+{% render 'static-page-styles' %}
+
+<div class="section-background color-{{ section.settings.color_scheme }}"></div>
+<div class="static-page color-{{ section.settings.color_scheme }} page-width">
+  <h1 class="static-page__heading">{{ section.settings.heading }}</h1>
+
+  <div class="static-page__body">
+    <div class="guide-list">
+      <div class="guide-list-col">
+        <h3>ご注文</h3>
+        <ul>
+          <li><a href="/pages/order-guide#order00">ご購入金額について</a></li>
+          <li><a href="/pages/order-guide#order01">商品の探し方</a></li>
+          <li><a href="/pages/order-guide#order02">ご注文までの流れ</a></li>
+        </ul>
+      </div>
+      <div class="guide-list-col">
+        <h3>お支払い</h3>
+        <ul>
+          <li><a href="/pages/payment-guide#payment01">お支払い方法</a></li>
+          <li><a href="/pages/payment-guide#payment02">クーポンのご利用</a></li>
+          <li><a href="/pages/payment-guide#payment03">領収書</a></li>
+        </ul>
+      </div>
+      <div class="guide-list-col">
+        <h3>商品のお届けと送料</h3>
+        <ul>
+          <li><a href="/pages/shipping-guide#carriage01">商品のお届けまで</a></li>
+          <li><a href="/pages/shipping-guide#carriage02">商品の日時指定・配送先</a></li>
+          <li><a href="/pages/shipping-guide#carriage03">お届け状況の確認</a></li>
+        </ul>
+      </div>
+      <div class="guide-list-col">
+        <h3>返品・交換・キャンセル</h3>
+        <ul>
+          <li><a href="/pages/return-guide#return01">返品条件・返品方法</a></li>
+          <li><a href="/pages/return-guide#return02">不良品、液漏れなどの初期不良</a></li>
+          <li><a href="/pages/return-guide#return03">30日間返品保証</a></li>
+        </ul>
+      </div>
+      <div class="guide-list-col">
+        <h3>会員サービス・ポイント</h3>
+        <ul>
+          <li><a href="/pages/member-guide#member01">会員サービスとは</a></li>
+          <li><a href="/pages/member-guide#member02">会員ステータス</a></li>
+          <li><a href="/pages/member-guide#member03">ポイントのため方</a></li>
+          <li><a href="/pages/member-guide#member04">ポイントの使い方</a></li>
+          <li><a href="/pages/member-guide#member06">ハッピーバースデーポイント</a></li>
+          <li><a href="/pages/member-guide#member08">メールマガジン講読</a></li>
+        </ul>
+      </div>
+      <div class="guide-list-col">
+        <h3>マイページでできること</h3>
+        <ul>
+          <li><a href="https://www.cosmetic-times.com/guide/mypage?id=mypage01">会員情報の変更、退会</a></li>
+          <li><a href="https://www.cosmetic-times.com/guide/mypage?id=mypage02">お届け先リストの追加</a></li>
+          <li><a href="https://www.cosmetic-times.com/guide/mypage?id=mypage03">ポイント、購入履歴照会</a></li>
+          <li><a href="https://www.cosmetic-times.com/guide/mypage?id=mypage04">クチコミ管理</a></li>
+          <li><a href="https://www.cosmetic-times.com/guide/mypage?id=mypage05">気になるリスト、入荷待ちリスト</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="guide-beginner-info">
+      <h3>初めての方へ</h3>
+      <p>コスメティックタイムズとはどんなショップなのかご案内いたします。</p>
+      <ul>
+        <li><a href="/pages/guide-info#info01">コスメティックタイムズとは？</a></li>
+        <li><a href="/pages/guide-info#info02">コスメティックタイムズの3つのお約束</a></li>
+        <li><a href="/pages/guide-info#info03">選ばれる理由</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+{% style %}
+  .guide-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 24px;
+    margin-bottom: 32px;
+  }
+
+  .guide-list-col h3 {
+    margin: 0 0 10px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid rgb(var(--color-foreground-rgb) / var(--opacity-20, 0.2));
+  }
+
+  .guide-list-col ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .guide-list-col li {
+    margin-bottom: 8px;
+  }
+
+  .guide-beginner-info {
+    padding: 20px;
+    background: rgb(var(--color-foreground-rgb) / var(--opacity-5, 0.05));
+    border-radius: 8px;
+  }
+
+  .guide-beginner-info h3 {
+    margin-top: 0;
+  }
+{% endstyle %}
+
+{% schema %}
+{
+  "name": "ご利用ガイド トップ",
+  "enabled_on": {
+    "templates": ["page"]
+  },
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "見出し",
+      "default": "ご利用ガイド"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:settings.color_scheme",
+      "default": "scheme-1"
+    }
+  ],
+  "presets": [
+    {
+      "name": "ご利用ガイド トップ"
+    }
+  ]
+}
+{% endschema %}

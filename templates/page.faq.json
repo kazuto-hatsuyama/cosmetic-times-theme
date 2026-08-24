@@ -1,0 +1,14 @@
+{
+  "sections": {
+    "faq": {
+      "type": "faq",
+      "settings": {
+        "heading": "よくいただくご質問",
+        "color_scheme": "scheme-1"
+      }
+    }
+  },
+  "order": [
+    "faq"
+  ]
+}

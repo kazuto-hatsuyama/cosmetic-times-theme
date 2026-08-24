@@ -1,0 +1,14 @@
+{
+  "sections": {
+    "company": {
+      "type": "company",
+      "settings": {
+        "heading": "会社概要・特定商取引法に基づく表示",
+        "color_scheme": "scheme-1"
+      }
+    }
+  },
+  "order": [
+    "company"
+  ]
+}

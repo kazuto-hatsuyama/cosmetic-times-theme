@@ -1,0 +1,14 @@
+{
+  "sections": {
+    "guide_top": {
+      "type": "guide-top",
+      "settings": {
+        "heading": "ご利用ガイド",
+        "color_scheme": "scheme-1"
+      }
+    }
+  },
+  "order": [
+    "guide_top"
+  ]
+}

@@ -1,0 +1,167 @@
+{% comment %}
+  ガイド・法務系静的ページ（tasks/20260824-static-guide-legal-pages/spec.md）共通スタイル。
+
+  sections/ranking-list.liquid・sections/brand-list.liquid で判明した既知の不具合
+  （{% stylesheet %} がコンパイル済みCSSバンドルに含まれないことがある）を踏まえ、
+  {% style %}（インライン<style>としてその場に出力される、バンドル非依存の方式）を使用する。
+  各ページ（sections/guide-top.liquid 等）から {% render 'static-page-styles' %} で読み込む。
+  1ページに1回のみレンダリングされる前提のセクション群のため、重複出力の心配はない。
+{% endcomment %}
+{% style %}
+  .static-page {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    padding-block: 32px;
+    max-width: 960px;
+    margin-inline: auto;
+  }
+
+  .static-page__heading {
+    margin: 0;
+  }
+
+  .static-page__toc {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 16px;
+    margin: 0;
+    list-style: none;
+    background: rgb(var(--color-foreground-rgb) / var(--opacity-5, 0.05));
+    border-radius: 8px;
+  }
+
+  .static-page__toc li {
+    margin: 0;
+  }
+
+  .static-page__toc a {
+    display: inline-block;
+    padding: 4px 12px;
+    border: 1px solid rgb(var(--color-foreground-rgb) / var(--opacity-20, 0.2));
+    border-radius: 999px;
+    font-size: 0.85rem;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .static-page__toc a:hover {
+    background: rgb(var(--color-foreground-rgb) / var(--opacity-10, 0.1));
+  }
+
+  .static-page__body {
+    line-height: 1.8;
+    font-size: 0.95rem;
+  }
+
+  .static-page__body h2 {
+    margin: 40px 0 16px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #c9a227;
+    font-size: 1.3rem;
+  }
+
+  .static-page__body > h2:first-child,
+  .static-page__body__section:first-child h2 {
+    margin-top: 0;
+  }
+
+  .static-page__body h3 {
+    margin: 32px 0 12px;
+    font-size: 1.1rem;
+    color: #a8842f;
+  }
+
+  .static-page__body h4 {
+    margin: 20px 0 8px;
+    font-size: 1rem;
+  }
+
+  .static-page__body p {
+    margin: 0 0 14px;
+  }
+
+  .static-page__body ul,
+  .static-page__body ol {
+    margin: 0 0 14px;
+    padding-left: 1.4em;
+  }
+
+  .static-page__body li {
+    margin-bottom: 6px;
+  }
+
+  .static-page__body a {
+    color: #a8842f;
+    text-decoration: underline;
+  }
+
+  .static-page__body img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 12px 0;
+  }
+
+  .static-page__body table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0 0 20px;
+    font-size: 0.9rem;
+  }
+
+  .static-page__body caption {
+    text-align: left;
+    font-weight: var(--font-heading-bold--weight, 700);
+    margin-bottom: 8px;
+  }
+
+  .static-page__body th,
+  .static-page__body td {
+    border: 1px solid rgb(var(--color-foreground-rgb) / var(--opacity-20, 0.2));
+    padding: 10px 12px;
+    text-align: left;
+    vertical-align: top;
+  }
+
+  .static-page__body thead th {
+    background: rgb(var(--color-foreground-rgb) / var(--opacity-10, 0.1));
+  }
+
+  .static-page__body tbody th {
+    background: rgb(var(--color-foreground-rgb) / var(--opacity-5, 0.05));
+    white-space: nowrap;
+  }
+
+  .static-page__section {
+    scroll-margin-top: 100px;
+  }
+
+  .faq-item {
+    padding: 16px 0;
+    border-bottom: 1px solid rgb(var(--color-foreground-rgb) / var(--opacity-10, 0.1));
+  }
+
+  .faq-item:last-child {
+    border-bottom: none;
+  }
+
+  .faq-item__q {
+    margin: 0 0 8px;
+    font-size: 1rem;
+    color: #a8842f;
+  }
+
+  .faq-item__a {
+    font-size: 0.9rem;
+  }
+
+  .faq-item__a p:last-child {
+    margin-bottom: 0;
+  }
+
+  .static-page__back-link {
+    margin-top: 8px;
+  }
+{% endstyle %}

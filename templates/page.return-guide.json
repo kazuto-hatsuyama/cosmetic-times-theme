@@ -1,0 +1,14 @@
+{
+  "sections": {
+    "return_guide": {
+      "type": "return-guide",
+      "settings": {
+        "heading": "返品・交換・キャンセル",
+        "color_scheme": "scheme-1"
+      }
+    }
+  },
+  "order": [
+    "return_guide"
+  ]
+}

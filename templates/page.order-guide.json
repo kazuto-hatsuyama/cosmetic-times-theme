@@ -1,0 +1,14 @@
+{
+  "sections": {
+    "order_guide": {
+      "type": "order-guide",
+      "settings": {
+        "heading": "ご注文について",
+        "color_scheme": "scheme-1"
+      }
+    }
+  },
+  "order": [
+    "order_guide"
+  ]
+}

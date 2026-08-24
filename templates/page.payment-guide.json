@@ -1,0 +1,14 @@
+{
+  "sections": {
+    "payment_guide": {
+      "type": "payment-guide",
+      "settings": {
+        "heading": "お支払いについて",
+        "color_scheme": "scheme-1"
+      }
+    }
+  },
+  "order": [
+    "payment_guide"
+  ]
+}

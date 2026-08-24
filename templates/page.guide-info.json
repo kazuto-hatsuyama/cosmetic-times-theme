@@ -1,0 +1,14 @@
+{
+  "sections": {
+    "guide_info": {
+      "type": "guide-info",
+      "settings": {
+        "heading": "コスメティックタイムズについて",
+        "color_scheme": "scheme-1"
+      }
+    }
+  },
+  "order": [
+    "guide_info"
+  ]
+}
