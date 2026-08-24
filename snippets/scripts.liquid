@@ -143,6 +143,12 @@
     fetchpriority="low"
   ></script>
 {% endif %}
+{% if template.name == 'page' and template.suffix == 'brand-list' %}
+  <script
+    src="{{ 'brand-list.js' | asset_url }}"
+    defer="defer"
+  ></script>
+{% endif %}
 
 <script
   src="{{ 'dialog.js' | asset_url }}"

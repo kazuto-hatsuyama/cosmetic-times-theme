@@ -1,0 +1,308 @@
+{% comment %}
+  ブランド一覧ページ用セクション（新規・2026-08-24、tasks/20260824-brand-list-page/spec.md）。
+
+  データ系（D:\Inetpub\shopify_data）が全567件のブランドSmartCollectionへ設定した
+  custom名前空間のメタフィールドを利用する:
+    - custom.kana        ブランド名のカナ読み（例: "アヴェダ"）。ほぼ全件に設定あり
+    - custom.ename       ブランドの英語名
+    - custom.initial_e   英語名の頭文字（例: "A"）
+    - custom.short_name  短縮名（一部のみ設定のため今回は未使用）
+
+  「ブランドのコレクションかどうか」の判定は custom.kana メタフィールドの有無のみで行う。
+  Shopifyのコレクションには商品のような tags は実質存在せず、SmartCollectionの rules も
+  Liquidから参照できないため、新着・アウトレット・カテゴリ等の他種別コレクションと区別する
+  唯一の手段としてこのメタフィールドの有無を使う（tags/rulesには一切依存しない）。
+
+  五十音の行（ア行・カ行…）分類は、custom.initial の値がア行以外（子音を含むケース）で
+  実例未確認・仕様未確定のため使用せず、custom.kana の先頭1文字を assets/brand-list.js 側で
+  判定する方式を採用（読み仮名さえあれば行分類できるため、initialの仕様確定を待たずに実装できる）。
+  英語モードのA-Z分類は custom.initial_e をそのまま使用する。
+
+  Shopifyの collections オブジェクトは paginate で一度に最大250件までしか取得できない
+  （sections/main-collection.liquidに記録済みの既知の上限と同じ）。全567件を表示するため、
+  SSRでは1ページ目（先頭250件）のみ描画し、残りのページは assets/brand-list.js が
+  Section Rendering API（?section_id=...&page=N）経由で自動取得してグリッドへ追加する
+  （ユーザー操作によるページ送りは発生させず、透過的に全件を1ページ内にまとめる）。
+
+  JSが動かない場合でも、1ページ目分のブランドはSSRのみでリンク・ロゴ・説明文が表示され続ける
+  よう、タブ絞り込み前提のhidden制御はJS側でのみ行う（初期状態は全件表示）。
+{% endcomment %}
+
+<div class="section-background color-{{ section.settings.color_scheme }}"></div>
+<div class="brand-list-page color-{{ section.settings.color_scheme }} page-width" data-lang="ja">
+  {% if section.settings.heading != blank %}
+    <h2 class="brand-list-page__heading">{{ section.settings.heading }}</h2>
+  {% endif %}
+
+  <div class="brand-list__controls">
+    <div class="brand-list__lang-toggle" role="group" aria-label="表示言語切替">
+      <button type="button" class="brand-list__lang-btn is-active" data-lang-btn="ja">日本語</button>
+      <button type="button" class="brand-list__lang-btn" data-lang-btn="en">English</button>
+    </div>
+
+    <div class="brand-list__index" data-index-group="ja" role="group" aria-label="五十音インデックス">
+      <button type="button" class="brand-list__index-btn is-active" data-index-btn data-row="all">すべて</button>
+      <button type="button" class="brand-list__index-btn" data-index-btn data-row="a">ア</button>
+      <button type="button" class="brand-list__index-btn" data-index-btn data-row="ka">カ</button>
+      <button type="button" class="brand-list__index-btn" data-index-btn data-row="sa">サ</button>
+      <button type="button" class="brand-list__index-btn" data-index-btn data-row="ta">タ</button>
+      <button type="button" class="brand-list__index-btn" data-index-btn data-row="na">ナ</button>
+      <button type="button" class="brand-list__index-btn" data-index-btn data-row="ha">ハ</button>
+      <button type="button" class="brand-list__index-btn" data-index-btn data-row="ma">マ</button>
+      <button type="button" class="brand-list__index-btn" data-index-btn data-row="ya">ヤ</button>
+      <button type="button" class="brand-list__index-btn" data-index-btn data-row="ra">ラ</button>
+      <button type="button" class="brand-list__index-btn" data-index-btn data-row="wa">ワ</button>
+      <button type="button" class="brand-list__index-btn" data-index-btn data-row="other">他</button>
+    </div>
+
+    <div class="brand-list__index" data-index-group="en" role="group" aria-label="alphabetical index" hidden>
+      <button type="button" class="brand-list__index-btn is-active" data-index-btn data-row="all">All</button>
+      {% assign az_letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ' | split: '' %}
+      {% for letter in az_letters %}
+        <button type="button" class="brand-list__index-btn" data-index-btn data-row="{{ letter | downcase }}">
+          {{ letter }}
+        </button>
+      {% endfor %}
+      <button type="button" class="brand-list__index-btn" data-index-btn data-row="other">#</button>
+    </div>
+  </div>
+
+  {% paginate collections by 250 %}
+    <div
+      class="brand-list__grid"
+      data-brand-grid
+      data-total-pages="{{ paginate.pages }}"
+      data-page-url="{{ request.path }}"
+      data-section-id="{{ section.id }}"
+    >
+      {% for collection in collections %}
+        {% assign kana = collection.metafields.custom.kana.value %}
+        {% unless kana == blank %}
+          {% assign ename = collection.metafields.custom.ename.value %}
+          {% assign initial_e = collection.metafields.custom.initial_e.value %}
+          {% assign row_en = 'other' %}
+          {% if initial_e != blank %}
+            {% assign row_en = initial_e | slice: 0, 1 | downcase %}
+          {% endif %}
+          {% assign brand_desc = collection.description | strip_html | truncate: 60 %}
+          <div
+            class="brand-card"
+            data-brand-card
+            data-kana="{{ kana | escape }}"
+            data-ja-name="{{ collection.title | escape }}"
+            data-en-name="{{ ename | escape }}"
+            data-row-en="{{ row_en }}"
+          >
+            <a href="{{ collection.url }}" class="brand-card__link">
+              <span class="brand-card__logo">
+                {% if collection.image %}
+                  <img
+                    class="brand-card__logo-img"
+                    src="{{ collection.image | image_url: width: 240 }}"
+                    srcset="
+                      {{ collection.image | image_url: width: 120 }} 120w,
+                      {{ collection.image | image_url: width: 240 }} 240w,
+                      {{ collection.image | image_url: width: 480 }} 480w
+                    "
+                    sizes="120px"
+                    loading="lazy"
+                    width="{{ collection.image.width }}"
+                    height="{{ collection.image.height }}"
+                    alt="{{ collection.image.alt | default: collection.title | escape }}"
+                  >
+                {% else %}
+                  {{ 'product-apparel-1' | placeholder_svg_tag: 'brand-card__logo-placeholder' }}
+                {% endif %}
+              </span>
+              <span class="brand-card__body">
+                <span class="brand-card__name brand-card__name--ja">{{ collection.title }}</span>
+                {% if ename != blank %}
+                  <span class="brand-card__name brand-card__name--en">{{ ename }}</span>
+                {% endif %}
+                {% if brand_desc != blank %}
+                  <p class="brand-card__desc">{{ brand_desc }}</p>
+                {% endif %}
+              </span>
+            </a>
+          </div>
+        {% endunless %}
+      {% endfor %}
+    </div>
+  {% endpaginate %}
+
+  <p class="brand-list__empty" data-brand-empty hidden>該当するブランドが見つかりませんでした。</p>
+</div>
+
+{% comment %}
+  {% stylesheet %} はページ単位で1インスタンスのみ配置される前提のセクションで、
+  sections/ranking-list.liquid（2026-08-21）にてコンパイル済みCSSバンドルへ含まれない
+  不具合が確認されているため、同様にバンドル非依存の {% style %} を使用する。
+{% endcomment %}
+{% style %}
+  .brand-list-page {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    padding-block: 32px;
+  }
+
+  .brand-list-page__heading {
+    margin: 0;
+  }
+
+  .brand-list__controls {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .brand-list__lang-toggle {
+    display: inline-flex;
+    align-self: flex-start;
+    border: 1px solid rgb(var(--color-foreground-rgb) / var(--opacity-30, 0.3));
+    border-radius: 999px;
+    overflow: hidden;
+  }
+
+  .brand-list__lang-btn {
+    padding: 6px 18px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 0.9rem;
+    color: inherit;
+  }
+
+  .brand-list__lang-btn.is-active {
+    background: rgb(var(--color-foreground-rgb) / var(--opacity-90, 0.9));
+    color: var(--color-background);
+  }
+
+  .brand-list__index {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .brand-list__index-btn {
+    min-width: 2.25rem;
+    padding: 4px 10px;
+    border: 1px solid rgb(var(--color-foreground-rgb) / var(--opacity-20, 0.2));
+    border-radius: 6px;
+    background: transparent;
+    cursor: pointer;
+    font-size: 0.85rem;
+    color: inherit;
+  }
+
+  .brand-list__index-btn.is-active {
+    background: rgb(var(--color-foreground-rgb) / var(--opacity-90, 0.9));
+    border-color: transparent;
+    color: var(--color-background);
+  }
+
+  .brand-list__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 20px;
+  }
+
+  .brand-card {
+    border: 1px solid rgb(var(--color-foreground-rgb) / var(--opacity-10, 0.1));
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .brand-card__link {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .brand-card__logo {
+    display: block;
+    aspect-ratio: 16 / 9;
+    background: rgb(var(--color-foreground-rgb) / var(--opacity-5, 0.05));
+  }
+
+  .brand-card__logo-img,
+  .brand-card__logo-placeholder {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  .brand-card__body {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 14px 16px 18px;
+  }
+
+  .brand-card__name--ja {
+    font-size: 1.05rem;
+    font-weight: var(--font-heading-bold--weight, 700);
+  }
+
+  .brand-card__name--en {
+    font-size: 0.8rem;
+    opacity: 0.7;
+  }
+
+  [data-lang='en'] .brand-card__name--ja {
+    font-size: 0.8rem;
+    font-weight: normal;
+    opacity: 0.7;
+  }
+
+  [data-lang='en'] .brand-card__name--en {
+    font-size: 1.05rem;
+    font-weight: var(--font-heading-bold--weight, 700);
+    opacity: 1;
+  }
+
+  .brand-card__desc {
+    margin: 4px 0 0;
+    font-size: 0.85rem;
+    line-height: 1.5;
+    opacity: 0.8;
+  }
+
+  .brand-list__empty {
+    margin: 0;
+    padding-block: 24px;
+    text-align: center;
+    opacity: 0.7;
+  }
+{% endstyle %}
+
+{% schema %}
+{
+  "name": "ブランド一覧",
+  "enabled_on": {
+    "templates": ["page"]
+  },
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "見出し",
+      "default": "ブランド一覧"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:settings.color_scheme",
+      "default": "scheme-1"
+    }
+  ],
+  "presets": [
+    {
+      "name": "ブランド一覧"
+    }
+  ]
+}
+{% endschema %}

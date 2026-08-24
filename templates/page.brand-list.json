@@ -1,0 +1,14 @@
+{
+  "sections": {
+    "brand_list": {
+      "type": "brand-list",
+      "settings": {
+        "heading": "ブランド一覧",
+        "color_scheme": "scheme-1"
+      }
+    }
+  },
+  "order": [
+    "brand_list"
+  ]
+}
