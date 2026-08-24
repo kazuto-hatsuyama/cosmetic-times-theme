@@ -1,0 +1,14 @@
+{
+  "sections": {
+    "terms_of_service": {
+      "type": "terms-of-service",
+      "settings": {
+        "heading": "ご利用規約",
+        "color_scheme": "scheme-1"
+      }
+    }
+  },
+  "order": [
+    "terms_of_service"
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "sections": {
+    "privacy_policy": {
+      "type": "privacy-policy",
+      "settings": {
+        "heading": "プライバシーポリシー",
+        "color_scheme": "scheme-1"
+      }
+    }
+  },
+  "order": [
+    "privacy_policy"
+  ]
+}

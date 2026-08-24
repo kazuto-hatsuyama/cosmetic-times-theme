@@ -1,0 +1,14 @@
+{
+  "sections": {
+    "member_guide": {
+      "type": "member-guide",
+      "settings": {
+        "heading": "会員サービス・ポイント",
+        "color_scheme": "scheme-1"
+      }
+    }
+  },
+  "order": [
+    "member_guide"
+  ]
+}

@@ -1,0 +1,153 @@
+{% comment %}
+  「ご注文について」静的ページ用セクション（新規・2026-08-24、tasks/20260824-static-guide-legal-pages/spec.md）。
+
+  現行サイト https://www.cosmetic-times.com/guide/orderflow?id=guideTop の本文を忠実に転記。
+  画像は移行元サーバー（www.cosmetic-times.com/image/guide/）を直接参照するホットリンクのまま。
+  Shopify CDNへの移行は未実施（CLAUDE.mdの「未対応事項」categoty_grid画像と同種の既知の課題）。
+  会員登録・ログイン・ブランド一覧・カテゴリ一覧・お悩み検索など、本タスクの対象外の機能ページへの
+  リンクは旧サイトへの絶対URLのまま残している（マイページ等の会員機能はまだ移行されていないため）。
+{% endcomment %}
+{% render 'static-page-styles' %}
+
+<div class="section-background color-{{ section.settings.color_scheme }}"></div>
+<div class="static-page color-{{ section.settings.color_scheme }} page-width">
+  <h1 class="static-page__heading">{{ section.settings.heading }}</h1>
+
+  <ul class="static-page__toc">
+    <li><a href="#order00">ご購入金額について</a></li>
+    <li><a href="#order01">商品の探し方</a></li>
+    <li><a href="#order02">ご注文までの流れ</a></li>
+  </ul>
+
+  <div class="static-page__body">
+    <div class="static-page__section" id="order00">
+      <h3>ご購入金額について</h3>
+      <p>本サイトでは最低購入金額を設けさせていただいております。</p>
+      <p>カート内の商品合計金額が3,000円以上でご注文いただけます。</p>
+    </div>
+
+    <div class="static-page__section" id="order01">
+      <h3>商品の探し方</h3>
+      <p>お探しの商品は、各ページのヘッダー部分にある４つの方法からお探しいただけます。</p>
+      <img src="https://www.cosmetic-times.com/image/guide/order01_01.gif" alt="商品の探し方 4つの方法" width="710" height="470">
+
+      <h4>（１）商品番号やフリーキーワードで探す</h4>
+      <p>カタログやチラシをご覧いただいている方は、商品番号をご入力いただき検索できます。<br>
+      商品名の一部や、解消したいお悩み（シミ、保湿など）を、自由にご入力いただき虫眼鏡ボタンをクリックしてください。</p>
+
+      <h4>（２）ブランドから探す</h4>
+      <p>お探しのブランドがある場合は、こちらが便利です。アイウエオ順、アルファベット順で、コスメティックタイムズ内のすべてのブランドを索引できます。</p>
+      <p><a href="https://www.cosmetic-times.com/brand/top">ブランドから探す</a></p>
+
+      <h4>（３）商品カテゴリから探す</h4>
+      <p>スキンケア、メイクアップ、ボディ＆オーラルケア、ヘアケア、サプリメント、セット・コフレ、雑貨・その他、商品のジャンルより商品一覧をご覧いただけます。</p>
+      <p><a href="https://www.cosmetic-times.com/category">商品カテゴリから探す</a></p>
+
+      <h4>（４）お悩みから探す</h4>
+      <p>特定の商品がお決まりでない方は、お悩みから商品をお探しいただくことができます。スキンケア、ベースメイク、メイクアップ、ボディケア、ヘアケア、その他より、気になるお悩みをお選びいただき、対応した商品をお探しいただけます。</p>
+      <p><a href="https://www.cosmetic-times.com/trouble/top">お悩みから探す</a></p>
+
+      <h4>こんな商品の探し方もあります</h4>
+      <p><a href="https://www.cosmetic-times.com/item/new">新着から選ぶ</a></p>
+      <p>コスメティックタイムズに入荷して1ヶ月以内の商品をチェックできます。</p>
+    </div>
+
+    <div class="static-page__section" id="order02">
+      <h3>ご注文までの流れ</h3>
+      <p>当ショッピングサイトをご利用いただくためには会員登録（登録料・年会費無料）が必要となります。</p>
+      <p><a href="https://www.cosmetic-times.com/member/entry">新規会員登録はこちら</a></p>
+      <p>ご注文の手順は4つ。初めての方でも、簡単にお買物がお楽しみいただけます。</p>
+      <img src="https://www.cosmetic-times.com/image/guide/order02_01.gif" alt="ご注文までの流れ STEP1〜4" width="710" height="146">
+
+      <h4>STEP.1　カートに入れる・カートの中身の確認</h4>
+      <p>▼各商品の詳細ページ</p>
+      <img src="https://www.cosmetic-times.com/image/guide/order02_02.jpg" alt="各商品の詳細ページ" width="430" height="342">
+      <p>商品を選び、ご希望の商品が決まりましたら<br>
+      （１）数量を選択して<br>
+      （２）「カートへ入れる」ボタンをクリックし、<br>
+      商品をカートに入れます。</p>
+      <p>「カートに入れる」ボタンがある商品は現在ご購入いただける商品です。</p>
+
+      <p>▼カート画面への飛び方</p>
+      <img src="https://www.cosmetic-times.com/image/guide/order02_03.jpg" alt="カート画面への飛び方" width="430" height="465">
+      <p>カート画面へ移動するには、各ページヘッダー部分（上部）の「カートを見る」ボタンをクリックで飛びます。</p>
+      <p>また、現在のカートの中身をページの移動をせずに見るには、ページフッター（下部）のピンクのタブをクリックすることでも、確認できます。</p>
+      <p>▼かんたんカート確認で、カートに入れた商品を閲覧できます。</p>
+      <img src="https://www.cosmetic-times.com/image/guide/order02_06.gif" alt="かんたんカート確認" width="250" height="80">
+
+      <p>▼カート画面</p>
+      <img src="https://www.cosmetic-times.com/image/guide/order02_04.jpg" alt="カート画面" width="430" height="368">
+      <p>さらに商品をお選びになる場合はカート内の「トップに戻って買い物を続ける」 ボタンをクリックし、そのままお買物を続けてください。</p>
+      <p>※ショッピングカートはご注文いただく商品をまとめて置いておくためのものです。カートに商品を入れただけではお会計は発生しません。</p>
+      <p>※カート内では商品の数量を変更したり、やめたい商品をカートから削除することもできます。</p>
+
+      <h4>ここから先へ進むにはログインが必要です</h4>
+      <p>コスメティックタイムズでお買い物をしていただくには、会員登録が必要です。<br>
+      当サイトで初めてお買い物をされる方は、<a href="https://www.cosmetic-times.com/member/entry">新規会員登録</a>にて、会員登録を行う必要がございます。<br>
+      既に会員様でログインをされていない方は、<a href="https://www.cosmetic-times.com/common/login">ログイン画面</a>にて、ログインを行っていただくとレジに進みます。</p>
+
+      <h4>STEP.2　お届け先・お支払い方法の選択</h4>
+      <p>▼レジ画面</p>
+      <img src="https://www.cosmetic-times.com/image/guide/order02_05.jpg" alt="レジ画面" width="430" height="1358">
+      <p>レジでは、お届け先・お支払い方法の変更などをご入力いただきます。</p>
+      <p><strong>（１）ポイントの確認と使用</strong><br>
+      お客様の所持ポイントが表示されています。今回のお買い物で使用されるポイント数をご入力ください。<br>
+      （ポイントは1ポイント1円換算でご利用いただけます）</p>
+      <p><strong>（２）クーポンの使用</strong><br>
+      クーポンコードをお持ちの方は、こちらにご入力ください。</p>
+      <p><strong>（３）お届け先の指定</strong><br>
+      ご登録されているお届け先リストから選択していただけます。<br>
+      ご登録がない住所へのお届けは、「新しいお届け先を指定する」にチェックをして、住所をご入力ください。</p>
+      <p><strong>（４）配送日時の指定</strong><br>
+      お届け希望日時や宅配ボックス指定を行います。</p>
+      <p><strong>（５）支払い方法の指定</strong><br>
+      クレジットカード決済・ｄ払い・コンビニ後払い・代金引換からご希望のお支払い方法をお選びください。</p>
+      <p>「注文の確認へ」ボタンを押して次のステップへ進みます。</p>
+      <p>＊この時点では、まだお買い物は完了していません。</p>
+
+      <h4>STEP.3　ご注文内容の確認</h4>
+      <p>▼ご確認画面</p>
+      <img src="https://www.cosmetic-times.com/image/guide/order02_07.jpg" alt="ご確認画面" width="420" height="677">
+      <p>ご注文内容をご確認いただきます。</p>
+      <p><strong>各種変更ボタン</strong><br>
+      確認画面では、カートの中身の変更・使用するポイント・クーポンの変更・お届け先の変更・お届け日時の変更・お支払い方法の変更をしていただくことができます。</p>
+      <p><strong>ご注文を確定する</strong><br>
+      入力する情報にお間違いがなければ、「ご注文を確定する」ボタンを押してください。</p>
+
+      <h4>STEP.4　ご注文完了</h4>
+      <p>▼完了画面</p>
+      <img src="https://www.cosmetic-times.com/image/guide/order02_08.gif" alt="完了画面" width="420" height="268">
+      <p>以上でご注文手続きは完了です。</p>
+      <p>ご登録いただいているメールアドレスに、注文内容の記載されたメールを自動配信いたします。</p>
+      <p>商品到着まで楽しみにお待ちください。</p>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "ご注文について",
+  "enabled_on": {
+    "templates": ["page"]
+  },
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "見出し",
+      "default": "ご注文について"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:settings.color_scheme",
+      "default": "scheme-1"
+    }
+  ],
+  "presets": [
+    {
+      "name": "ご注文について"
+    }
+  ]
+}
+{% endschema %}
