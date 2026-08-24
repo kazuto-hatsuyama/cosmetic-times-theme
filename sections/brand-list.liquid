@@ -8,10 +8,13 @@
     - custom.initial_e   英語名の頭文字（例: "A"）
     - custom.short_name  短縮名（一部のみ設定のため今回は未使用）
 
-  「ブランドのコレクションかどうか」の判定は custom.kana メタフィールドの有無のみで行う。
+  「ブランドのコレクションかどうか」の判定は custom.kana メタフィールドの有無で行う。
   Shopifyのコレクションには商品のような tags は実質存在せず、SmartCollectionの rules も
   Liquidから参照できないため、新着・アウトレット・カテゴリ等の他種別コレクションと区別する
   唯一の手段としてこのメタフィールドの有無を使う（tags/rulesには一切依存しない）。
+  **2026-08-24（同日中に追加修正）**: 上記条件だけでは該当商品が0件のブランド（例: 3M、
+  3Wクリニック等）も一覧に表示されてしまっていたため、custom.kana の有無に加えて
+  collection.products_count > 0 も満たすことを表示条件に追加した（データ系からの依頼）。
 
   五十音の行（ア行・カ行…）分類は、custom.initial の値がア行以外（子音を含むケース）で
   実例未確認・仕様未確定のため使用せず、custom.kana の先頭1文字を assets/brand-list.js 側で
@@ -77,7 +80,7 @@
     >
       {% for collection in collections %}
         {% assign kana = collection.metafields.custom.kana.value %}
-        {% unless kana == blank %}
+        {% if kana != blank and collection.products_count > 0 %}
           {% assign ename = collection.metafields.custom.ename.value %}
           {% assign initial_e = collection.metafields.custom.initial_e.value %}
           {% assign row_en = 'other' %}
@@ -125,7 +128,7 @@
               </span>
             </a>
           </div>
-        {% endunless %}
+        {% endif %}
       {% endfor %}
     </div>
   {% endpaginate %}
