@@ -1,0 +1,14 @@
+{
+  "sections": {
+    "category_list": {
+      "type": "category-list",
+      "settings": {
+        "heading": "カテゴリ一覧",
+        "color_scheme": "scheme-1"
+      }
+    }
+  },
+  "order": [
+    "category_list"
+  ]
+}

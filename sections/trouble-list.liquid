@@ -1,0 +1,220 @@
+{% comment %}
+  お悩み一覧ページ用セクション（新規・2026-08-25、feature/category-trouble-listing-pages
+  ブランチ、tasks/20260825-category-trouble-listing-pages/spec.md）。
+
+  データ系（D:\Inetpub\shopify_data）が69件のお悩みタグSmartCollectionを作成済み。
+  現行サイト（移行元）の /trouble ページに相当する一覧を、6グループ見出し
+  （スキンケア/ベースメイク/メイクアップ/ボディケア/ヘアケア/その他のお悩み）ごとに
+  全69項目を列挙する形で再現する。
+
+  sections/category-list.liquidと同方針: 件数が今後増減しない前提のため、collections
+  オブジェクトからの動的取得は行わず、項目名・handleを本ファイルに直接ハードコードした
+  静的HTMLとして出力する（JSファイル不要）。リンク先は /collections/{handle} の固定文字列。
+  handleは4桁の数字コード（0000等）。項目名に含まれる括弧（例:「カール・ハリ(マスカラ)」）は
+  そのままテキストとして表示する。
+{% endcomment %}
+
+<div class="section-background color-{{ section.settings.color_scheme }}"></div>
+<div class="trouble-list-page color-{{ section.settings.color_scheme }} page-width">
+  {% if section.settings.heading != blank %}
+    <h2 class="trouble-list-page__heading">{{ section.settings.heading }}</h2>
+  {% endif %}
+
+  <div class="trouble-list__groups">
+    <section class="trouble-group">
+      <h3 class="trouble-group__title">スキンケアのお悩み</h3>
+      <ul class="trouble-group__items">
+        <li><a href="/collections/0000">うるおい</a></li>
+        <li><a href="/collections/0001">毛穴</a></li>
+        <li><a href="/collections/0002">ニキビ</a></li>
+        <li><a href="/collections/0003">シミ・そばかす</a></li>
+        <li><a href="/collections/0004">低刺激・敏感肌</a></li>
+        <li><a href="/collections/0006">たるみ</a></li>
+        <li><a href="/collections/0007">赤み・赤ら顔</a></li>
+        <li><a href="/collections/0008">UVカットコスメ</a></li>
+        <li><a href="/collections/0009">角質ケア</a></li>
+        <li><a href="/collections/0010">顔のテカリ</a></li>
+        <li><a href="/collections/0011">引き締め</a></li>
+        <li><a href="/collections/0012">唇の荒れ・乾燥</a></li>
+        <li><a href="/collections/0013">よく落ちる</a></li>
+        <li><a href="/collections/0014">目のクマ</a></li>
+      </ul>
+    </section>
+
+    <section class="trouble-group">
+      <h3 class="trouble-group__title">ベースメイクのお悩み</h3>
+      <ul class="trouble-group__items">
+        <li><a href="/collections/0115">ナチュラルメイク</a></li>
+        <li><a href="/collections/0116">カバー力</a></li>
+        <li><a href="/collections/0117">毛穴カバー力</a></li>
+        <li><a href="/collections/0118">崩れにくい</a></li>
+        <li><a href="/collections/0119">マット肌</a></li>
+        <li><a href="/collections/0120">ツヤ</a></li>
+        <li><a href="/collections/0121">ウォータープルーフ</a></li>
+        <li><a href="/collections/0122">肌の透明感・薄づき</a></li>
+        <li><a href="/collections/0123">立体感メイク</a></li>
+        <li><a href="/collections/0124">フィット感</a></li>
+        <li><a href="/collections/0125">肌色コントロール</a></li>
+      </ul>
+    </section>
+
+    <section class="trouble-group">
+      <h3 class="trouble-group__title">メイクアップのお悩み</h3>
+      <ul class="trouble-group__items">
+        <li><a href="/collections/0226">色持ちがよい</a></li>
+        <li><a href="/collections/0227">お湯で落ちるマスカラ</a></li>
+        <li><a href="/collections/0228">描きやすい</a></li>
+        <li><a href="/collections/0229">発色がよい</a></li>
+        <li><a href="/collections/0230">ダマにならない</a></li>
+        <li><a href="/collections/0231">カール・ハリ(マスカラ)</a></li>
+        <li><a href="/collections/0232">ボリューム(マスカラ)</a></li>
+        <li><a href="/collections/0233">ロング(マスカラ)</a></li>
+        <li><a href="/collections/0234">セパレート(マスカラ)</a></li>
+        <li><a href="/collections/0235">にじみにくい</a></li>
+        <li><a href="/collections/0236">パール・ラメ</a></li>
+      </ul>
+    </section>
+
+    <section class="trouble-group">
+      <h3 class="trouble-group__title">ボディケアのお悩み</h3>
+      <ul class="trouble-group__items">
+        <li><a href="/collections/0337">ホワイトニング(ボディ)</a></li>
+        <li><a href="/collections/0338">角質ケア(ボディ)</a></li>
+        <li><a href="/collections/0339">乾燥(ボディ)</a></li>
+        <li><a href="/collections/0340">疲れ・コリ</a></li>
+        <li><a href="/collections/0341">バストケア・ネックケア</a></li>
+        <li><a href="/collections/0342">老廃物の排出・代謝</a></li>
+        <li><a href="/collections/0343">むくみ・冷え</a></li>
+        <li><a href="/collections/0344">痩身・スリミング・ボディライン</a></li>
+        <li><a href="/collections/0345">汗・におい</a></li>
+        <li><a href="/collections/0346">ムダ毛除去</a></li>
+        <li><a href="/collections/0347">ストレッチマーク・妊娠線</a></li>
+        <li><a href="/collections/0348">歯のホワイトニング</a></li>
+        <li><a href="/collections/0349">口臭対策・口臭予防</a></li>
+        <li><a href="/collections/0350">ささくれ・二枚爪</a></li>
+        <li><a href="/collections/0351">べたつかない(ボディ)</a></li>
+      </ul>
+    </section>
+
+    <section class="trouble-group">
+      <h3 class="trouble-group__title">ヘアケアのお悩み</h3>
+      <ul class="trouble-group__items">
+        <li><a href="/collections/0452">抜け毛予防</a></li>
+        <li><a href="/collections/0453">頭皮のエイジング</a></li>
+        <li><a href="/collections/0454">フケ・頭皮のかゆみ</a></li>
+        <li><a href="/collections/0455">カラーリングケア</a></li>
+        <li><a href="/collections/0456">トリートメント効果</a></li>
+        <li><a href="/collections/0457">さらさら</a></li>
+        <li><a href="/collections/0458">髪 しっとり</a></li>
+        <li><a href="/collections/0459">セットキープ力</a></li>
+        <li><a href="/collections/0460">ストレートヘア</a></li>
+        <li><a href="/collections/0461">ウェーブヘア</a></li>
+        <li><a href="/collections/0462">ボリュームダウン(ヘア)</a></li>
+        <li><a href="/collections/0463">ボリュームアップ(ヘア)</a></li>
+      </ul>
+    </section>
+
+    <section class="trouble-group">
+      <h3 class="trouble-group__title">その他のお悩み</h3>
+      <ul class="trouble-group__items">
+        <li><a href="/collections/0564">リラックス</a></li>
+        <li><a href="/collections/0565">コストパフォーマンス</a></li>
+        <li><a href="/collections/0566">オーガニックコスメ・自然派/ナチュラル化粧品</a></li>
+        <li><a href="/collections/0567">アルコールフリー</a></li>
+        <li><a href="/collections/0568">オイルフリー</a></li>
+        <li><a href="/collections/0569">無香料</a></li>
+      </ul>
+    </section>
+  </div>
+</div>
+
+{% comment %}
+  {% stylesheet %} ではなく {% style %} を使用する（sections/category-list.liquidと同じ理由。
+  sections/ranking-list.liquid, sections/brand-list.liquidで判明した既知の不具合を避けるため）。
+{% endcomment %}
+{% style %}
+  .trouble-list-page {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    padding-block: 32px;
+  }
+
+  .trouble-list-page__heading {
+    margin: 0;
+  }
+
+  .trouble-list__groups {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 28px;
+    align-items: start;
+  }
+
+  .trouble-group {
+    border: 1px solid rgb(var(--color-foreground-rgb) / var(--opacity-10, 0.1));
+    border-radius: 10px;
+    padding: 20px 22px 24px;
+    background: rgb(var(--color-background-rgb) / 1);
+  }
+
+  .trouble-group__title {
+    margin: 0 0 14px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #c9a227;
+    font-size: 1.15rem;
+  }
+
+  .trouble-group__items {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .trouble-group__items > li > a {
+    display: inline-block;
+    font-size: 0.95rem;
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .trouble-group__items > li > a::before {
+    content: '- ';
+    color: #c9a227;
+  }
+
+  .trouble-group__items > li > a:hover {
+    color: #c9a227;
+  }
+{% endstyle %}
+
+{% schema %}
+{
+  "name": "お悩み一覧",
+  "enabled_on": {
+    "templates": ["page"]
+  },
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "見出し",
+      "default": "お悩み一覧"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:settings.color_scheme",
+      "default": "scheme-1"
+    }
+  ],
+  "presets": [
+    {
+      "name": "お悩み一覧"
+    }
+  ]
+}
+{% endschema %}

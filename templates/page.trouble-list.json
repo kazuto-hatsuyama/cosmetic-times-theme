@@ -1,0 +1,14 @@
+{
+  "sections": {
+    "trouble_list": {
+      "type": "trouble-list",
+      "settings": {
+        "heading": "お悩み一覧",
+        "color_scheme": "scheme-1"
+      }
+    }
+  },
+  "order": [
+    "trouble_list"
+  ]
+}
