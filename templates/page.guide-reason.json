@@ -1,0 +1,14 @@
+{
+  "sections": {
+    "guide_reason": {
+      "type": "guide-reason",
+      "settings": {
+        "heading": "安くて安心な商品をおとどけできるワケ",
+        "color_scheme": "scheme-1"
+      }
+    }
+  },
+  "order": [
+    "guide_reason"
+  ]
+}
