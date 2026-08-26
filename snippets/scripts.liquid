@@ -149,6 +149,12 @@
     defer="defer"
   ></script>
 {% endif %}
+{% if template.name == 'page' and template.suffix == 'feature-list' %}
+  <script
+    src="{{ 'feature-list.js' | asset_url }}"
+    defer="defer"
+  ></script>
+{% endif %}
 
 <script
   src="{{ 'dialog.js' | asset_url }}"

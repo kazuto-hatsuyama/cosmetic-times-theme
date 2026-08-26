@@ -1,0 +1,14 @@
+{
+  "sections": {
+    "feature_list": {
+      "type": "feature-list",
+      "settings": {
+        "heading": "特集一覧",
+        "color_scheme": "scheme-1"
+      }
+    }
+  },
+  "order": [
+    "feature_list"
+  ]
+}
