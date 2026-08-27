@@ -1,18 +1,26 @@
 {% comment %}
   「SE向け実装指示書_20260817.docx」対応:
-  悩み・肌タイプ・仕上がりタグ／使い方／全成分／並行輸入の信頼性説明／購買実績を
+  悩み・肌タイプ・仕上がりタグ／使い方／並行輸入の信頼性説明／購買実績を
   商品ページ上に縦並び・SSR静的出力するセクション（タブ・アコーディオン不使用）。
 
-  参照メタフィールド（すべて namespace: custom。データ系がこれから定義・投入するため、
-  現時点では未作成 = 値が blank になる想定。各項目は個別に blank チェックしており、
-  存在しない/空の項目は何も出力しない。全項目が空の場合はセクション自体を出力しない）:
-    - custom.skin_concern      (list.single_line_text_field) 悩みタグ
-    - custom.skin_type         (list.single_line_text_field) 肌質タグ
-    - custom.finish_type       (list.single_line_text_field) 仕上がりタグ
-    - custom.usage_steps       (multi_line_text_field) 使い方（1行1ステップ想定）
-    - custom.ingredients       (multi_line_text_field) 全成分
-    - custom.parallel_import_info (multi_line_text_field) 並行輸入の信頼性説明（テキストのみ。バナー画像は使用しない）
-    - custom.sales_record      (single_line_text_field) 購買実績（例: 累計10万件以上）
+  2026-08-27 仕様変更（担当者HYからの回答、データ系より）:
+    - 全成分（旧 custom.ingredients）はフレキシブルに変更できず業務上使えないため、
+      商品ページへの表示自体を廃止。ブロックを完全に削除済み（メタフィールドも投入しない）。
+    - 並行輸入の信頼性説明は「商品ごと」ではなく「全商品共通」の固定テキストに変更。
+      参照先を商品単位の custom.parallel_import_info から
+      Shop単位の shop.metafields.custom.parallel_import_info に変更。
+
+  参照メタフィールド:
+    - custom.skin_concern      (list.single_line_text_field, product) 悩みタグ
+    - custom.skin_type         (list.single_line_text_field, product) 肌質タグ
+    - custom.finish_type       (list.single_line_text_field, product) 仕上がりタグ
+    - custom.usage_steps       (multi_line_text_field, product) 使い方（1行1ステップ想定）
+    - custom.parallel_import_info (multi_line_text_field, shop単位) 並行輸入の信頼性説明（全商品共通・テキストのみ。バナー画像は使用しない）
+    - custom.sales_record      (single_line_text_field, product) 購買実績（例: 累計10万件以上）
+
+  上記はいずれも各項目を個別に blank チェックしており、存在しない/空の項目は何も出力しない。
+  全項目が空の場合はセクション自体を出力しない（shop単位のparallel_import_infoも2026-08-27時点で
+  確定テキスト未投入のため空）。
 {% endcomment %}
 {% liquid
   assign concern_tags = product.metafields.custom.skin_concern.value
@@ -25,12 +33,11 @@
   endif
 
   assign usage_steps = product.metafields.custom.usage_steps.value
-  assign ingredients = product.metafields.custom.ingredients.value
-  assign parallel_import_info = product.metafields.custom.parallel_import_info.value
+  assign parallel_import_info = shop.metafields.custom.parallel_import_info.value
   assign sales_record = product.metafields.custom.sales_record.value
 
   assign has_any_content = false
-  if has_tags or usage_steps != blank or ingredients != blank or parallel_import_info != blank or sales_record != blank
+  if has_tags or usage_steps != blank or parallel_import_info != blank or sales_record != blank
     assign has_any_content = true
   endif
 %}
@@ -66,13 +73,6 @@
             {% endif %}
           {% endfor %}
         </ol>
-      </div>
-    {% endif %}
-
-    {% if ingredients != blank %}
-      <div class="product-extra-info__block">
-        <h2 class="product-extra-info__heading">全成分</h2>
-        <p class="product-ingredients">{{ ingredients | newline_to_br }}</p>
       </div>
     {% endif %}
 
@@ -135,7 +135,6 @@
     gap: 8px;
   }
 
-  .product-ingredients,
   .product-parallel-import {
     margin: 0;
     white-space: normal;

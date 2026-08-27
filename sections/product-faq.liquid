@@ -3,17 +3,22 @@
   FAQ（よくある質問）をクチコミの直下相当の位置に縦並び・常時表示（タブ・アコーディオン不使用）でSSR出力し、
   FAQPageのJSON-LDを付与するセクション。
 
-  参照メタフィールド: custom.faq_items（json型）
+  参照メタフィールド: shop.metafields.custom.faq_items（json型、Shop単位）
   想定フォーマット: [{"q": "質問文", "a": "回答文"}, ...]
-  Q&Aの内容自体はデータ系（HY/WEBマネージャー側）が商品ごとに用意して投入する運用のため、
-  現時点ではメタフィールド自体が未作成 = 値がblankになる想定。blankの場合はセクションごと何も出力しない。
+
+  2026-08-27 仕様変更（担当者HYからの回答、データ系より）:
+    指示書原案は「商品ごと」のQ&A（product.metafields.custom.faq_items）だったが、
+    「全商品共通」の内容に訂正されたため、参照先をShop単位の
+    shop.metafields.custom.faq_items に変更。全商品ページで同じ内容が表示される。
+    確定FAQ文言は2026-08-27時点で未投入のため値はblank。blankの場合は
+    セクションごと何も出力しない挙動は維持。
 
   既知の注意点: 個々のクチコミ（Judge.me）のSSRセクションが指示書の推奨構成では本セクションの
   直上（このセクションより前）に来る想定だが、2026-08-19時点でJudge.meレビューウィジェットが
   商品ページに未設置のため未実装。詳細は D:\Inetpub\HANDOFF.md 参照。
 {% endcomment %}
 {% liquid
-  assign faq_items = product.metafields.custom.faq_items.value
+  assign faq_items = shop.metafields.custom.faq_items.value
 %}
 
 {% if faq_items != blank %}
