@@ -21,7 +21,7 @@ class FavoriteButton extends Component {
   // customer-sync.js と同一の共有トークン（データ系了承済み・本番公開前に恒久的な認証方式への
   // 切替を推奨、詳細は D:\Inetpub\HANDOFF.md 参照）
   static TOKEN = 'bee15c758842afe80a460a8d1d899e88323163105c99946f';
-  static ENDPOINT = 'https://arnulfo-fordable-pipingly.ngrok-free.dev/Manage/shopify/toggle_favorite.cfm';
+  static ENDPOINT = 'https://www2.cosmetic-times.com/Manage/shopify/toggle_favorite.cfm';
 
   #busy = false;
 
