@@ -228,6 +228,14 @@
               },
               "block_order": []
             },
+            "favorite_button_9wLmQ2": {
+              "type": "favorite-button",
+              "settings": {
+                "padding-block-start": 8,
+                "padding-block-end": 0
+              },
+              "blocks": {}
+            },
             "text_aEtTtq": {
               "type": "product-description",
               "name": "Product description",
@@ -260,6 +268,7 @@
             "divider_VJhene",
             "variant_picker_R3rGDr",
             "buy_buttons_eYQEYi",
+            "favorite_button_9wLmQ2",
             "text_aEtTtq"
           ]
         }

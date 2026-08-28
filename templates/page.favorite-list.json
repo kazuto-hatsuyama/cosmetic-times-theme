@@ -1,0 +1,14 @@
+{
+  "sections": {
+    "favorite_list": {
+      "type": "favorite-list",
+      "settings": {
+        "heading": "お気に入り一覧",
+        "color_scheme": "scheme-1"
+      }
+    }
+  },
+  "order": [
+    "favorite_list"
+  ]
+}

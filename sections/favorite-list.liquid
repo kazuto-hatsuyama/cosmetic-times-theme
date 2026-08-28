@@ -1,0 +1,119 @@
+{% comment %}
+  お気に入り一覧ページ用セクション（新規・2026-08-27、feature/favorite-products ブランチ）。
+
+  データ系（D:\Inetpub\shopify_data）が実装した customer.metafields.custom.favorite_items
+  （list.product_reference、最大128件・上限管理はサーバー側実装済み）を単一ソースとして使用する。
+  Liquid上は customer.metafields.custom.favorite_items.value がそのまま Product オブジェクトの
+  配列として解決される（GID解析不要）。
+
+  商品カードの描画は sections/product-list.liquid で使われている手法をそのまま踏襲する:
+  {% content_for 'block', type: '_product-card', ... %} をUniqueStaticBlockIdチェック無効化
+  コメントで挟み、Horizonネイティブの商品カードをそのまま利用する（手組みマークアップにしない）。
+
+  このページはお気に入りの追加・削除UI（ハートボタン等）を一切持たない、閲覧専用ページ
+  （blocks/favorite-button.liquid は商品ページ専用。トグル操作はこのページの対象外）。
+
+  未ログイン時はLiquid側でのサーバーサイドリダイレクトができないため、customerがnilの場合は
+  ページ本体を描画せず、即座に routes.account_login_url へ遷移するインラインscriptのみを出力する
+  （新規JSアセットは作らず、ページ内に直接scriptタグを置く。ログイン後は通常どおりこのページに
+  戻ってこられる想定）。
+
+  {% stylesheet %} がこのストアのコンパイル済みCSSバンドルに含まれず新規セクションのスタイルが
+  サイレントに失われる既知の不具合（sections/ranking-list.liquid・sections/brand-list.liquid・
+  sections/feature-list.liquidで確認済み）を踏まえ、本セクションも {% style %} を使用する。
+{% endcomment %}
+
+{% if customer %}
+  <div class="section-background color-{{ section.settings.color_scheme }}"></div>
+  <div class="favorite-list-page color-{{ section.settings.color_scheme }} page-width">
+    {% if section.settings.heading != blank %}
+      <h2 class="favorite-list-page__heading">{{ section.settings.heading }}</h2>
+    {% endif %}
+
+    {% liquid
+      assign favorite_products = customer.metafields.custom.favorite_items.value
+    %}
+
+    {% if favorite_products.size > 0 %}
+      <div class="favorite-list__grid" data-favorite-grid>
+        {% for favorite_product in favorite_products %}
+          <div class="resource-list__item favorite-list__item">
+            {% # theme-check-disable UniqueStaticBlockId %}
+              {% content_for 'block', type: '_product-card', id: 'static-product-card', closest.product: favorite_product %}
+            {% # theme-check-enable UniqueStaticBlockId %}
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <p class="favorite-list__empty">お気に入り商品はまだありません。</p>
+    {% endif %}
+  </div>
+{% else %}
+  <script>
+    window.location.href = {{ routes.account_login_url | json }};
+  </script>
+  <noscript>
+    <p class="favorite-list__redirect-message">
+      <a href="{{ routes.account_login_url }}">ログインページへ進む</a>
+    </p>
+  </noscript>
+{% endif %}
+
+{% style %}
+  .favorite-list-page {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    padding-block: 32px;
+  }
+
+  .favorite-list-page__heading {
+    margin: 0;
+  }
+
+  .favorite-list__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 20px 16px;
+  }
+
+  .favorite-list__empty {
+    margin: 0;
+    padding-block: 48px;
+    text-align: center;
+    opacity: 0.7;
+  }
+
+  .favorite-list__redirect-message {
+    padding-block: 48px;
+    text-align: center;
+  }
+{% endstyle %}
+
+{% schema %}
+{
+  "name": "お気に入り一覧",
+  "enabled_on": {
+    "templates": ["page"]
+  },
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "見出し",
+      "default": "お気に入り一覧"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:settings.color_scheme",
+      "default": "scheme-1"
+    }
+  ],
+  "presets": [
+    {
+      "name": "お気に入り一覧"
+    }
+  ]
+}
+{% endschema %}

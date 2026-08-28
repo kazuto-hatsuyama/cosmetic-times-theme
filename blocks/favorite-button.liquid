@@ -1,0 +1,199 @@
+{% comment %}
+  商品ページ用「お気に入り」トグルボタン（新規theme block・2026-08-27、feature/favorite-products
+  ブランチ）。データ系（D:\Inetpub\shopify_data）実装のバックエンド
+  （customer.metafields.custom.favorite_items = list.product_reference、最大128件・上限管理は
+  サーバー側で実施済み、および toggle_favorite.cfm エンドポイント）と連携する。
+
+  templates/product.json の "main"（product-information）セクション内、
+  "product-details" ブロック（blocks/_product-details.liquid、schema.blocksに"@theme"を許可）の
+  子ブロックとして buy_buttons_eYQEYi の直後に配置する想定。
+
+  ログイン時（customer あり）:
+    - SSR時点で customer.metafields.custom.favorite_items.value（Productオブジェクトの配列）に
+      product.id が含まれるかを判定し、初期状態（塗りつぶし/アウトラインのハート）を出し分ける。
+    - クリックすると assets/favorite-button.js が toggle_favorite.cfm を叩き、レスポンスの
+      favorited値で見た目を更新する（サーバー側が真の状態を持つ前提。楽観的更新はしない）。
+    - limit_reached: true が返った場合（お気に入り128件上限到達時のトグル追加試行）は、
+      ボタン付近にメッセージを表示する。
+
+  未ログイン時（customer なし）:
+    - APIは一切呼ばず、routes.account_login_url への通常のリンクとして描画する
+      （customer-sync.jsと同じ共有トークン方式は使わない＝そもそも呼び出し自体をしない）。
+
+  {% stylesheet %} がこのストアのコンパイル済みCSSバンドルに含まれず新規セクション/ブロックの
+  スタイルがサイレントに失われる既知の不具合（sections/ranking-list.liquid他で確認済み）を
+  踏まえ、本ブロックも {% style %}（バンドル非依存のインラインstyle）を使用する。
+{% endcomment %}
+
+{% liquid
+  assign product = closest.product
+  assign is_favorited = false
+  if customer and product
+    for fav_product in customer.metafields.custom.favorite_items.value
+      if fav_product.id == product.id
+        assign is_favorited = true
+      endif
+    endfor
+  endif
+%}
+
+<div
+  class="favorite-button-block spacing-style"
+  style="{% render 'spacing-style', settings: block.settings %}"
+  {{ block.shopify_attributes }}
+>
+  {% if product == blank %}
+    {%- comment -%} テーマエディタのプレビュー等でproductが取得できない場合は何も出力しない {%- endcomment -%}
+  {% elsif customer %}
+    <favorite-button-component
+      class="favorite-button{% if is_favorited %} is-favorited{% endif %}"
+      data-customer-id="{{ customer.id }}"
+      data-product-id="{{ product.id }}"
+      data-favorited="{{ is_favorited }}"
+    >
+      <button
+        type="button"
+        ref="toggleButton"
+        class="favorite-button__toggle"
+        on:click="/toggle"
+        aria-pressed="{{ is_favorited }}"
+        aria-label="{% if is_favorited %}お気に入りから削除{% else %}お気に入りに追加{% endif %}"
+      >
+        <span class="favorite-button__icon favorite-button__icon--outline">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+          </svg>
+        </span>
+        <span class="favorite-button__icon favorite-button__icon--filled">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor" aria-hidden="true" focusable="false">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+          </svg>
+        </span>
+        <span class="favorite-button__label">
+          {% if is_favorited %}お気に入り登録済み{% else %}お気に入りに追加{% endif %}
+        </span>
+      </button>
+      <p
+        class="favorite-button__message hidden"
+        ref="message"
+        role="status"
+        data-limit-text="お気に入りは最大128件までです"
+        data-error-text="お気に入りの更新に失敗しました。時間をおいて再度お試しください"
+      ></p>
+    </favorite-button-component>
+  {% else %}
+    <a
+      href="{{ routes.account_login_url }}"
+      class="favorite-button favorite-button--logged-out"
+      aria-label="お気に入りに追加（ログインが必要です）"
+    >
+      <span class="favorite-button__icon favorite-button__icon--outline">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+        </svg>
+      </span>
+      <span class="favorite-button__label">お気に入りに追加</span>
+    </a>
+  {% endif %}
+</div>
+
+{% style %}
+  .favorite-button-block {
+    display: block;
+  }
+
+  .favorite-button,
+  .favorite-button__toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    border: 1px solid rgb(var(--color-foreground-rgb) / 0.25);
+    border-radius: 999px;
+    background: transparent;
+    color: var(--color-foreground);
+    cursor: pointer;
+    font-size: 0.9rem;
+    line-height: 1;
+    text-decoration: none;
+    transition: border-color 0.2s ease, color 0.2s ease;
+  }
+
+  .favorite-button:hover,
+  .favorite-button__toggle:hover {
+    border-color: var(--color-primary, currentColor);
+  }
+
+  .favorite-button__toggle:disabled {
+    opacity: 0.6;
+    cursor: default;
+  }
+
+  .favorite-button__icon {
+    display: inline-flex;
+    width: 22px;
+    height: 22px;
+  }
+
+  .favorite-button__icon--filled {
+    display: none;
+    color: var(--color-primary, #c9a84c);
+  }
+
+  favorite-button-component.is-favorited .favorite-button__icon--outline {
+    display: none;
+  }
+
+  favorite-button-component.is-favorited .favorite-button__icon--filled {
+    display: inline-flex;
+  }
+
+  favorite-button-component.is-favorited .favorite-button__toggle {
+    border-color: var(--color-primary, #c9a84c);
+  }
+
+  .favorite-button__message {
+    margin: 6px 0 0;
+    font-size: 0.8rem;
+    opacity: 0.85;
+  }
+{% endstyle %}
+
+{% schema %}
+{
+  "name": "お気に入りボタン",
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "t:content.padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "t:settings.top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "t:settings.bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    }
+  ],
+  "presets": [
+    {
+      "name": "お気に入りボタン",
+      "category": "t:categories.product"
+    }
+  ]
+}
+{% endschema %}

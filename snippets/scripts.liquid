@@ -295,6 +295,11 @@
     import { RecentlyViewed } from '@theme/recently-viewed-products';
     RecentlyViewed.addProduct('{{ product.id }}');
   </script>
+  <script
+    src="{{ 'favorite-button.js' | asset_url }}"
+    type="module"
+    fetchpriority="low"
+  ></script>
 {% endif %}
 
 <script
