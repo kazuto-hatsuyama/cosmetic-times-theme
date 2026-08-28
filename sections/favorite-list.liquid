@@ -34,7 +34,7 @@
       assign favorite_products = customer.metafields.custom.favorite_items.value
     %}
 
-    {% if favorite_products.size > 0 %}
+    {% if favorite_products != blank %}
       <div class="favorite-list__grid" data-favorite-grid>
         {% for favorite_product in favorite_products %}
           <div class="resource-list__item favorite-list__item">
