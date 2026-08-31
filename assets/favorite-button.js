@@ -50,11 +50,7 @@ class FavoriteButton extends Component {
     });
 
     try {
-      const response = await fetch(`${FavoriteButton.ENDPOINT}?${params.toString()}`, {
-        headers: {
-          'ngrok-skip-browser-warning': 'true',
-        },
-      });
+      const response = await fetch(`${FavoriteButton.ENDPOINT}?${params.toString()}`);
 
       if (!response.ok) throw new Error('toggle_favorite request failed');
 
