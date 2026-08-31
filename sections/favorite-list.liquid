@@ -38,6 +38,7 @@
       <div class="favorite-list__grid" data-favorite-grid>
         {% for favorite_product in favorite_products %}
           <div class="resource-list__item favorite-list__item">
+            <p style="background:yellow;color:red;font-weight:bold;">DEBUG: id=[{{ favorite_product.id }}] title=[{{ favorite_product.title }}] class=[{{ favorite_product.class }}] raw=[{{ favorite_product }}]</p>
             {% # theme-check-disable UniqueStaticBlockId %}
               {% content_for 'block', type: '_product-card', id: 'static-product-card', closest.product: favorite_product %}
             {% # theme-check-enable UniqueStaticBlockId %}
