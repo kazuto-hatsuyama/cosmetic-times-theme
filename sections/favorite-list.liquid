@@ -6,9 +6,23 @@
   Liquid上は customer.metafields.custom.favorite_items.value がそのまま Product オブジェクトの
   配列として解決される（GID解析不要）。
 
-  商品カードの描画は sections/product-list.liquid で使われている手法をそのまま踏襲する:
-  {% content_for 'block', type: '_product-card', ... %} をUniqueStaticBlockIdチェック無効化
-  コメントで挟み、Horizonネイティブの商品カードをそのまま利用する（手組みマークアップにしない）。
+  【2026-08-31 修正】商品カードの描画は、当初 sections/product-list.liquid と同じ
+  {% content_for 'block', type: '_product-card', id: 'static-product-card', ... %} 方式を
+  踏襲していたが、この方式は「static-product-card」という固定IDに対応する子ブロック構成
+  （image/product-title/price等）が実際のテンプレートJSON側（templates/page.favorite-list.json）
+  に存在して初めて機能する。product-list.liquid でこの方式が動くのは、その子ブロック構成が
+  セクションschemaの presets[].blocks 経由でテーマエディタ上「セクション追加」時に自動でJSONへ
+  書き込まれるため。今回のように新規ページテンプレートをJSONで直接作成した場合はその書き込みが
+  発生せず、closest.product 自体は正しく解決されるのに子ブロックが1つも描画されず、
+  商品カードの中身（画像・商品名・価格）が全て空白になる不具合を引き起こしていた。
+
+  そのため、content_for/closestの仕組みに依存しない、Horizon標準の汎用リソースカード
+  snippets/resource-card.liquid を直接renderする方式に変更した。このsnippetはブロック設定や
+  テンプレートJSON側の子ブロック構成を一切必要とせず、product/collectionオブジェクトを渡すだけで
+  画像・タイトル・価格を描画できる。snippets/header-drawer.liquid・snippets/mega-menu-list.liquid・
+  snippets/predictive-search-products-list.liquid など、テーマ標準機能内でも同様に
+  「コレクション/セクションの子ブロック構成に依存せず商品カードを描画したい」箇所で使われている
+  実績のあるパターン。
 
   このページはお気に入りの追加・削除UI（ハートボタン等）を一切持たない、閲覧専用ページ
   （blocks/favorite-button.liquid は商品ページ専用。トグル操作はこのページの対象外）。
@@ -37,12 +51,19 @@
     {% if favorite_products != blank %}
       <div class="favorite-list__grid" data-favorite-grid>
         {% for favorite_product in favorite_products %}
-          <div class="resource-list__item favorite-list__item">
-            <p style="background:yellow;color:red;font-weight:bold;">DEBUG: id=[{{ favorite_product.id }}] title=[{{ favorite_product.title }}] class=[{{ favorite_product.class }}] raw=[{{ favorite_product }}]</p>
-            {% # theme-check-disable UniqueStaticBlockId %}
-              {% content_for 'block', type: '_product-card', id: 'static-product-card', closest.product: favorite_product %}
-            {% # theme-check-enable UniqueStaticBlockId %}
-          </div>
+          {% comment %}
+            参照先商品が削除済み等でblankになるケースをスキップする
+            （sections/ranking-list.liquidと同じ安全策）。
+          {% endcomment %}
+          {% if favorite_product != blank %}
+            <div class="favorite-list__item">
+              {% render 'resource-card',
+                resource: favorite_product,
+                resource_type: 'product',
+                image_aspect_ratio: 'square'
+              %}
+            </div>
+          {% endif %}
         {% endfor %}
       </div>
     {% else %}
