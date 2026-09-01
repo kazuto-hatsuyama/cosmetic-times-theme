@@ -430,3 +430,55 @@ body [class*="color-scheme"].color-scheme-9 {
     color: #8b8471;
   }
 }
+
+/* ── 20-1. ナビバーをPC幅でも常時表示（2026-09-01、ユーザー要望による再修正）
+ * Horizon標準は @media (min-width:750px) の時、data-menu-style="menu"（PC幅の
+ * メニュー表示モード）であれば .header__navigation-bar-row を非表示にする仕様
+ * （sections/header.liquid の{% stylesheet %}内、テーマ標準コード）。
+ * 「SP版デザインをベースに画面幅問わず常時反映してほしい」との指示のため、
+ * !importantでこの非表示ルールを打ち消す。 */
+.header__navigation-bar-row {
+  display: block !important;
+}
+#header-component[data-menu-style='menu'] .header__navigation-bar-row {
+  display: block !important;
+}
+
+/* ── 20-2. ヘッダー会員挨拶バー（renew_header_s.cfmの2段目相当、2026-09-01追加）
+ * ログイン中: 「〇〇様 あなたのランクは〇〇です」＋右端「ログアウト」
+ * 未ログイン: 「会員登録後のお買い物でポイントプレゼント！」＋右端「新規会員登録」
+ * 現行サイトは白背景＋上端に薄いグレーの罫線、ランク名・リンクはピンクで強調。 */
+.header-member-bar-row {
+  border-top: 1px solid #cccccc;
+}
+.header-member-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 16px;
+  width: 100%;
+  padding: 10px var(--page-margin, 16px);
+  font-size: 0.8rem;
+}
+.header-member-bar__text {
+  margin: 0;
+  font-weight: 700;
+  color: #2a2a2a;
+}
+.header-member-bar__text--guest {
+  color: #c83564;
+}
+.header-member-bar__rank {
+  color: #c83564;
+  font-weight: 700;
+}
+.header-member-bar__action {
+  font-weight: 700;
+  color: #2a2a2a;
+  text-decoration: underline;
+  white-space: nowrap;
+}
+.header-member-bar__text--guest + .header-member-bar__action {
+  color: #c83564;
+}
