@@ -7,7 +7,7 @@
 {% render 'static-page-styles' %}
 
 <div class="section-background color-{{ section.settings.color_scheme }}"></div>
-<div class="static-page color-{{ section.settings.color_scheme }} page-width">
+<div class="static-page static-page--plain color-{{ section.settings.color_scheme }} page-width">
   <h1 class="static-page__heading">{{ section.settings.heading }}</h1>
 
   <div class="static-page__body">
@@ -73,7 +73,8 @@
     </ul>
 
     <h3>3.問い合わせ先</h3>
-    <p>ここに示した個人情報についての考え方についてご不明な点などございましたら<a href="https://www.cosmetic-times.com/inquiry/entry">お問い合わせフォーム</a>からお問い合わせください。</p>
+    <p>ここに示した個人情報についての考え方についてご不明な点などございましたらお問い合わせフォームからお問い合わせください。</p>
+    <a href="https://www.cosmetic-times.com/inquiry/entry" class="static-page__button">お問い合わせフォーム</a>
   </div>
 </div>
 

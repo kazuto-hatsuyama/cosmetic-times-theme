@@ -7,6 +7,13 @@
   Shopifyページ（/pages/order-guide 等）のアンカー付きURLへ張り替えている。
   guide/mypage（マイページ機能の説明）は本タスクの対象外（マイページ自体がまだ移行されていないため）
   のため、旧サイトへの絶対URLのまま残し、旧サイトが稼働している間はリンクとして機能する。
+
+  2026-08-31（デザイン刷新、tasks/20260831-static-page-design-alignment/spec.md）:
+  現行SP版トップページ（sp/guide/guidelist_include_new_s.cfm）に存在したが未実装だった
+  電話CTA（ご注文専用ダイヤル／問い合わせダイヤル）と「よくいただくご質問へ」
+  「お問い合わせはこちら」の.btn相当ボタンを追加。カテゴリ一覧自体は現行のアコーディオン
+  （guide_ul/guide_li）ではなくグリッドカード形式のまま維持（デスクトップでも見やすい
+  レスポンシブ表示を優先した判断。配色は現行サイトのアクセント色（ピンク#c83564）に統一）。
 {% endcomment %}
 {% render 'static-page-styles' %}
 
@@ -71,7 +78,21 @@
       </div>
     </div>
 
-    <div class="guide-beginner-info">
+    <div class="guide-contact">
+      <a href="tel:03-5759-6912" class="guide-contact__tel">
+        <span class="guide-contact__icon" aria-hidden="true">&#9742;</span>
+        <span>ご注文専用ダイヤル　03-5759-6912</span>
+      </a>
+      <a href="tel:0120-88-7565" class="guide-contact__tel">
+        <span class="guide-contact__icon" aria-hidden="true">&#9742;</span>
+        <span>問い合わせダイヤル　0120-88-7565</span>
+      </a>
+    </div>
+
+    <a href="/pages/faq" class="static-page__button">よくいただくご質問へ</a>
+    <a href="https://www.cosmetic-times.com/inquiry/entry" class="static-page__button">お問い合わせはこちら</a>
+
+    <div class="guide-beginner-info static-page__callout">
       <h3>初めての方へ</h3>
       <p>コスメティックタイムズとはどんなショップなのかご案内いたします。</p>
       <ul>
@@ -107,14 +128,42 @@
     margin-bottom: 8px;
   }
 
-  .guide-beginner-info {
-    padding: 20px;
-    background: rgb(var(--color-foreground-rgb) / var(--opacity-5, 0.05));
-    border-radius: 8px;
+  .guide-beginner-info.static-page__callout h3 {
+    margin-top: 0;
+    border-bottom: none;
+    padding-left: 0;
+    border-left: none;
+    color: #c83564;
   }
 
-  .guide-beginner-info h3 {
-    margin-top: 0;
+  .guide-contact {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 8px;
+  }
+
+  .guide-contact__tel {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 16px 20px;
+    background-color: #c83564;
+    color: #fff;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 1.1rem;
+    text-decoration: none;
+  }
+
+  .guide-contact__tel:hover {
+    background-color: #a8284f;
+    color: #fff;
+    text-decoration: none;
+  }
+
+  .guide-contact__icon {
+    font-size: 1.2rem;
   }
 {% endstyle %}
 

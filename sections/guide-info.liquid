@@ -8,6 +8,14 @@
   内部リンクのうち今回移行対象のページ（guide/top, guide/member, guide/faq）は新URLへ張り替え。
   guide/reason（詳しくはコチラ）は2026-08-25にsections/guide-reason.liquidとして移行済みのため/pages/guide-reasonへ張り替え済み。
   /category・/trouble/top・/brand/top は本タスクの対象外のため、旧サイトへの絶対URLのまま残している。
+
+  2026-08-31（デザイン刷新、tasks/20260831-static-page-design-alignment/spec.md）:
+  現行ページの「３つのお約束」は本来 .promiseList/.col（3カラムのカード＋装飾アイコン画像）
+  だったが、対応するCSS定義（.promiseList, .infoTtl等）は現行のnew_common.css/common.cssに
+  見当たらず、旧世代の別スタイルシートに依存していた可能性が高く再現性が低いため、
+  装飾画像なしのシンプルな3カラムカード（promise-list、本ファイル末尾の{% style %}参照）に
+  置き換えた。配色はサイト共通のガイド系配色（クリーム地#fff6e4＋タウプ罫線）を採用し、
+  他ページとの統一感を優先している。
 {% endcomment %}
 {% render 'static-page-styles' %}
 
@@ -29,39 +37,47 @@
     <h2 id="info02">コスメティックタイムズの３つのお約束</h2>
     <p>私たちは、お客様に３つのハッピーな時間をご提供いたします。</p>
 
-    <h3>見つけてハッピー</h3>
-    <p>たくさんの中から見つかる！</p>
-    <p>
-      メーカーやブランドの枠を超えて、1万点以上のコスメを取り揃えており、ブランド別、悩み別、アイテム別など、お好きな切り口からお探しいただけます。
-    </p>
-    <p>
-      気になるコスメや入荷待ちのコスメを管理したり、便利な機能で、自分にぴったりのコスメを見つけることができます。
-    </p>
-    <p><a href="/pages/guide-top">ご利用ガイドへ</a></p>
+    <div class="promise-list">
+      <div class="promise-list__col">
+        <h3>見つけてハッピー</h3>
+        <p><strong>たくさんの中から見つかる！</strong></p>
+        <p>
+          メーカーやブランドの枠を超えて、1万点以上のコスメを取り揃えており、ブランド別、悩み別、アイテム別など、お好きな切り口からお探しいただけます。
+        </p>
+        <p>
+          気になるコスメや入荷待ちのコスメを管理したり、便利な機能で、自分にぴったりのコスメを見つけることができます。
+        </p>
+        <p><a href="/pages/guide-top">ご利用ガイドへ</a></p>
+      </div>
 
-    <h3>優しい価格でハッピー</h3>
-    <p>国内希望小売価格よりぐーんと安い！</p>
-    <p>
-      私たちは実店舗を持たないため、国内希望小売価格よりお安い価格でご用意できます。<br>
-      もちろん、全商品正規品です。
-    </p>
-    <p>
-      消費税は、全額負担させていただきます。お客様のお財布の負担は最小限を目指します。
-    </p>
-    <p><a href="/pages/guide-reason">詳しくはコチラ</a></p>
+      <div class="promise-list__col">
+        <h3>優しい価格でハッピー</h3>
+        <p><strong>国内希望小売価格よりぐーんと安い！</strong></p>
+        <p>
+          私たちは実店舗を持たないため、国内希望小売価格よりお安い価格でご用意できます。<br>
+          もちろん、全商品正規品です。
+        </p>
+        <p>
+          消費税は、全額負担させていただきます。お客様のお財布の負担は最小限を目指します。
+        </p>
+        <p><a href="/pages/guide-reason">詳しくはコチラ</a></p>
+      </div>
 
-    <h3>一生キレイでハッピー</h3>
-    <p>絆が深まるほどお得でキレイになれる!</p>
-    <p>
-      私たちは、ただ単にコスメを販売して終わりとは考えておりません。
-    </p>
-    <p>
-      お客様の年齢や環境の変化による様々なお悩みやご要望に、一生涯お応えすることを使命としております。
-    </p>
-    <p>
-      コスメを通して、お客様のハッピーを支える頼れるパートナーを目指しています。
-    </p>
-    <p><a href="/pages/member-guide#member01">嬉しい会員特典について</a></p>
+      <div class="promise-list__col">
+        <h3>一生キレイでハッピー</h3>
+        <p><strong>絆が深まるほどお得でキレイになれる!</strong></p>
+        <p>
+          私たちは、ただ単にコスメを販売して終わりとは考えておりません。
+        </p>
+        <p>
+          お客様の年齢や環境の変化による様々なお悩みやご要望に、一生涯お応えすることを使命としております。
+        </p>
+        <p>
+          コスメを通して、お客様のハッピーを支える頼れるパートナーを目指しています。
+        </p>
+        <p><a href="/pages/member-guide#member01">嬉しい会員特典について</a></p>
+      </div>
+    </div>
 
     <h2 id="info01">コスメティックタイムズとは？</h2>
     <p>
@@ -120,6 +136,30 @@
     </ul>
   </div>
 </div>
+
+{% style %}
+  /* 現行サイトの「３つのお約束」3カラムカード（.promiseList .col）を、
+     装飾画像を除いたカード風レイアウトで再現。 */
+  .promise-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+    margin: 20px 0 32px;
+  }
+
+  .promise-list__col {
+    padding: 20px;
+    background: #fff6e4;
+    border: 1px solid #eadfc4;
+    border-radius: 10px;
+  }
+
+  .promise-list__col h3 {
+    margin-top: 0;
+    text-align: center;
+    border-bottom: 2px solid #635d4d;
+  }
+{% endstyle %}
 
 {% schema %}
 {
