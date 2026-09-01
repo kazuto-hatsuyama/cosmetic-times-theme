@@ -13,13 +13,119 @@
   "sections": {
     "footer_m9NzUG": {
       "type": "footer",
-      "blocks": {},
-      "block_order": [],
+      "blocks": {
+        "footer_sp_group_Kq3nR7": {
+          "type": "group",
+          "settings": {
+            "content_direction": "column",
+            "vertical_on_mobile": true,
+            "horizontal_alignment": "center",
+            "vertical_alignment": "center",
+            "horizontal_alignment_flex_direction_column": "center",
+            "vertical_alignment_flex_direction_column": "center",
+            "gap": 24,
+            "width": "fill",
+            "width_mobile": "fill",
+            "height": "fit",
+            "inherit_color_scheme": true,
+            "background_media": "none",
+            "border": "none",
+            "border_radius": 0,
+            "toggle_overlay": false,
+            "open_in_new_tab": false,
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {
+            "footer_sns_heading_9mQ2Lx": {
+              "type": "text",
+              "settings": {
+                "text": "<p>SNSだけでしかもらえないクーポンや情報盛り沢山！</p>",
+                "width": "100%",
+                "max_width": "normal",
+                "alignment": "center",
+                "type_preset": "paragraph"
+              },
+              "blocks": {}
+            },
+            "footer_sns_icons_7hTb4W": {
+              "type": "social-links",
+              "settings": {
+                "facebook_url": "https://www.facebook.com/Cosmetic.T/",
+                "instagram_url": "https://www.instagram.com/cosmetic_times.official/",
+                "youtube_url": "",
+                "tiktok_url": "",
+                "twitter_url": "https://mobile.twitter.com/CosmeticTimes",
+                "threads_url": "",
+                "linkedin_url": "",
+                "bluesky_url": "",
+                "snapchat_url": "",
+                "pinterest_url": "",
+                "tumblr_url": "",
+                "vimeo_url": "",
+                "custom_url": "https://line.me/R/ti/p/%40dvv3793k"
+              },
+              "blocks": {}
+            },
+            "footer_phone_order_2cVn8s": {
+              "type": "button",
+              "settings": {
+                "label": "ご注文専用ダイヤル：03-5759-6912",
+                "link": "tel:03-5759-6912",
+                "open_in_new_tab": false,
+                "style_class": "button",
+                "width": "fit-content",
+                "custom_width": 100,
+                "width_mobile": "fit-content",
+                "custom_width_mobile": 100
+              },
+              "blocks": {}
+            },
+            "footer_phone_inquiry_5wFz1k": {
+              "type": "button",
+              "settings": {
+                "label": "お問い合わせ専用ダイヤル：0120-88-7565",
+                "link": "tel:0120-88-7565",
+                "open_in_new_tab": false,
+                "style_class": "button",
+                "width": "fit-content",
+                "custom_width": 100,
+                "width_mobile": "fit-content",
+                "custom_width_mobile": 100
+              },
+              "blocks": {}
+            },
+            "footer_quick_links_4jYp9d": {
+              "type": "text",
+              "settings": {
+                "text": "<p><a href=\"https://www.cosmetic-times.com/inquiry/entry\">お問い合わせ</a>　<a href=\"/pages/faq\">よくいただくご質問</a></p><p><a href=\"/pages/guide-top\">ご利用ガイド</a>　<a href=\"https://www.cosmetic-times.com/common/calendar\">営業・配送日カレンダー</a></p><p><a href=\"/pages/company\">会社概要・規約</a>　<a href=\"/pages/privacy-policy\">プライバシーポリシー</a></p>",
+                "width": "100%",
+                "max_width": "normal",
+                "alignment": "center",
+                "type_preset": "rte"
+              },
+              "blocks": {}
+            }
+          },
+          "block_order": [
+            "footer_sns_heading_9mQ2Lx",
+            "footer_sns_icons_7hTb4W",
+            "footer_phone_order_2cVn8s",
+            "footer_phone_inquiry_5wFz1k",
+            "footer_quick_links_4jYp9d"
+          ]
+        }
+      },
+      "block_order": [
+        "footer_sp_group_Kq3nR7"
+      ],
       "name": "t:names.footer",
       "settings": {
         "section_width": "page-width",
         "gap": 20,
-        "color_scheme": "scheme-1",
+        "color_scheme": "scheme-8",
         "padding-block-start": 30,
         "padding-block-end": 30
       }
@@ -43,38 +149,18 @@
             "case": "none"
           },
           "blocks": {}
-        },
-        "social_links_Ew63Kq": {
-          "type": "social-links",
-          "settings": {
-            "facebook_url": "https://www.facebook.com/",
-            "instagram_url": "https://www.instagram.com/",
-            "youtube_url": "https://www.youtube.com/",
-            "tiktok_url": "https://www.tiktok.com/",
-            "twitter_url": "https://x.com/",
-            "threads_url": "",
-            "linkedin_url": "",
-            "bluesky_url": "",
-            "snapchat_url": "",
-            "pinterest_url": "",
-            "tumblr_url": "",
-            "vimeo_url": "",
-            "custom_url": ""
-          },
-          "blocks": {}
         }
       },
       "block_order": [
         "footer_copyright_jweRK8",
-        "footer_policy_list_VCdnpa",
-        "social_links_Ew63Kq"
+        "footer_policy_list_VCdnpa"
       ],
       "name": "t:names.utilities",
       "settings": {
         "section_width": "page-width",
         "gap": 24,
         "divider_thickness": 0,
-        "color_scheme": "",
+        "color_scheme": "scheme-9",
         "padding-block-start": 20,
         "padding-block-end": 48
       }

@@ -6,6 +6,29 @@
   {% style %}（インライン<style>としてその場に出力される、バンドル非依存の方式）を使用する。
   各ページ（sections/guide-top.liquid 等）から {% render 'static-page-styles' %} で読み込む。
   1ページに1回のみレンダリングされる前提のセクション群のため、重複出力の心配はない。
+
+  2026-08-31（デザイン刷新、tasks/20260831-static-page-design-alignment/spec.md）:
+  現行サイト（検証サーバー \\192.168.99.3\d$\inetpub\public\sp\）のSP版ソース・CSS
+  （css/common/new_common.css 等）を実際に調査し、色・見出し装飾・リスト・ボタン・
+  引用ボックスの意匠をこのスニペットに反映した。判明した実際の設計トークン:
+    - アクセント色（.pred）: #c83564（ピンク、金/ゴールドではない）
+    - 本文リンク（a）既定色: #7b7052（タウプ系ブラウン、下線なし）
+    - 見出し下線（.qa_tit）: 2px solid #635d4d（暗いグレーブラウン、色付けなし）
+    - 強調ボックス（.qa_point）: background #fff6e4 / border 2px solid #c83564
+    - ボタン（.btn）: background #f7f2e6 / color・border #8b8471、角丸10px、太字
+    - パンくず（.pankuzu）: background #f8f5ec、小さめフォント
+  この配色は「会員サービス・ポイント」「返品」「お支払い」「FAQ」等の“ガイド系”ページ
+  （new_common.cssベース）で確認された。一方「会社概要」「特定商取引法」
+  「プライバシーポリシー」「ご利用規約」の“法務系”ページは、実際には new_common.css に
+  対応クラス定義が存在せず（.section/.fs36/.guideContentは未定義）、実質プレーンな
+  太字＋余白のみで装飾がないことが判明した。そのため法務系3ページには
+  `.static-page--plain` 修飾クラスを付与し、装飾を抑えた見た目にしている
+  （sections/company.liquid, privacy-policy.liquid, terms-of-service.liquid）。
+  「コスメティックタイムズについて」「安くて安心な商品をおとどけできるワケ」は現行サイトでは
+  さらに旧世代のcommon.css/guide.cssベース（新デザインとは配色・構成が異なる）だが、
+  該当ページ固有の装飾クラス（.promiseList, .infoTtl 等）は現行CSSに対応定義が
+  見当たらず再現性が低いため、他ページと統一感のある新デザイン（ピンクアクセント）を
+  採用した（判断理由は各セクションファイル・作業報告を参照）。
 {% endcomment %}
 {% style %}
   .static-page {
@@ -18,17 +41,22 @@
   }
 
   .static-page__heading {
-    margin: 0;
+    margin: 0 0 8px;
+    text-align: center;
+    color: #c83564;
+    font-size: 2rem;
+    line-height: 1.4;
   }
 
   .static-page__toc {
     display: flex;
     flex-wrap: wrap;
+    justify-content: center;
     gap: 8px;
     padding: 16px;
     margin: 0;
     list-style: none;
-    background: rgb(var(--color-foreground-rgb) / var(--opacity-5, 0.05));
+    background: #f8f5ec;
     border-radius: 8px;
   }
 
@@ -39,43 +67,57 @@
   .static-page__toc a {
     display: inline-block;
     padding: 4px 12px;
-    border: 1px solid rgb(var(--color-foreground-rgb) / var(--opacity-20, 0.2));
+    border: 1px solid #8b8471;
     border-radius: 999px;
     font-size: 0.85rem;
     text-decoration: none;
-    color: inherit;
+    color: #7b7052;
   }
 
   .static-page__toc a:hover {
-    background: rgb(var(--color-foreground-rgb) / var(--opacity-10, 0.1));
+    background: #fff0f5;
+    border-color: #c83564;
+    color: #c83564;
   }
 
   .static-page__body {
     line-height: 1.8;
     font-size: 0.95rem;
+    color: #333;
   }
 
+  /* 大見出し（現行サイトの h2.wf-hannari.pred 相当）。ページ内の章タイトル。 */
   .static-page__body h2 {
-    margin: 40px 0 16px;
-    padding-bottom: 8px;
-    border-bottom: 2px solid #c9a227;
-    font-size: 1.3rem;
+    margin: 48px 0 20px;
+    text-align: center;
+    color: #c83564;
+    font-size: 1.6rem;
+    line-height: 1.4;
   }
 
   .static-page__body > h2:first-child,
-  .static-page__body__section:first-child h2 {
+  .static-page__section:first-child > h2:first-child {
     margin-top: 0;
   }
 
+  /* 中見出し（現行サイトの h3.qa_tit 相当）。下線のみで色は付けない。 */
   .static-page__body h3 {
-    margin: 32px 0 12px;
-    font-size: 1.1rem;
-    color: #a8842f;
+    margin: 36px 0 16px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #635d4d;
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #333;
   }
 
+  /* 小見出し。左に細いアクセント罫を添える程度の軽い強調に留める。 */
   .static-page__body h4 {
-    margin: 20px 0 8px;
-    font-size: 1rem;
+    margin: 24px 0 10px;
+    padding-left: 10px;
+    border-left: 4px solid #c83564;
+    font-size: 1.02rem;
+    font-weight: 700;
+    color: #333;
   }
 
   .static-page__body p {
@@ -88,12 +130,38 @@
     padding-left: 1.4em;
   }
 
+  /* 現行サイトの「■」手動プレフィックス付き箇条書きの見た目を、
+     セマンティックな<li>のまま再現するためのカスタムマーカー。 */
+  .static-page__body ul {
+    list-style: none;
+    padding-left: 0.2em;
+  }
+
+  .static-page__body ul li {
+    position: relative;
+    padding-left: 1.3em;
+  }
+
+  .static-page__body ul li::before {
+    content: "■";
+    position: absolute;
+    left: 0;
+    color: #c83564;
+    font-size: 0.7em;
+    line-height: 1.9;
+  }
+
   .static-page__body li {
     margin-bottom: 6px;
   }
 
   .static-page__body a {
-    color: #a8842f;
+    color: #7b7052;
+    text-decoration: none;
+  }
+
+  .static-page__body a:hover {
+    color: #c83564;
     text-decoration: underline;
   }
 
@@ -119,18 +187,18 @@
 
   .static-page__body th,
   .static-page__body td {
-    border: 1px solid rgb(var(--color-foreground-rgb) / var(--opacity-20, 0.2));
+    border: 1px solid #ddd8c8;
     padding: 10px 12px;
     text-align: left;
     vertical-align: top;
   }
 
   .static-page__body thead th {
-    background: rgb(var(--color-foreground-rgb) / var(--opacity-10, 0.1));
+    background: #f8f5ec;
   }
 
   .static-page__body tbody th {
-    background: rgb(var(--color-foreground-rgb) / var(--opacity-5, 0.05));
+    background: #f8f5ec;
     white-space: nowrap;
   }
 
@@ -138,9 +206,103 @@
     scroll-margin-top: 100px;
   }
 
+  /* 強調ボックス（現行サイトの .qa_point 相当）。3Dセキュア説明・特典案内など。 */
+  .static-page__callout {
+    line-height: 1.6;
+    padding: 20px;
+    background-color: #fff6e4;
+    border: 2px solid #c83564;
+    border-radius: 10px;
+    margin: 20px 0;
+  }
+
+  .static-page__callout > *:last-child {
+    margin-bottom: 0;
+  }
+
+  .static-page__callout h3,
+  .static-page__callout h4 {
+    margin-top: 0;
+    padding-left: 0;
+    border: none;
+    color: #c83564;
+    font-size: 1.05rem;
+  }
+
+  /* インライン強調（現行サイトの .pred / .pred.bold 相当）。 */
+  .static-page__highlight {
+    color: #c83564;
+  }
+
+  /* CTAボタン（現行サイトの .btn 相当）。 */
+  .static-page__button {
+    display: block;
+    width: fit-content;
+    max-width: 100%;
+    margin: 16px 0;
+    padding: 14px 28px;
+    background-color: #f7f2e6;
+    color: #8b8471;
+    border: 2px solid #8b8471;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 1rem;
+    text-align: center;
+    text-decoration: none;
+    line-height: 1.4;
+  }
+
+  .static-page__button:hover {
+    background-color: #8b8471;
+    color: #fff;
+    text-decoration: none;
+  }
+
+  /* パンくず風の戻りリンク（現行サイトの .pankuzu 相当）。各ページ末尾に配置。 */
+  .static-page__back-link {
+    margin-top: 8px;
+    padding: 10px 14px;
+    background: #f8f5ec;
+    font-size: 0.85rem;
+    border-radius: 4px;
+  }
+
+  .static-page__back-link a {
+    color: #7b7052;
+  }
+
+  /* 法務系ページ（会社概要・特商法・プライバシーポリシー・利用規約）用の抑制修飾子。
+     現行サイトではこれらのページに .pred / .qa_tit 相当のクラス定義が存在せず、
+     実際には太字＋余白のみのプレーンな見た目のため、アクセント装飾を外す。 */
+  .static-page--plain .static-page__heading {
+    color: #333;
+  }
+
+  .static-page--plain .static-page__body h2,
+  .static-page--plain .static-page__body h3,
+  .static-page--plain .static-page__body h4 {
+    margin: 32px 0 12px;
+    padding: 0;
+    border: none;
+    text-align: left;
+    color: #333;
+    font-size: 1.1rem;
+    font-weight: 700;
+  }
+
+  .static-page--plain .static-page__body ul li::before {
+    content: "■";
+    color: #333;
+  }
+
+  .static-page--plain .static-page__body a {
+    color: #7b7052;
+    text-decoration: underline;
+  }
+
   .faq-item {
     padding: 16px 0;
-    border-bottom: 1px solid rgb(var(--color-foreground-rgb) / var(--opacity-10, 0.1));
+    border-bottom: 1px solid #ddd8c8;
   }
 
   .faq-item:last-child {
@@ -149,8 +311,11 @@
 
   .faq-item__q {
     margin: 0 0 8px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #635d4d;
     font-size: 1rem;
-    color: #a8842f;
+    font-weight: 700;
+    color: #c83564;
   }
 
   .faq-item__a {
@@ -159,9 +324,5 @@
 
   .faq-item__a p:last-child {
     margin-bottom: 0;
-  }
-
-  .static-page__back-link {
-    margin-top: 8px;
   }
 {% endstyle %}

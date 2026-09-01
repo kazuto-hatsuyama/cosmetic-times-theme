@@ -581,13 +581,50 @@
             （menuUpdate）でのメニュー編集は、このストアで使えるAdmin APIトークンの
             スコープ不足（write_online_store_navigation権限なし、ACCESS_DENIED確認済み）
             のため実行不可だったための対応。上のif/elseどちらの分岐でもここに到達する。
+            2026-09-01: main-menu自体が空（もしくはHome/Catalog/Contactのみ）で、
+            ドロワーメニューに実質「ランキング」しか表示されていなかったと判明したため、
+            現行SPサイトのナビバー（新着/セール/ランキング/ブランド/カテゴリ）と同じ
+            項目を同じ理由で固定リンク化。セールは専用コレクション未作成のため
+            /collections/outlet を暫定使用（blocks/_header-menu.liquidの同種コメント参照）。
           {%- endcomment -%}
+          <li class="menu-drawer__list-item--flat">
+            <a
+              href="/collections/new-arrivals"
+              class="menu-drawer__menu-item menu-drawer__menu-item--mainlist menu-drawer__animated-element focus-inset"
+            >
+              <span class="menu-drawer__menu-item-text wrap-text">新着</span>
+            </a>
+          </li>
+          <li class="menu-drawer__list-item--flat">
+            <a
+              href="/collections/outlet"
+              class="menu-drawer__menu-item menu-drawer__menu-item--mainlist menu-drawer__animated-element focus-inset"
+            >
+              <span class="menu-drawer__menu-item-text wrap-text">セール</span>
+            </a>
+          </li>
           <li class="menu-drawer__list-item--flat">
             <a
               href="/pages/ranking"
               class="menu-drawer__menu-item menu-drawer__menu-item--mainlist menu-drawer__animated-element focus-inset"
             >
               <span class="menu-drawer__menu-item-text wrap-text">ランキング</span>
+            </a>
+          </li>
+          <li class="menu-drawer__list-item--flat">
+            <a
+              href="/pages/brand-list"
+              class="menu-drawer__menu-item menu-drawer__menu-item--mainlist menu-drawer__animated-element focus-inset"
+            >
+              <span class="menu-drawer__menu-item-text wrap-text">ブランド</span>
+            </a>
+          </li>
+          <li class="menu-drawer__list-item--flat">
+            <a
+              href="/pages/category-list"
+              class="menu-drawer__menu-item menu-drawer__menu-item--mainlist menu-drawer__animated-element focus-inset"
+            >
+              <span class="menu-drawer__menu-item-text wrap-text">カテゴリ</span>
             </a>
           </li>
         </ul>

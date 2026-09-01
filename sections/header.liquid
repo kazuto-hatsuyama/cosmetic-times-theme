@@ -395,6 +395,60 @@
     {% endif %}
   {% endfor %}
 
+  {%- comment -%}
+    2026-09-01: 現行SPサイト renew_header_s.cfm の2段目
+    （ログイン中会員向けの挨拶文＋ランク表示＋ログアウト／未ログイン時の
+    会員登録訴求）を再現する新規行。customer オブジェクトでログイン状態を判定。
+    ランク名は customer.metafields.custom.rank.value（RankCD 00〜04）を
+    snippets/cart-summary.liquid と同じメタフィールドから取得し、
+    sections/member-guide.liquidに転記済みの名称（メンバー/フレンド/
+    ハートフル/ラブリー/CT VIP）にマッピングしている。
+  {%- endcomment -%}
+  <div class="header__row header-member-bar-row color-{{ section.settings.color_scheme_top }}">
+    {% liquid
+      if customer
+        assign rank_code = customer.metafields.custom.rank.value
+        case rank_code
+          when '00'
+            assign rank_name = 'メンバー'
+          when '01'
+            assign rank_name = 'フレンド'
+          when '02'
+            assign rank_name = 'ハートフル'
+          when '03'
+            assign rank_name = 'ラブリー'
+          when '04'
+            assign rank_name = 'CT VIP'
+          else
+            assign rank_name = 'メンバー'
+        endcase
+      endif
+    %}
+    <div class="header-member-bar">
+      {% if customer %}
+        <p class="header-member-bar__text">
+          {{ customer.name }} 様　あなたのランクは<span class="header-member-bar__rank">{{ rank_name }}</span>です
+        </p>
+        <a
+          href="{{ routes.account_logout_url }}"
+          class="header-member-bar__action"
+        >
+          ログアウト
+        </a>
+      {% else %}
+        <p class="header-member-bar__text header-member-bar__text--guest">
+          会員登録後のお買い物でポイントプレゼント！
+        </p>
+        <a
+          href="{{ routes.account_register_url }}"
+          class="header-member-bar__action"
+        >
+          新規会員登録
+        </a>
+      {% endif %}
+    </div>
+  </div>
+
   {% if navigation_bar != blank %}
     <div class="header__row header__navigation-bar-row color-{{ section.settings.color_scheme_bottom }}">
       {{ navigation_bar }}

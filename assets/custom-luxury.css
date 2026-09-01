@@ -341,3 +341,144 @@ a {
   object-fit: cover;
   display: block;
 }
+
+
+/* ── 20. Header & Footer — 現行SPサイト（renew_header_s.cfm / new_footer_s.cfm）
+ *       のデザインに合わせる（2026-09-01、feature/static-page-design-alignment）
+ *
+ * 注意: 本ファイル冒頭の「2. Color Scheme Overrides」が
+ * `body [class*="color-scheme"]` という広いセレクタで全カラースキームの
+ * CSS変数を強制的にゴールド/白/黒へ上書きしている（specificity 0,1,1）ため、
+ * settings_data.json に新規追加した scheme-7/8/9 の背景色・前景色をただ
+ * 定義しただけでは反映されない。ここでは各スキームのクラス名を追加して
+ * specificity 0,2,1 まで上げることで、この3スキームに限り上書きを打ち消し、
+ * 現行サイトの実際の配色（アクセントはピンク#c83564、ゴールドではない。
+ * ガイド系静的ページの調査で判明した内容と同じ）を反映させている。
+ * ─────────────────────────────────────────────────────────────── */
+
+/* scheme-7: ヘッダー下段ナビバー（.head_menu相当、新着/セール/ランキング/ブランド/カテゴリ） */
+body [class*="color-scheme"].color-scheme-7 {
+  --color-background:              #635d4d;
+  --color-background-rgb:          99, 93, 77;
+  --color-foreground:              #ffffff;
+  --color-foreground-rgb:          255, 255, 255;
+  --color-foreground-heading:      #ffffff;
+  --color-foreground-heading-rgb:  255, 255, 255;
+  --color-primary:                 #c83564;
+  --color-primary-rgb:             200, 53, 100;
+  --color-primary-button-background: #c83564;
+  --color-primary-button-text:       #ffffff;
+  --color-primary-button-border:     #c83564;
+}
+
+/* scheme-8: フッター本体（#footer相当、クリーム背景・タウプブラウンのリンク色） */
+body [class*="color-scheme"].color-scheme-8 {
+  --color-background:              #f8f5ec;
+  --color-background-rgb:          248, 245, 236;
+  --color-foreground:              #7b7052;
+  --color-foreground-rgb:          123, 112, 82;
+  --color-foreground-heading:      #5f5847;
+  --color-foreground-heading-rgb:  95, 88, 71;
+  --color-primary:                 #7b7052;
+  --color-primary-rgb:             123, 112, 82;
+  --color-border:                  #c5bfb0;
+  --color-primary-button-background: #7b7052;
+  --color-primary-button-text:       #ffffff;
+  --color-primary-button-border:     #7b7052;
+}
+
+/* scheme-9: フッター最下部の著作権バー（.footc相当、ダークブラウン） */
+body [class*="color-scheme"].color-scheme-9 {
+  --color-background:              #524e43;
+  --color-background-rgb:          82, 78, 67;
+  --color-foreground:              #ffffff;
+  --color-foreground-rgb:          255, 255, 255;
+  --color-foreground-heading:      #ffffff;
+  --color-foreground-heading-rgb:  255, 255, 255;
+  --color-primary:                 #ffffff;
+  --color-primary-rgb:             255, 255, 255;
+}
+
+/* ヘッダー下段ナビバー全体（行の背景色。#new_header .head_menu と同じ考え方） */
+.header__navigation-bar-row {
+  background-color: #635d4d;
+}
+.header__navigation-bar-row .menu-list__item {
+  color: #ffffff;
+}
+
+/* フッターの電話CTA（.tell相当）を角丸ピル形状に近づける。
+ * サイト全体のボタン角丸設定（button_border_radius_primary: 2px）を
+ * フッター本文（scheme-8）内のボタンだけ上書きする。 */
+.color-scheme-8 a.button {
+  border-radius: 10px;
+}
+
+/* カートアイコンの件数バッジ。現行サイトの .ab（ピンク #c83564）に合わせる。
+ * サイト全体のプライマリボタン色（ゴールド系）とは独立させたいため、
+ * ヘッダーのカートアイコン配下だけをピンポイントで上書きする。 */
+.header-actions__cart-icon .cart-bubble__background {
+  background-color: #c83564 !important;
+}
+
+/* モバイル時のヘッダー上段アイコン（検索・アカウント）の色を、現行サイトの
+ * #new_header li.w10 { color: #8b8471; } に近いタウプ系に寄せる。
+ * デスクトップのメガメニュー配色には影響させないよう max-width で限定。 */
+@media screen and (max-width: 749px) {
+  #header-component .header__row--top .header-actions__action,
+  #header-component .header__row--top .header__icon--menu {
+    color: #8b8471;
+  }
+}
+
+/* ── 20-1. ナビバーをPC幅でも常時表示（2026-09-01、ユーザー要望による再修正）
+ * Horizon標準は @media (min-width:750px) の時、data-menu-style="menu"（PC幅の
+ * メニュー表示モード）であれば .header__navigation-bar-row を非表示にする仕様
+ * （sections/header.liquid の{% stylesheet %}内、テーマ標準コード）。
+ * 「SP版デザインをベースに画面幅問わず常時反映してほしい」との指示のため、
+ * !importantでこの非表示ルールを打ち消す。 */
+.header__navigation-bar-row {
+  display: block !important;
+}
+#header-component[data-menu-style='menu'] .header__navigation-bar-row {
+  display: block !important;
+}
+
+/* ── 20-2. ヘッダー会員挨拶バー（renew_header_s.cfmの2段目相当、2026-09-01追加）
+ * ログイン中: 「〇〇様 あなたのランクは〇〇です」＋右端「ログアウト」
+ * 未ログイン: 「会員登録後のお買い物でポイントプレゼント！」＋右端「新規会員登録」
+ * 現行サイトは白背景＋上端に薄いグレーの罫線、ランク名・リンクはピンクで強調。 */
+.header-member-bar-row {
+  border-top: 1px solid #cccccc;
+}
+.header-member-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 16px;
+  width: 100%;
+  padding: 10px var(--page-margin, 16px);
+  font-size: 0.8rem;
+}
+.header-member-bar__text {
+  margin: 0;
+  font-weight: 700;
+  color: #2a2a2a;
+}
+.header-member-bar__text--guest {
+  color: #c83564;
+}
+.header-member-bar__rank {
+  color: #c83564;
+  font-weight: 700;
+}
+.header-member-bar__action {
+  font-weight: 700;
+  color: #2a2a2a;
+  text-decoration: underline;
+  white-space: nowrap;
+}
+.header-member-bar__text--guest + .header-member-bar__action {
+  color: #c83564;
+}
