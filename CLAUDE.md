@@ -74,7 +74,7 @@
 1. ユーザーが変更内容を指示
 2. Claude がファイルを編集
 3. Claude が `git add` / `commit` / `push` を実行
-4. GitHub Actions が自動で `shopify theme push` を実行（Shopifyへ反映）
+4. **2026-09-01〜: mainへのpushだけでは本番liveテーマへ自動反映されない**（下記「GitHub Actions 自動デプロイ」参照）。本番へ反映する場合は手動でワークフローを実行する
 
 ### Git運用ルール
 
@@ -94,11 +94,26 @@ style: ヒーロースライドショーのフォントサイズ調整
 
 ## GitHub Actions 自動デプロイ
 
+⚠️ **2026-09-01〜: mainへのpush/マージによる自動デプロイは停止中**（下記「トリガー」参照）。
+理由: `feature/static-page-design-alignment`マージ（コミット`59912fe`）のpushが本番の
+公開（live）テーマ（cosmetic-times-prd / テーマID 138815832273、`--allow-live`指定）へ
+そのまま自動反映されてしまい、ユーザーから「mainへのpushだけでは本番liveテーマに
+自動反映されないようにしてほしい」と明示的な依頼があったため、トリガーを
+`push`から`workflow_dispatch`（手動実行）に変更した。
+
+**本番へ反映したい場合の手動実行手順**:
+```
+gh workflow run "Deploy to Shopify" --ref main
+```
+または GitHub Actions画面（下記URL）→「Deploy to Shopify」→「Run workflow」ボタンから
+`main`ブランチを指定して実行する。ワークフロー自体の内容（`shopify theme push --allow-live`
+で本番liveテーマ 138815832273 へ反映する処理）は変更していない。
+
 | 項目 | 内容 |
 |---|---|
-| 設定日 | 2026-05-21（push先を2026-07-23に cosmetic-times-prd へ切替） |
+| 設定日 | 2026-05-21（push先を2026-07-23に cosmetic-times-prd へ切替）。**2026-09-01: トリガーをpush→workflow_dispatch（手動実行）に変更** |
 | ファイル | `.github/workflows/deploy.yml` |
-| トリガー | main ブランチへの push |
+| トリガー | **手動実行のみ（`workflow_dispatch`）**。~~main ブランチへの push~~（2026-09-01廃止） |
 | 認証 | GitHub Secrets に `SHOPIFY_CLI_THEME_TOKEN` 登録済み。**⚠️ トークンはストア単位で発行されるため、push先をprdストアに切り替えた際は、prdストア用のテーマアクセストークンに再登録が必要**（旧devストア用トークンのままだとpush失敗する） |
 | Actions確認 | https://github.com/kazuto-hatsuyama/cosmetic-times-theme/actions |
 

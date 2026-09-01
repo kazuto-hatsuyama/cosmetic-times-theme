@@ -1,9 +1,14 @@
 name: Deploy to Shopify
 
+# 2026-09-01: pushトリガーを廃止し、手動実行（workflow_dispatch）のみに変更。
+# 理由: mainへのマージ・push直後に本番の公開（live）テーマ（cosmetic-times-prd /
+# テーマID 138815832273、--allow-live指定）へ自動反映されてしまう挙動が発覚し、
+# ユーザーから「今後はmainへのpushだけでは本番liveテーマに自動反映されないように
+# してほしい」と明示的な依頼があったための対応。
+# 本番へ反映したい場合は、GitHub Actionsの「Run workflow」ボタン、または
+# `gh workflow run "Deploy to Shopify" --ref main` で手動実行すること。
 on:
-  push:
-    branches:
-      - main
+  workflow_dispatch: {}
 
 jobs:
   deploy:
