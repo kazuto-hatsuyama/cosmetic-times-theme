@@ -258,6 +258,21 @@ shopify theme push --only "config/settings_data.json" --allow-live --theme 13881
 
 2. `assets/custom-luxury.css`（section 23-1）: 会員バー（`.header-member-bar-row`）の背景をクリーム`#faf8f4`に指定したはずが、実機ではナビバーと同系のブラウン系で表示される不具合を修正。**原因**: (a) この行には`sections/header.liquid`が自身に付与する`.header__row`クラスも乗っており、同ファイルの`{% stylesheet %}`内に`.header__row { background-color: transparent; }`という設計上意図的なルール（「背景はunderlay側が担当する」という設計コメントあり）が存在する。このセクション単位のスタイルは`content_for_header`経由でlayout/theme.liquidのcustom-luxury.cssより後に出力されるため、同じ詳細度(0,1,0)同士の後勝ちでtransparentが優先されていた。(b) 結果として行が透明になり、下に敷かれた`.header__underlay-closed`のグラデーション（`--header-height`という、会員バー・ナビバー追加前の古い高さを基準に色境界を計算している）が透けて見え、境界を超えた部分はナビバーの配色で塗り続けられるため、会員バーの位置にブラウン系が透けて表示されていた。**対策**: `background-color: #ffffff !important;`で確実に不透明な白を敷き、ユーザー要望どおり「背景色なし（通常ページ背景と同化）」を実現。根本原因のunderlay高さ計算自体（Horizon標準のheader.js/theme.liquid側ロジック）には今回手を入れていない。ランクバッジ（ピンク地）・ログアウト/新規会員登録ボタン（ピンク枠ピル）の文字色・視認性はこの変更による影響なし。
 
+## 一覧系動的ページのビジュアル点検（2026-09-02、`feature/listing-pages-visual-refresh`ブランチ）
+
+データ系（`D:\Inetpub\shopify_data`）からの依頼で、header/footerで発覚した「SP版参照は表示内容のみ、見た目はHorizon既存ページのデザイン言語に合わせる」原則（上記244行目「今後の標準原則」参照）を、動的な一覧系ページ4種（`sections/ranking-list.liquid`・`sections/brand-list.liquid`・`sections/feature-list.liquid`・`sections/favorite-list.liquid`）と`sections/main-collection.liquid`にも横展開して点検した。
+
+**点検結果**: `ranking-list`/`brand-list`/`feature-list`自身の`{% style %}`ブロックは、header/footerのsection 20とは異なり元々SP版CFMの配色を直接数値コピーしたものではなく、既にテーマ共通のCSS変数（`--color-foreground-rgb`・`--opacity-5/10/20/30/40/70/90`、いずれも`snippets/theme-styles-variables.liquid`で定義済みの実変数）で組まれたニュートラルな実装だった。`sections/main-collection.liquid`は`assets/custom-luxury.css`に対応するカスタムCSSが一切存在せず、Horizon標準の商品グリッド機能のみで構成されているため変更不要と判断（対象外）。唯一、`favorite-list`向けの追加スタイル（`assets/custom-luxury.css`の「22. 気になる！リスト」セクション、2026-09-01追加）だけがSP版CSSの数値（グレー`#cccccc`・本文色`#333333`・淡いピンク`#fbdce2`）をそのまま移植していたため、これを修正した。
+
+| ファイル | 変更内容 |
+|---|---|
+| `assets/custom-luxury.css`（22. 気になる！リスト） | 区切り線を`#cccccc`固定値から`var(--color-border)`に、商品タイトル文字色の`#333333`固定指定を撤去（`.resource-card__content`が既に`var(--color-foreground)`を継承しているため不要と判断）、0件時案内ボックスの背景を`#fbdce2`固定値から`rgb(var(--color-primary-rgb) / 0.08)`（セクションの`color_scheme`設定に連動、既定scheme-1ではゴールド`#C9A84C`のティント）に変更。レイアウト構造（モバイル幅で画像左・詳細右の横並び）自体は変更していない |
+| `assets/custom-luxury.css`（24. 一覧系動的ページ ビジュアル調整、新規セクション） | `.brand-card`・`.feature-card`に、同ファイル内で既に使われている`.collection-card:hover`（section 11）と全く同じ値（金アクセント枠線`rgba(201, 168, 76, 0.5)`＋シャドウ`0 10px 36px rgba(0, 0, 0, 0.08)`＋`translateY(-2px)`）を再利用したホバー演出を追加。`.ranking-list__link`にもホバー時に見出し文字がゴールド`#c9a84c`（`.link:hover`と同色、section 7）に変わる演出を追加。新規の色を増やさず既存の値のみを再利用している |
+
+**確認事項**: 本セッションではChrome DevTools MCP・Playwright MCPいずれも実際には接続されておらず（過去のセッションと同様、`CLAUDE.md`記載の設定はあるがツールとして呼び出し不可）、静的コードレビューのみでの対応。ホバー演出（カードのリフト・タイトル色変化）と`favorite-list`の0件時ボックスの実際の見え方は、プレビューテーマでの実機確認を推奨。
+
+**注意点**: 本ブランチはユーザー確認前のためmainへのマージ・pushは未実施（作業指示どおりブランチへのコミットまで）。
+
 ## MCPサーバー設定
 
 | サーバー名 | 用途 | 設定場所 | 状態 |
