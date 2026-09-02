@@ -649,13 +649,33 @@ body [class*="color-scheme"].color-scheme-9 {
 
 /* --- 23-1. ヘッダー会員バー: 文字サイズ・コントラスト・階層を強化 ---
  * Before: 白背景に0.8rem・下線リンクのみで、ロゴ行と一体化して視認性が低かった。
- * After : 温かみのあるクリーム地（フッターscheme-8と同トーンで上下の統一感を出す）に
- *         上下罫線を追加してロゴ行と明確に区切り、ランクは塗りピルバッジ化、
- *         ログアウト/新規会員登録はピンク枠のピルボタン化してタップ対象を明確にする。 */
+ * After : 上下罫線でロゴ行と明確に区切り、ランクは塗りピルバッジ化、
+ *         ログアウト/新規会員登録はピンク枠のピルボタン化してタップ対象を明確にする。
+ *
+ * 2026-09-02（実機確認後の修正）: 上記のクリーム地（#faf8f4）指定は、実機では
+ * 効かずナビバーと同系のブラウン系背景で表示されてしまうとユーザーから指摘があった。
+ * 原因を調査した結果、次の2点が判明:
+ *  1. `.header-member-bar-row` には `.header__row` クラスも付与されており、
+ *     sections/header.liquid 自身の{% stylesheet %}内で
+ *     `.header__row { background-color: transparent; }`（コメントに
+ *     「backgroundはunderlayが担当する設計」と明記あり）が定義されている。
+ *     この section 単位の{% stylesheet %}はcontent_for_headerとして
+ *     layout/theme.liquidのcustom-luxury.cssより後に出力されるため、
+ *     同じ詳細度(0,1,0)同士の勝負でtransparentが後勝ちし、本ファイルの
+ *     background-color指定が打ち消されていた。
+ *  2. その結果、行の背景は透明になり、下に敷かれた`.header__underlay-closed`の
+ *     グラデーション（`--header-height`という、会員バー・ナビバー追加前の
+ *     古い高さを基準に色の境界を計算している）がそのまま透けて見える。
+ *     境界を超えた分は最終色（ナビバーのブラウン系）で塗り続けられるため、
+ *     会員バーの位置にはこのブラウン系が透けて表示されていた。
+ * 対策: `!important`で確実に不透明な白を敷き、ユーザー要望どおり「背景色なし
+ * （通常ページ背景と同化する白）」にする。根本原因のunderlay高さ計算自体は
+ * Horizon標準のheader.js/theme.liquid側のロジックに依存するため今回は触れず、
+ * 会員バー自身に確実な背景を持たせることで解決する。 */
 .header-member-bar-row {
-  background-color: #faf8f4;
-  border-top: 1px solid #e5ded0;
-  border-bottom: 1px solid #e5ded0;
+  background-color: #ffffff !important;
+  border-top: 1px solid #e0e0e0;
+  border-bottom: 1px solid #e0e0e0;
 }
 .header-member-bar {
   padding: 12px var(--page-margin, 16px);
