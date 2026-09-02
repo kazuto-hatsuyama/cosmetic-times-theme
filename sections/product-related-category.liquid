@@ -1,0 +1,210 @@
+{% comment %}
+  同じカテゴリの商品セクション（新規・2026-09-02、
+  tasks/20260902-product-page-discovery-and-support-sections/spec.md）。
+
+  カテゴリコレクションの判定ロジックは blocks/product-category-badge.liquid（2026-09-02実装済み）
+  と全く同じ二段判定を再利用する:
+    1. product.collections のうち、handleの先頭文字が数字のコレクション（第3カテゴリ、
+       tasks/20260825-category-trouble-listing-pages/spec.md のハンドル命名規則）を最優先。
+    2. 見つからない場合は 'all' を除いた最初のコレクション（ただしブランドコレクション＝
+       custom.kana を持つものは product-vendor 表示と重複するため除外）にフォールバック。
+  お悩み（trouble）コレクションを判別する明示的な目印が無いため、上記2.のフォールバックでは
+  稀に「お悩み」コレクションがカテゴリとして表示される可能性がある
+  （blocks/product-category-badge.liquidに記載済みの既知の制約と同一）。
+
+  「もっと見る」リンクの遷移先は、この商品固有のカテゴリコレクションページ
+  （/collections/{handle}）ではなく、依頼内容に沿ってカテゴリ一覧ページ
+  （/pages/category-list、sections/category-list.liquid）としている。ブランドセクションと
+  同様、個別コレクションへ直接送る方が自然という見方もあるため判断に迷った点として報告済み。
+{% endcomment %}
+{% liquid
+  assign product = closest.product
+  assign category_collection = blank
+
+  if product != blank
+    for c in product.collections
+      unless c.handle == 'all'
+        if c.metafields.custom.kana == blank
+          assign first_char = c.handle | slice: 0, 1
+          if category_collection == blank and '0123456789' contains first_char
+            assign category_collection = c
+          endif
+        endif
+      endunless
+    endfor
+
+    if category_collection == blank
+      for c in product.collections
+        unless c.handle == 'all'
+          if c.metafields.custom.kana == blank and category_collection == blank
+            assign category_collection = c
+          endif
+        endunless
+      endfor
+    endif
+  endif
+%}
+
+{% if category_collection != blank and category_collection.products_count > 1 %}
+  <div class="section-background color-{{ section.settings.color_scheme }}"></div>
+  <div class="product-related color-{{ section.settings.color_scheme }} page-width">
+    <div class="product-related__header">
+      <h2 class="product-related__heading">{{ category_collection.title }}の商品</h2>
+      <a href="/pages/category-list" class="product-related__more">同じカテゴリの商品をもっと見る ＞</a>
+    </div>
+    <ul class="product-related__grid" role="list">
+      {% liquid
+        assign max_items = 8
+        assign shown = 0
+      %}
+      {% for p in category_collection.products %}
+        {% unless p.id == product.id %}
+          {% if shown < max_items %}
+            <li class="product-related__item">
+              <a href="{{ p.url }}" class="product-related__link">
+                <span class="product-related__media">
+                  {% if p.featured_image %}
+                    <img
+                      class="product-related__image"
+                      src="{{ p.featured_image | image_url: width: 300 }}"
+                      srcset="
+                        {{ p.featured_image | image_url: width: 150 }} 150w,
+                        {{ p.featured_image | image_url: width: 300 }} 300w,
+                        {{ p.featured_image | image_url: width: 600 }} 600w
+                      "
+                      sizes="(min-width: 750px) 200px, 45vw"
+                      loading="lazy"
+                      width="{{ p.featured_image.width }}"
+                      height="{{ p.featured_image.height }}"
+                      alt="{{ p.featured_image.alt | escape | default: p.title | escape }}"
+                    >
+                  {% else %}
+                    <span class="product-related__image product-related__image--placeholder"></span>
+                  {% endif %}
+                </span>
+                <span class="product-related__body">
+                  <span class="product-related__title">{{ p.title }}</span>
+                  <span class="product-related__price">{% render 'price', product_resource: p %}</span>
+                </span>
+              </a>
+            </li>
+            {% assign shown = shown | plus: 1 %}
+          {% endif %}
+        {% endunless %}
+      {% endfor %}
+    </ul>
+  </div>
+{% endif %}
+
+{% comment %}
+  {% stylesheet %} ではなく {% style %} を使用する（sections/ranking-list.liquid,
+  sections/brand-list.liquid, sections/product-related-brand.liquid等で判明済みの既知の不具合
+  を避けるため）。クラス名は sections/product-related-brand.liquid と共通のため、両方のスタイル
+  が同一ページに出力された場合も重複競合しない（同一定義）。
+{% endcomment %}
+{% style %}
+  .product-related {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding-block: 32px;
+  }
+
+  .product-related__header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .product-related__heading {
+    margin: 0;
+  }
+
+  .product-related__more {
+    font-size: 0.9rem;
+    color: inherit;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  .product-related__more:hover {
+    text-decoration: underline;
+  }
+
+  .product-related__grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .product-related__link {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .product-related__media {
+    display: block;
+    aspect-ratio: 1 / 1;
+    background: rgb(var(--color-foreground-rgb) / var(--opacity-5, 0.05));
+  }
+
+  .product-related__image,
+  .product-related__image--placeholder {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 4px;
+  }
+
+  .product-related__body {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .product-related__title {
+    font-size: 0.9rem;
+    line-height: 1.4;
+  }
+
+  .product-related__price {
+    font-size: 0.9rem;
+  }
+
+  @media screen and (min-width: 750px) {
+    .product-related__grid {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+{% endstyle %}
+
+{% schema %}
+{
+  "name": "同じカテゴリの商品",
+  "enabled_on": {
+    "templates": ["product"]
+  },
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:settings.color_scheme",
+      "default": "scheme-1"
+    }
+  ],
+  "presets": [
+    {
+      "name": "同じカテゴリの商品"
+    }
+  ]
+}
+{% endschema %}
