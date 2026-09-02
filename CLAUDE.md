@@ -275,6 +275,22 @@ shopify theme push --only "config/settings_data.json" --allow-live --theme 13881
 
 → **2026-09-02: ユーザー承認を得て`main`へマージ・origin/mainへpush済み**（マージコミット`fdf0b82`、`git merge --no-ff feature/listing-pages-visual-refresh`）。マージ元ブランチの先頭コミットは`97a835a`（本セクション記載の変更一式）。`gh run list`で確認した結果、このpushによって`.github/workflows/deploy.yml`（`workflow_dispatch`のみがトリガー）は発火していない（直近のワークフロー実行は`workflow_dispatch`化前の`59912fe`のpush、2026-09-01T06:27:37Zが最後のまま）。本番liveテーマ（Horizon、ID 138815832273）への反映は本作業では行っていない（未実施のまま）。本番反映が必要な場合は本ファイル冒頭「GitHub Actions 自動デプロイ」記載の手動実行手順（`gh workflow run "Deploy to Shopify" --ref main`）が別途必要。
 
+## 商品ページ静的コンテンツ追加（2026-09-02、`feature/product-page-static-content-additions`ブランチ）
+
+データ系（`D:\Inetpub\shopify_data`）からの依頼（`tasks/20260902-product-page-static-content-additions/spec.md`）。07_現サイト比較シートで指摘された、商品ページ上で独立表示されていない/本文に埋もれている項目への対応。ユーザー確認前のためmainへのマージ・pushは未実施。
+
+| ファイル | 内容 |
+|---|---|
+| `blocks/product-vendor.liquid` | ブランド名表示ブロック（新規）。`closest.product.vendor`を「ブランド：○○」の形式で表示。vendorが空の場合は非表示 |
+| `blocks/product-category-badge.liquid` | 商品カテゴリ表示ブロック（新規）。`product.collections`から「カテゴリ：○○」を表示。判定ロジック: handleの先頭が数字（`sections/category-list.liquid`の第3カテゴリ命名規則）のコレクションを最優先採用、無ければ`sections/breadcrumbs.liquid`と同じ「'all'除外の最初のコレクション」にフォールバック（ブランドコレクション=`custom.kana`を持つものは除外、vendor表示と重複するため）。**既知の制約**: お悩み（trouble）コレクションを判別する明示的な目印が無いため、フォールバック時に稀に「お悩み」コレクションがカテゴリとして表示される可能性がある |
+| `blocks/product-summary.liquid` | 商品概要（description）を見出し＋箇条書き形式で表示するブロック（新規）。既存`product-description`ブロック（Horizon標準、長文一段落表示）を置き換え。テキスト内容は変更せず、`</p>`段落分割→`<br>`行分割→句点「。」文分割の優先順で自動的にリスト化する表示形式のみの変更 |
+| `sections/product-trust-info.liquid` | 信頼性情報 共通ブロック（新規）。全商品ページ共通で、現行サイト`/guide/reason`ページの本文をそのまま転記（並行輸入品・真正性について／仕入れルート／入荷時の検品／使用期限・入荷時期の管理／保管環境の5見出し・6項目）。詳細は`sections/guide-reason.liquid`（`/pages/guide-reason#hinshitsu`）へリンク。`{% stylesheet %}`非バンドル既知の不具合を踏まえ`{% style %}`方式を採用 |
+| `templates/product.json` | `main`セクションの`group_icgrde`（Header）ブロックに`product_vendor_5KpQa1`・`product_category_7NmXe2`を商品名の直後・価格の手前に追加。`buy_buttons_eYQEYi`の直後に配送目安の`text`ブロック（`delivery_estimate_9Zx1Qc`、「最短3日〜1週間前後のお届け」、現行サイト商品ページ下部の既存文言を転記）を追加。既存`text_aEtTtq`（`product-description`タイプ）を`product_summary_aEtTtq`（`product-summary`タイプ）に置き換え。`order`に`product_trust_info`セクションを`product_extra_info`の直後・`product_faq`の手前に追加 |
+
+**usage_steps（使い方の独立見出し表示）は対応不要と確認**: `sections/product-extra-info.liquid`（2026-08-19実装済み）が`custom.usage_steps`メタフィールドを「使い方」の独立見出し（`<h2>`）＋箇条書き（`<ol>`）で既に表示しており、データが空の商品では該当ブロックごと非表示になる実装が既に稼働中だったため、本タスクでの追加実装は行っていない。
+
+**本タスクで実機確認未実施**: 本セッションでもChrome DevTools MCP・Playwright MCPいずれも実際には接続されておらず、`shopify theme check`によるlint検証（新規ファイルはエラー0件、既存の警告のみ）とコードレビューのみでの対応。特にカテゴリ判定ロジック（数字handle優先→フォールバック）と商品概要の自動箇条書き化（`</p>`/`<br>`/`。`の各分割パターン）は、実際の商品データでの見え方をプレビューテーマで確認することを推奨。
+
 ## MCPサーバー設定
 
 | サーバー名 | 用途 | 設定場所 | 状態 |

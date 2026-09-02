@@ -1,0 +1,144 @@
+{% comment %}
+  商品概要（description）を見出し＋箇条書き形式で表示するブロック（新規・2026-09-02、
+  tasks/20260902-product-page-static-content-additions/spec.md）。
+
+  templates/product.json の既存 "product-description" ブロック（Horizon標準、
+  closest.product.description をそのままRTE表示していた）を置き換える。
+  テキスト内容は一切変更せず、長文一段落表示を見出し＋箇条書き形式に変更する
+  （表示形式のみの変更、要件どおり）。
+
+  分割ロジック（優先順）:
+    1. description(HTML)が複数の<p>段落を持つ場合 → 段落単位で1項目
+    2. <br>による改行を含む場合 → 行単位で1項目
+    3. いずれも無い単一の文章の場合 → 日本語の句点「。」で文単位に分割
+  いずれの場合も元の文言自体は変更せず、区切り位置でリスト化するのみ（strip_htmlで
+  タグは除去されるが、可視テキストは変わらない）。
+{% endcomment %}
+{% liquid
+  assign product = closest.product
+  assign raw_html = product.description
+
+  assign mode = 'sentence'
+  assign paragraph_chunks = raw_html | split: '</p>'
+  if paragraph_chunks.size > 1
+    assign mode = 'paragraph'
+  endif
+
+  if mode == 'sentence'
+    assign line_chunks = raw_html | split: '<br />'
+    if line_chunks.size == 1
+      assign line_chunks = raw_html | split: '<br>'
+    endif
+    if line_chunks.size > 1
+      assign mode = 'line'
+    endif
+  endif
+%}
+
+{% if raw_html != blank %}
+  <div
+    class="product-summary spacing-style"
+    style="{% render 'spacing-style', settings: block.settings %}"
+    {{ block.shopify_attributes }}
+  >
+    {% if block.settings.heading != blank %}
+      <h2 class="product-summary__heading">{{ block.settings.heading }}</h2>
+    {% endif %}
+
+    <ul class="product-summary__list">
+      {% if mode == 'paragraph' %}
+        {% for chunk in paragraph_chunks %}
+          {% assign clean_chunk = chunk | strip_html | strip %}
+          {% if clean_chunk != blank %}
+            <li class="product-summary__item">{{ clean_chunk }}</li>
+          {% endif %}
+        {% endfor %}
+      {% elsif mode == 'line' %}
+        {% for chunk in line_chunks %}
+          {% assign clean_chunk = chunk | strip_html | strip %}
+          {% if clean_chunk != blank %}
+            <li class="product-summary__item">{{ clean_chunk }}</li>
+          {% endif %}
+        {% endfor %}
+      {% else %}
+        {% assign plain_text = raw_html | strip_html | strip %}
+        {% assign sentence_chunks = plain_text | split: '。' %}
+        {% for chunk in sentence_chunks %}
+          {% assign clean_chunk = chunk | strip %}
+          {% if clean_chunk != blank %}
+            <li class="product-summary__item">{{ clean_chunk }}。</li>
+          {% endif %}
+        {% endfor %}
+      {% endif %}
+    </ul>
+  </div>
+{% endif %}
+
+{% style %}
+  .product-summary {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .product-summary__heading {
+    margin: 0;
+  }
+
+  .product-summary__list {
+    margin: 0;
+    padding-inline-start: 1.25em;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .product-summary__item {
+    line-height: 1.6;
+  }
+{% endstyle %}
+
+{% schema %}
+{
+  "name": "商品概要（箇条書き）",
+  "tag": null,
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "見出し",
+      "default": "商品概要"
+    },
+    {
+      "type": "header",
+      "content": "t:content.padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "t:settings.top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "t:settings.bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    }
+  ],
+  "presets": [
+    {
+      "name": "商品概要（箇条書き）",
+      "category": "t:categories.product"
+    }
+  ]
+}
+{% endschema %}

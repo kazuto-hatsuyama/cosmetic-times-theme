@@ -1,0 +1,121 @@
+{% comment %}
+  商品カテゴリ表示ブロック（新規・2026-09-02、tasks/20260902-product-page-static-content-additions/spec.md）。
+
+  用途が分かるカテゴリ名を「カテゴリ：○○」の形式で商品ページ上に表示する。
+  現状 sections/breadcrumbs.liquid のパンくずのみでは「用途が分かる」表示として弱いという
+  指摘（07_現サイト比較シート）への対応。
+
+  判定方法（テーマ側実装判断。データ系がSmartCollectionを提供、専用の判定用メタフィールドは
+  存在しないためヒューリスティックで対応）:
+    1. sections/category-list.liquid がハードコードしている87件のカテゴリ階層のうち、
+       第3カテゴリ（最も具体的で「用途が分かる」）のhandleはデータ系マスタの数字コード
+       （例: 000000）で統一されている。product.collectionsをループし、handleの先頭文字が
+       数字のコレクションが見つかればそれを最優先でカテゴリとして採用する。
+    2. 見つからない場合は、sections/breadcrumbs.liquid と同じフォールバック方式
+       （'all'を除外した最初のコレクション）を採用する。ただしブランドコレクション
+       （sections/brand-list.liquid と同じ判定基準の custom.kana メタフィールドを持つもの）は
+       vendor表示（blocks/product-vendor.liquid）と重複するため除外する。
+    3. お悩み（trouble）コレクションを判別する明示的な目印（メタフィールド等）が
+       存在しないため、上記2.のフォールバックでは稀に「お悩み」コレクションが
+       カテゴリとして表示される可能性がある（既知の制約）。
+
+  templates/product.json の group_icgrde（Header）ブロック内、商品名・ブランドの直後に配置。
+{% endcomment %}
+{% liquid
+  assign product = closest.product
+  assign category_collection = blank
+
+  if product != blank
+    for c in product.collections
+      unless c.handle == 'all'
+        if c.metafields.custom.kana == blank
+          assign first_char = c.handle | slice: 0, 1
+          if category_collection == blank and '0123456789' contains first_char
+            assign category_collection = c
+          endif
+        endif
+      endunless
+    endfor
+
+    if category_collection == blank
+      for c in product.collections
+        unless c.handle == 'all'
+          if c.metafields.custom.kana == blank and category_collection == blank
+            assign category_collection = c
+          endif
+        endunless
+      endfor
+    endif
+  endif
+%}
+
+{% if category_collection != blank %}
+  <div
+    class="product-category-badge spacing-style"
+    style="{% render 'spacing-style', settings: block.settings %}"
+    {{ block.shopify_attributes }}
+  >
+    <a href="{{ category_collection.url }}" class="product-category-badge__link">
+      <span class="product-category-badge__label">カテゴリ：</span>{{ category_collection.title }}
+    </a>
+  </div>
+{% endif %}
+
+{% style %}
+  .product-category-badge {
+    font-size: 0.9rem;
+    line-height: 1.4;
+  }
+
+  .product-category-badge__label {
+    color: rgb(var(--color-foreground-rgb) / var(--opacity-70, 0.7));
+  }
+
+  .product-category-badge__link {
+    color: var(--color-foreground);
+    text-decoration: none;
+  }
+
+  .product-category-badge__link:hover {
+    text-decoration: underline;
+  }
+{% endstyle %}
+
+{% schema %}
+{
+  "name": "カテゴリ表示",
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "t:content.padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "t:settings.top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "t:settings.bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 4
+    }
+  ],
+  "presets": [
+    {
+      "name": "カテゴリ表示",
+      "category": "t:categories.product"
+    }
+  ]
+}
+{% endschema %}
