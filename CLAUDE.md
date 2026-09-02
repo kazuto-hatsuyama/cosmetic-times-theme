@@ -273,6 +273,8 @@ shopify theme push --only "config/settings_data.json" --allow-live --theme 13881
 
 **注意点**: 本ブランチはユーザー確認前のためmainへのマージ・pushは未実施（作業指示どおりブランチへのコミットまで）。
 
+→ **2026-09-02: ユーザー承認を得て`main`へマージ・origin/mainへpush済み**（マージコミット`fdf0b82`、`git merge --no-ff feature/listing-pages-visual-refresh`）。マージ元ブランチの先頭コミットは`97a835a`（本セクション記載の変更一式）。`gh run list`で確認した結果、このpushによって`.github/workflows/deploy.yml`（`workflow_dispatch`のみがトリガー）は発火していない（直近のワークフロー実行は`workflow_dispatch`化前の`59912fe`のpush、2026-09-01T06:27:37Zが最後のまま）。本番liveテーマ（Horizon、ID 138815832273）への反映は本作業では行っていない（未実施のまま）。本番反映が必要な場合は本ファイル冒頭「GitHub Actions 自動デプロイ」記載の手動実行手順（`gh workflow run "Deploy to Shopify" --ref main`）が別途必要。
+
 ## MCPサーバー設定
 
 | サーバー名 | 用途 | 設定場所 | 状態 |
