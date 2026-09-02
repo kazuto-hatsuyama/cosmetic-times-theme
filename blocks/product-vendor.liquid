@@ -1,0 +1,79 @@
+{% comment %}
+  ブランド名表示ブロック（新規・2026-09-02、tasks/20260902-product-page-static-content-additions/spec.md）。
+
+  商品の vendor フィールド（既にShopify商品データに設定済み）を「ブランド：○○」の形式で
+  商品名付近に独立表示する。vendorが空の場合は何も出力しない。
+
+  templates/product.json の "main"（product-information）セクション → "product-details" ブロック
+  （blocks/_product-details.liquid、schema.blocksに"@theme"を許可）内の group_icgrde
+  （Header：商品名＋価格）ブロックの子として、商品名の直後に配置する想定。
+{% endcomment %}
+{% liquid
+  assign product = closest.product
+  assign vendor = product.vendor
+%}
+
+{% if vendor != blank %}
+  <div
+    class="product-vendor-badge spacing-style"
+    style="{% render 'spacing-style', settings: block.settings %}"
+    {{ block.shopify_attributes }}
+  >
+    <span class="product-vendor-badge__label">ブランド：</span><span class="product-vendor-badge__value">{{ vendor }}</span>
+  </div>
+{% endif %}
+
+{% style %}
+  .product-vendor-badge {
+    font-size: 0.9rem;
+    line-height: 1.4;
+  }
+
+  .product-vendor-badge__label {
+    color: rgb(var(--color-foreground-rgb) / var(--opacity-70, 0.7));
+  }
+
+  .product-vendor-badge__value {
+    color: var(--color-foreground);
+    font-weight: var(--font-body-bold--weight, 600);
+  }
+{% endstyle %}
+
+{% schema %}
+{
+  "name": "ブランド表示",
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "t:content.padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "t:settings.top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "t:settings.bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 4
+    }
+  ],
+  "presets": [
+    {
+      "name": "ブランド表示",
+      "category": "t:categories.product"
+    }
+  ]
+}
+{% endschema %}

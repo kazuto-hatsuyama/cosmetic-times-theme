@@ -140,6 +140,22 @@
                   },
                   "blocks": {}
                 },
+                "product_vendor_5KpQa1": {
+                  "type": "product-vendor",
+                  "settings": {
+                    "padding-block-start": 0,
+                    "padding-block-end": 4
+                  },
+                  "blocks": {}
+                },
+                "product_category_7NmXe2": {
+                  "type": "product-category-badge",
+                  "settings": {
+                    "padding-block-start": 0,
+                    "padding-block-end": 4
+                  },
+                  "blocks": {}
+                },
                 "price_tVjtKg": {
                   "type": "price",
                   "settings": {
@@ -165,6 +181,8 @@
               },
               "block_order": [
                 "text_xrnftG",
+                "product_vendor_5KpQa1",
+                "product_category_7NmXe2",
                 "price_tVjtKg"
               ]
             },
@@ -228,6 +246,32 @@
               },
               "block_order": []
             },
+            "delivery_estimate_9Zx1Qc": {
+              "type": "text",
+              "name": "配送目安",
+              "settings": {
+                "text": "<p>最短3日〜1週間前後のお届け</p>",
+                "width": "100%",
+                "max_width": "normal",
+                "alignment": "left",
+                "type_preset": "paragraph",
+                "font": "var(--font-body--family)",
+                "font_size": "0.85rem",
+                "line_height": "normal",
+                "letter_spacing": "normal",
+                "case": "none",
+                "wrap": "pretty",
+                "color": "var(--color-foreground)",
+                "background": false,
+                "background_color": "#00000026",
+                "corner_radius": 0,
+                "padding-block-start": 8,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {}
+            },
             "favorite_button_9wLmQ2": {
               "type": "favorite-button",
               "settings": {
@@ -236,29 +280,13 @@
               },
               "blocks": {}
             },
-            "text_aEtTtq": {
-              "type": "product-description",
-              "name": "Product description",
+            "product_summary_aEtTtq": {
+              "type": "product-summary",
+              "name": "Product summary",
               "settings": {
-                "text": "{{ closest.product.description }}",
-                "width": "100%",
-                "max_width": "normal",
-                "alignment": "left",
-                "type_preset": "rte",
-                "font": "var(--font-primary--family)",
-                "font_size": "",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "wrap": "pretty",
-                "color": "",
-                "background": false,
-                "background_color": "#00000026",
-                "corner_radius": 0,
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
+                "heading": "商品概要",
+                "padding-block-start": 8,
+                "padding-block-end": 0
               },
               "blocks": {}
             }
@@ -268,8 +296,9 @@
             "divider_VJhene",
             "variant_picker_R3rGDr",
             "buy_buttons_eYQEYi",
+            "delivery_estimate_9Zx1Qc",
             "favorite_button_9wLmQ2",
-            "text_aEtTtq"
+            "product_summary_aEtTtq"
           ]
         }
       },
@@ -288,6 +317,13 @@
     "product_extra_info": {
       "type": "product-extra-info",
       "settings": {
+        "color_scheme": "scheme-1"
+      }
+    },
+    "product_trust_info": {
+      "type": "product-trust-info",
+      "settings": {
+        "heading": "安くて安心な商品をおとどけできるワケ",
         "color_scheme": "scheme-1"
       }
     },
@@ -443,6 +479,7 @@
     "breadcrumbs",
     "main",
     "product_extra_info",
+    "product_trust_info",
     "product_faq",
     "product_recommendations_qggXJq"
   ]
