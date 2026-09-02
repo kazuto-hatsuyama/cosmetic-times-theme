@@ -482,3 +482,132 @@ body [class*="color-scheme"].color-scheme-9 {
 .header-member-bar__text--guest + .header-member-bar__action {
   color: #c83564;
 }
+
+/* ── 21. カートページ — 現行SPサイト（/sp/cart/new_cart_s.html.cfm、
+ * /sp/css/common/new_cart_s.css、/sp/css/cart/reji.css）に準拠（2026-09-01追加）
+ * 方針: Horizon標準のcart-page構造・機能（数量選択・削除・クーポン・ポイント・配送設定等）は
+ * 一切変更せず、現行SPサイトの配色・ボタン形状・区切り線・合計ボックスのみをCSSで上書きする。
+ * 現行サイトのアクセントカラーは一貫してピンク #c83564/#c93764（ヘッダー・フッター調査時と同じ結論）。
+ * PC幅（750px以上）はサイドバー型の既存レイアウトを崩さないよう、主にモバイル幅を対象にする。 */
+
+/* 「レジへ進む」相当のチェックアウトボタン（現行SPの .pop_cartbtn を再現：
+ * ピンク地・白文字・角丸10px・太字） */
+.cart__checkout-button {
+  background-color: #c83564 !important;
+  border-color: #c83564 !important;
+  color: #ffffff !important;
+  border-radius: 10px !important;
+  font-weight: 700;
+}
+.cart__checkout-button:hover {
+  background-color: #b32c54 !important;
+  border-color: #b32c54 !important;
+}
+
+/* 「ショッピングを続ける」ボタン（現行SPの .btn を再現：クリーム地・タウプ枠・角丸10px） */
+.cart-items__empty-button {
+  background-color: #f7f2e6 !important;
+  color: #8b8471 !important;
+  border: solid 2px #8b8471 !important;
+  border-radius: 10px !important;
+  font-weight: 700;
+}
+.cart-items__empty-button:hover {
+  background-color: #efe7d3 !important;
+}
+
+/* カート内商品の区切り線（現行SPの .cart_bdr：ドット線4px #ccc）。
+ * PC幅ではHorizonのテーブル型レイアウトを崩さないためモバイル幅のみ適用 */
+@media screen and (max-width: 749px) {
+  .cart-items--dividers .cart-items__table-row {
+    border-bottom: dotted 4px #cccccc;
+    padding-bottom: var(--padding-lg);
+  }
+}
+
+/* 合計金額の強調表示（現行SPの .pred：ピンク文字） */
+.cart-totals__total-value {
+  color: #c83564;
+}
+
+/* カート合計ボックス（現行SPの .reji_result：白背景・枠線・角丸10px）をモバイル幅で再現 */
+@media screen and (max-width: 749px) {
+  .cart-summary {
+    background-color: #ffffff;
+    border: solid 1px #b6b6b6 !important;
+    border-radius: 10px !important;
+    overflow: hidden;
+  }
+}
+
+/* ポイント適用・クーポン適用ボタンも同じピンクアクセントに統一 */
+.cart-points__button,
+.cart-discount__button {
+  background-color: #c83564 !important;
+  border-color: #c83564 !important;
+  color: #ffffff !important;
+}
+.cart-points__button:hover,
+.cart-discount__button:hover {
+  background-color: #b32c54 !important;
+  border-color: #b32c54 !important;
+}
+
+/* 商品削除ボタンのホバー色をアクセントピンクに */
+.cart-items__remove:hover {
+  color: #c83564;
+}
+
+/* ── 22. 気になる！リスト（お気に入り一覧）ページ — 現行SPサイト
+ * （/sp/mypage/list_item_favorite_s.html.cfm、/sp/css/mypage/list_favorite.css）に準拠
+ * （2026-09-01追加）
+ * 方針: sections/favorite-list.liquid は snippets/resource-card.liquid をそのまま利用しているため
+ * （商品カードの内部DOM構造はHorizon標準のまま変更しない）、現行SPの「画像は左・詳細は右の横並び
+ * 1カラムリスト、カード間はグレーの区切り線」という構成をCSSのflex方向切り替えのみで再現する。
+ * 現行SPにあるカテゴリタグ（ピンク文字）・星評価・在庫アイコン・カート追加ボタンは
+ * resource-cardのデータ構造（商品タイトル・価格のみ）では再現できないため対象外
+ * （HANDOFF.md不要なほど軽微な既知の制約として本ファイルに記録）。 */
+@media screen and (max-width: 749px) {
+  .favorite-list__grid {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+  .favorite-list__item {
+    border-bottom: 2px solid #cccccc;
+    padding-block: 20px;
+  }
+  .favorite-list__item:first-child {
+    border-top: 2px solid #cccccc;
+  }
+  .favorite-list__item .resource-card {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 16px;
+  }
+  .favorite-list__item .resource-card__media {
+    width: 35%;
+    flex-shrink: 0;
+  }
+  .favorite-list__item .resource-card__content {
+    flex: 1;
+    min-width: 0;
+  }
+  .favorite-list__item .resource-card__title {
+    font-weight: 700;
+    font-size: 1.05rem;
+    color: #333333;
+  }
+}
+
+/* 見出し（現行SPの .ttl_list_favorite：太字強調）。左のアイコン画像は既存アセットに存在せず対象外 */
+.favorite-list-page__heading {
+  font-weight: 700;
+}
+
+/* 0件時の案内文（現行SPの気になるリスト活用案内ボックス。背景は現行の淡いピンク #fbdce2 を再現） */
+.favorite-list__empty {
+  background-color: #fbdce2;
+  border-radius: 10px;
+  font-weight: 700;
+}
