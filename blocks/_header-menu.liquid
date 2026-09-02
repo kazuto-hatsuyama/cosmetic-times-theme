@@ -200,28 +200,14 @@
       {%- comment -%}
         2026-08-21: 「売れ筋ランキング」ページ（/pages/ranking）への導線がAdmin管理の
         main-menuに含まれていないため、デスクトップのメガメニュー/オーバーフローメニュー
-        末尾に固定リンクとして追加。Admin GraphQL API（menuUpdate）でのメニュー編集は、
-        このストアで使えるAdmin APIトークンのスコープ不足（write_online_store_navigation
-        権限なし、ACCESS_DENIED確認済み）のため実行不可だったための対応。
-        モバイルドロワー側の同等の対応は snippets/header-drawer.liquid 参照。
+        末尾に固定リンクとして追加していたが、2026-09-02: header-group.jsonで
+        navigation_bar（下段ナビバー、新着/セール/ランキング/ブランド/カテゴリの5項目）を
+        常時表示化したことで、この上段メニューの「ランキング」単独リンクが
+        ロゴのすぐ右に地味な見た目で重複表示される状態になり、ユーザー指摘（実機確認）に
+        より削除した。ランキングへの導線は下段ナビバー（および
+        snippets/header-drawer.liquid のモバイルドロワー）に残っているため、
+        導線自体は失われない。
       {%- endcomment -%}
-      <li
-        role="presentation"
-        class="menu-list__list-item"
-        on:focus="/activate"
-        on:blur="/deactivate"
-        on:pointerenter="/activate"
-        on:pointerleave="/deactivate"
-      >
-        <a
-          href="/pages/ranking"
-          data-skip-node-update="true"
-          class="menu-list__link"
-          ref="menuitem"
-        >
-          <span class="menu-list__link-title">ランキング</span>
-        </a>
-      </li>
       <li
         class="menu-list__list-item"
         role="presentation"

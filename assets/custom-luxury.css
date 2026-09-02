@@ -289,8 +289,23 @@ textarea:focus {
   color: rgba(42, 42, 42, 0.55);
   transition: color 0.25s ease;
 }
+/* 2026-09-02: ブランドアクセントはゴールドではなくピンク#c83564（カート/ヘッダー等
+ * 既存実装と統一）。以前はゴールドが残っていたため修正（詳細はsection 23参照） */
 [class*="footer"] a:hover {
-  color: #C9A84C;
+  color: #c83564;
+}
+/* 2026-09-02: 上記 [class*="footer"] a の文字色（濃いグレー約55%）は、
+ * footer-utilities（著作権バー、色スキームscheme-9・背景ダークブラウン#524e43）の
+ * 内側にも祖先セレクタとして効いてしまい、暗い背景に暗いグレー文字が乗って
+ * ほぼ判読できない状態になっていた。scheme-9配下のリンクだけ明示的に白文字＋
+ * ホバー時ピンクへ上書きする（詳細はsection 23参照） */
+body [class*="color-scheme"].color-scheme-9 a {
+  color: #ffffff;
+  opacity: 0.85;
+}
+body [class*="color-scheme"].color-scheme-9 a:hover {
+  color: #c83564;
+  opacity: 1;
 }
 
 
@@ -356,10 +371,14 @@ a {
  * ガイド系静的ページの調査で判明した内容と同じ）を反映させている。
  * ─────────────────────────────────────────────────────────────── */
 
-/* scheme-7: ヘッダー下段ナビバー（.head_menu相当、新着/セール/ランキング/ブランド/カテゴリ） */
+/* scheme-7: ヘッダー下段ナビバー（.head_menu相当、新着/セール/ランキング/ブランド/カテゴリ）
+ * 2026-09-02: 当初の背景色#635d4d（オリーブ/カーキ）が「単色で単調・視認性が低い」との
+ * ユーザー指摘（set.png）を受け、フッター最下部の著作権バー（scheme-9・#524e43）と
+ * 同系の深いウォームブラウンに変更。ヘッダー下段とフッター最下部を同じトーンで
+ * 揃えることでサイト全体の「上下の額縁」のような統一感を出す狙い（詳細はsection 23参照） */
 body [class*="color-scheme"].color-scheme-7 {
-  --color-background:              #635d4d;
-  --color-background-rgb:          99, 93, 77;
+  --color-background:              #4a4537;
+  --color-background-rgb:          74, 69, 55;
   --color-foreground:              #ffffff;
   --color-foreground-rgb:          255, 255, 255;
   --color-foreground-heading:      #ffffff;
@@ -399,9 +418,10 @@ body [class*="color-scheme"].color-scheme-9 {
   --color-primary-rgb:             255, 255, 255;
 }
 
-/* ヘッダー下段ナビバー全体（行の背景色。#new_header .head_menu と同じ考え方） */
+/* ヘッダー下段ナビバー全体（行の背景色。#new_header .head_menu と同じ考え方）
+ * 2026-09-02: 背景色をscheme-7と同じ深いウォームブラウンに更新（上記参照） */
 .header__navigation-bar-row {
-  background-color: #635d4d;
+  background-color: #4a4537;
 }
 .header__navigation-bar-row .menu-list__item {
   color: #ffffff;
@@ -610,4 +630,178 @@ body [class*="color-scheme"].color-scheme-9 {
   background-color: #fbdce2;
   border-radius: 10px;
   font-weight: 700;
+}
+
+
+/* ── 23. ヘッダー・ナビバー・フッター ビジュアル刷新
+ *       （2026-09-02、feature/header-footer-visual-refresh）
+ *
+ * 背景: 2026-09-01時点の実装（section 20/20-1/20-2）はデスクトップの実機
+ * スクリーンショット（set.png）で「会員名・ランク表示の文字が小さく読めない」
+ * 「ナビバーが単色・単調で階層感がない」とユーザーから強い指摘を受けた。
+ *
+ * 今回からの方針転換: SP版を参照するのは「表示内容（何を出すか）」までとし、
+ * 配色・フォントサイズ・余白等の「見た目」はHorizonのデザイン言語（角丸ピル型
+ * ボタン、カード型の余白感、ブランドアクセント＝ピンク#c83564）に合わせて
+ * 作り直す。section 20/20-2の内容は変更履歴として残し、本セクションで上書きする
+ * （後方の記述が優先される、ファイル内の既存の追記スタイルを踏襲）。
+ * ─────────────────────────────────────────────────────────────── */
+
+/* --- 23-1. ヘッダー会員バー: 文字サイズ・コントラスト・階層を強化 ---
+ * Before: 白背景に0.8rem・下線リンクのみで、ロゴ行と一体化して視認性が低かった。
+ * After : 上下罫線でロゴ行と明確に区切り、ランクは塗りピルバッジ化、
+ *         ログアウト/新規会員登録はピンク枠のピルボタン化してタップ対象を明確にする。
+ *
+ * 2026-09-02（実機確認後の修正）: 上記のクリーム地（#faf8f4）指定は、実機では
+ * 効かずナビバーと同系のブラウン系背景で表示されてしまうとユーザーから指摘があった。
+ * 原因を調査した結果、次の2点が判明:
+ *  1. `.header-member-bar-row` には `.header__row` クラスも付与されており、
+ *     sections/header.liquid 自身の{% stylesheet %}内で
+ *     `.header__row { background-color: transparent; }`（コメントに
+ *     「backgroundはunderlayが担当する設計」と明記あり）が定義されている。
+ *     この section 単位の{% stylesheet %}はcontent_for_headerとして
+ *     layout/theme.liquidのcustom-luxury.cssより後に出力されるため、
+ *     同じ詳細度(0,1,0)同士の勝負でtransparentが後勝ちし、本ファイルの
+ *     background-color指定が打ち消されていた。
+ *  2. その結果、行の背景は透明になり、下に敷かれた`.header__underlay-closed`の
+ *     グラデーション（`--header-height`という、会員バー・ナビバー追加前の
+ *     古い高さを基準に色の境界を計算している）がそのまま透けて見える。
+ *     境界を超えた分は最終色（ナビバーのブラウン系）で塗り続けられるため、
+ *     会員バーの位置にはこのブラウン系が透けて表示されていた。
+ * 対策: `!important`で確実に不透明な白を敷き、ユーザー要望どおり「背景色なし
+ * （通常ページ背景と同化する白）」にする。根本原因のunderlay高さ計算自体は
+ * Horizon標準のheader.js/theme.liquid側のロジックに依存するため今回は触れず、
+ * 会員バー自身に確実な背景を持たせることで解決する。 */
+.header-member-bar-row {
+  background-color: #ffffff !important;
+  border-top: 1px solid #e0e0e0;
+  border-bottom: 1px solid #e0e0e0;
+}
+.header-member-bar {
+  padding: 12px var(--page-margin, 16px);
+  font-size: 0.95rem;
+}
+.header-member-bar__text {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #3a352c;
+}
+.header-member-bar__text--guest {
+  font-weight: 700;
+  color: #3a352c;
+}
+.header-member-bar__rank {
+  display: inline-block;
+  margin-inline-start: 2px;
+  padding: 3px 12px;
+  border-radius: 999px;
+  background-color: #c83564;
+  color: #ffffff;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  vertical-align: middle;
+}
+.header-member-bar__action {
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 6px 16px;
+  border: 1.5px solid #c83564;
+  border-radius: 999px;
+  color: #c83564;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+.header-member-bar__action:hover {
+  background-color: #c83564;
+  color: #ffffff;
+}
+
+/* --- 23-2. ヘッダー下段ナビバー: 文字サイズ・区切り線・ホバーで階層感を出す ---
+ * Before: 0.75rem前後・全項目同系色の羅列で、クリック可能に見えず単調だった。
+ * After : フォントを大きく太くし、項目間に縦区切り線を追加。ホバー時は
+ *         ピンクのアンダーラインが下からせり上がるアニメーションで
+ *         「押せる」ことを明示する（Horizonのmenu-list標準のホバー挙動を踏襲）。 */
+.header__navigation-bar-row .menu-list__list {
+  gap: 0;
+}
+.header__navigation-bar-row .menu-list__list > li {
+  display: flex;
+  align-items: stretch;
+}
+.header__navigation-bar-row .menu-list__list > li:not(:last-child) {
+  border-right: 1px solid rgba(255, 255, 255, 0.22);
+}
+.header__navigation-bar-row .menu-list__item {
+  display: inline-flex;
+  align-items: center;
+  position: relative;
+  padding: 13px 22px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  color: #ffffff;
+  transition: background-color 0.2s ease;
+}
+.header__navigation-bar-row .menu-list__item::after {
+  content: '';
+  position: absolute;
+  left: 22px;
+  right: 22px;
+  bottom: 6px;
+  height: 2px;
+  background-color: #c83564;
+  transform: scaleX(0);
+  transition: transform 0.2s ease;
+}
+.header__navigation-bar-row .menu-list__item:hover,
+.header__navigation-bar-row .menu-list__item:focus-visible {
+  background-color: rgba(255, 255, 255, 0.08);
+  color: #ffffff;
+}
+.header__navigation-bar-row .menu-list__item:hover::after,
+.header__navigation-bar-row .menu-list__item:focus-visible::after {
+  transform: scaleX(1);
+}
+
+/* --- 23-3. フッター: CTAボタン・SNSアイコン・リンク間隔を整理 ---
+ * Before: 電話CTAボタンがscheme-8既定のタウプブラウン地でブランドアクセント
+ *         （ピンク）と連動しておらず、SNSアイコンも小さく間隔が詰まっていた。
+ * After : 電話CTAをピンク枠のアウトラインボタン（ホバーで塗りつぶし）にして
+ *         カートページのCTA（section 21）と統一。SNSアイコンを一回り大きく・
+ *         間隔を広げてタップしやすくする。 */
+.color-scheme-8 a.button[href^="tel:"] {
+  background-color: transparent !important;
+  border: 2px solid #c83564 !important;
+  color: #c83564 !important;
+  font-weight: 700;
+}
+.color-scheme-8 a.button[href^="tel:"]:hover {
+  background-color: #c83564 !important;
+  color: #ffffff !important;
+}
+.color-scheme-8 .social-icons__wrapper {
+  gap: 20px;
+}
+.color-scheme-8 .social-icons__icon-wrapper,
+.color-scheme-8 .social-icons__icon {
+  width: 26px;
+  height: 26px;
+}
+.color-scheme-8 .social-icons__icon-wrapper a:hover {
+  color: #c83564;
+}
+.color-scheme-8 .footer-content a {
+  display: inline-block;
+  padding-block: 2px;
+}
+
+/* --- 23-4. 上段ヘッダー行（ロゴ・検索/アカウント/カートアイコン）の統一感 ---
+ * 構造・アイコン自体はHorizon標準のまま変更しない（問い合わせアイコン等の追加は
+ * 別タスクの既知の制約として`CLAUDE.md`に記載済み）。ホバー時の色だけ
+ * ブランドアクセント（ピンク）に統一し、下段の会員バー・ナビバーと
+ * 一貫した「押せる要素はピンクに反応する」という視覚言語で揃える。 */
+#header-component .header-actions__action:hover {
+  color: #c83564;
 }
