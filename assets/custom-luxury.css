@@ -579,14 +579,20 @@ body [class*="color-scheme"].color-scheme-9 {
 }
 
 /* ── 22. 気になる！リスト（お気に入り一覧）ページ — 現行SPサイト
- * （/sp/mypage/list_item_favorite_s.html.cfm、/sp/css/mypage/list_favorite.css）に準拠
- * （2026-09-01追加）
+ * （/sp/mypage/list_item_favorite_s.html.cfm、/sp/css/mypage/list_favorite.css）を参考に構成
+ * （2026-09-01追加）。
  * 方針: sections/favorite-list.liquid は snippets/resource-card.liquid をそのまま利用しているため
  * （商品カードの内部DOM構造はHorizon標準のまま変更しない）、現行SPの「画像は左・詳細は右の横並び
- * 1カラムリスト、カード間はグレーの区切り線」という構成をCSSのflex方向切り替えのみで再現する。
+ * 1カラムリスト」という表示内容（構造）のみを再現し、Horizon標準のflex方向切り替えで実装する。
  * 現行SPにあるカテゴリタグ（ピンク文字）・星評価・在庫アイコン・カート追加ボタンは
  * resource-cardのデータ構造（商品タイトル・価格のみ）では再現できないため対象外
- * （HANDOFF.md不要なほど軽微な既知の制約として本ファイルに記録）。 */
+ * （HANDOFF.md不要なほど軽微な既知の制約として本ファイルに記録）。
+ * **2026-09-02改修（feature/listing-pages-visual-refresh）**: 当初は区切り線・本文色・
+ * 0件時の背景色をSP版CSSの数値（グレー#cccccc・本文色#333333・淡いピンク#fbdce2）から
+ * そのまま数値コピーしていたが、header/footerと同じ「表示内容はSP版・見た目はHorizonの
+ * デザイン言語（既存のCSS変数・カラースキーム）に合わせる」方針（section 23参照）を
+ * このページにも適用し、色はテーマ共通のCSS変数（--color-border・--color-foreground・
+ * --color-primary-rgb）を再利用する形に置き換えた。レイアウト構造は変更していない。 */
 @media screen and (max-width: 749px) {
   .favorite-list__grid {
     display: flex;
@@ -594,11 +600,11 @@ body [class*="color-scheme"].color-scheme-9 {
     gap: 0;
   }
   .favorite-list__item {
-    border-bottom: 2px solid #cccccc;
+    border-bottom: 1px solid var(--color-border);
     padding-block: 20px;
   }
   .favorite-list__item:first-child {
-    border-top: 2px solid #cccccc;
+    border-top: 1px solid var(--color-border);
   }
   .favorite-list__item .resource-card {
     flex-direction: row;
@@ -616,7 +622,8 @@ body [class*="color-scheme"].color-scheme-9 {
   .favorite-list__item .resource-card__title {
     font-weight: 700;
     font-size: 1.05rem;
-    color: #333333;
+    /* 2026-09-02: ハードコードされた#333333を撤去。.resource-card__content が既に
+     * var(--color-foreground) を継承しているため、テーマの配色設定にそのまま追従する */
   }
 }
 
@@ -625,9 +632,12 @@ body [class*="color-scheme"].color-scheme-9 {
   font-weight: 700;
 }
 
-/* 0件時の案内文（現行SPの気になるリスト活用案内ボックス。背景は現行の淡いピンク #fbdce2 を再現） */
+/* 0件時の案内文。2026-09-02: SP版の淡いピンク(#fbdce2)ベタ移植をやめ、このセクションの
+ * color_scheme設定に連動するアクセント変数（--color-primary-rgb。既定scheme-1ではゴールド
+ * #C9A84C）から薄いティントを生成する形に変更。特定の色を新規に増やさず既存変数を再利用する */
 .favorite-list__empty {
-  background-color: #fbdce2;
+  background-color: rgb(var(--color-primary-rgb) / 0.08);
+  border: 1px solid rgb(var(--color-primary-rgb) / 0.25);
   border-radius: 10px;
   font-weight: 700;
 }
@@ -804,4 +814,49 @@ body [class*="color-scheme"].color-scheme-9 {
  * 一貫した「押せる要素はピンクに反応する」という視覚言語で揃える。 */
 #header-component .header-actions__action:hover {
   color: #c83564;
+}
+
+
+/* ── 24. 一覧系動的ページ（ランキング・ブランド一覧・特集一覧・お気に入り一覧）
+ *       ビジュアル点検・調整（2026-09-02、feature/listing-pages-visual-refresh）
+ *
+ * 背景: header/footer（section 20→23で修正）と同じ「SP版参照は表示内容のみ、見た目は
+ * Horizon既存ページのデザイン言語に合わせる」原則を、動的な一覧ページ4種
+ * （sections/ranking-list.liquid・brand-list.liquid・feature-list.liquid・favorite-list.liquid）
+ * にも適用して点検した。
+ *
+ * 点検結果: これら4セクション自身の{% style %}ブロックは、header/footerのsection 20とは
+ * 異なり、そもそもSP版CFMの配色を直接数値コピーしたものではなく、既にテーマ共通のCSS変数
+ * （--color-foreground-rgb・--opacity-5/10/20/30/40/70/90等、snippets/theme-styles-variables.liquid
+ * で定義済みの実変数）で組まれたニュートラルな実装だった。唯一、favorite-list.liquid向けの
+ * 追加スタイル（本ファイルsection 22）だけがSP版CSSの数値をそのまま移植しており、上記で
+ * 修正済み。
+ *
+ * 一方で、これら新規カード（.brand-card・.feature-card）や一覧行（.ranking-list__link）には
+ * ホバー時の反応が一切無く、同じページ内・他ページで既に使われている
+ * .product-card__content（section 8）・.collection-card（section 11）が持つ
+ * 「金アクセントの枠線＋シャドウで軽く浮き上がる」ホバー演出が欠けており、テーマ全体としての
+ * 一体感がやや不足していた。SP版由来ではなく、既存Horizonカードの値をそのまま再利用する形で
+ * 追加する（新規の色を増やさない）。
+ *
+ * sections/main-collection.liquid はカスタムCSSが本ファイルに一切存在せず、Horizon標準の
+ * 商品グリッド機能のみで構成されているため、点検の結果「変更不要（既にHorizon標準そのもの）」
+ * と判断した。 */
+
+.brand-card,
+.feature-card {
+  transition: border-color 0.35s ease, box-shadow 0.35s ease, transform 0.35s ease;
+}
+.brand-card:hover,
+.feature-card:hover {
+  border-color: rgba(201, 168, 76, 0.5) !important;
+  box-shadow: 0 10px 36px rgba(0, 0, 0, 0.08) !important;
+  transform: translateY(-2px);
+}
+
+.ranking-list__link {
+  transition: color 0.25s ease;
+}
+.ranking-list__link:hover .ranking-list__title {
+  color: #c9a84c;
 }
