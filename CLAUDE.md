@@ -277,7 +277,9 @@ shopify theme push --only "config/settings_data.json" --allow-live --theme 13881
 
 ## 商品ページ静的コンテンツ追加（2026-09-02、`feature/product-page-static-content-additions`ブランチ）
 
-データ系（`D:\Inetpub\shopify_data`）からの依頼（`tasks/20260902-product-page-static-content-additions/spec.md`）。07_現サイト比較シートで指摘された、商品ページ上で独立表示されていない/本文に埋もれている項目への対応。ユーザー確認前のためmainへのマージ・pushは未実施。
+データ系（`D:\Inetpub\shopify_data`）からの依頼（`tasks/20260902-product-page-static-content-additions/spec.md`）。07_現サイト比較シートで指摘された、商品ページ上で独立表示されていない/本文に埋もれている項目への対応。
+
+→ **2026-09-02: cosmetic-times-prdの未公開プレビューテーマ（`preview_theme_id=139188142289`）でユーザー実機確認・承認を得て、mainへマージ（マージコミット`bd693c8`）・origin/mainへpush済み**。続けて`gh workflow run "Deploy to Shopify" --ref main`でGitHub Actionsを手動実行し、live theme（Horizon、テーマID`138815832273`、cosmetic-times-prd）へ反映済み（実行ID`33602953361`、`deploy`ジョブ成功）。プレビューテーマ`139188142289`は反映後に削除してよいかユーザー確認待ちのため、本セッションでは未削除。cosmetic-times-devには一切手を加えていない（誤って作成した同名の未公開テーマ`163516121316`は同セッション内で削除済み、詳細は本ファイルの過去の記述参照）。
 
 | ファイル | 内容 |
 |---|---|
