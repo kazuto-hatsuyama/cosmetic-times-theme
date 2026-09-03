@@ -293,6 +293,18 @@ shopify theme push --only "config/settings_data.json" --allow-live --theme 13881
 
 **本タスクで実機確認未実施**: 本セッションでもChrome DevTools MCP・Playwright MCPいずれも実際には接続されておらず、`shopify theme check`によるlint検証（新規ファイルはエラー0件、既存の警告のみ）とコードレビューのみでの対応。特にカテゴリ判定ロジック（数字handle優先→フォールバック）と商品概要の自動箇条書き化（`</p>`/`<br>`/`。`の各分割パターン）は、実際の商品データでの見え方をプレビューテーマで確認することを推奨。
 
+## 商品詳細ページ 割引率バッジ追加（2026-09-03、`feature/discount-percentage-badge`ブランチ）
+
+データ系（`D:\Inetpub\shopify_data`）からの依頼。`CT_Shopify_UI設計書.xlsx`の`02_PCワイヤーフレーム`シートで、セール価格の近くに「54％OFF!」のような割引率バッジが想定されていたが、`snippets/price.liquid`にはセール価格（`price`）・元価格の取り消し線表示（`compare_at_price`）のみで割引率表示が無かった不足分の追加実装。
+
+| ファイル | 内容 |
+|---|---|
+| `snippets/price.liquid` | `show_compare_price`が真の場合に割引率バッジ「◯◯％OFF!」を追加。計算は`selected_variant.compare_at_price`（`compare_at_price_raw`として新規保持）と既存の`price_raw`（フォーマット前の生の数値、`money`/`money_with_currency`フィルタ適用前）を使い、`floor((compare_at_price_raw - price_raw) / compare_at_price_raw * 100)`で切り捨て（実際の割引率を超えて表示しないための安全側の丸め）。`compare_at_price_raw > 0`もガードし0除算を回避。表示位置は`price__sale`ブロック内、`price-item--sale`（セール価格）と同じ`price-item__group`内・直後（`show_sale_price_first`のtrue/false両分岐に追加）。`compare_at_price`が無い通常価格商品では`discount_percent`が`null`のまま表示されない。商品カード（`is_product_card`が真）・商品詳細ページのどちらも同じ`show_compare_price`条件を使っているため、両方で同じロジックのまま表示される（商品詳細ページに限定する強い理由が無いため区別なし）。CSSは既存の`{% style %}`ブロック（このテーマの既知の不具合により`{% stylesheet %}`は使わない方針）に`.discount-badge`（背景`#9B2226`の濃い赤・白文字・角丸ピル）を追加 |
+
+**確認事項**: バッジの配色（濃い赤`#9B2226`）はブランドアクセントのピンク`#c83564`や既存のゴールド系タグバッジ（`.product-badges__badge`）とは別系統の新規色。セール・割引という緊急性を示すため意図的に別色にしたが、既存デザイン言語との統一を優先するなら`#c83564`系への変更も検討可能（判断が必要ならユーザーに確認）。
+
+**未確認事項**: 本セッションでもChrome DevTools MCP・Playwright MCPいずれも実際には接続されておらず、`shopify theme check`によるlint検証（新規エラー・警告0件）とコードレビューのみで実装。実際のセール商品ページでのバッジ表示・計算結果の見た目はプレビューテーマでの実機確認を推奨。
+
 ## MCPサーバー設定
 
 | サーバー名 | 用途 | 設定場所 | 状態 |
