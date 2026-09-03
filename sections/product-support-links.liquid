@@ -1,0 +1,121 @@
+{% comment %}
+  購入サポートリンク一覧セクション（新規・2026-09-02、
+  tasks/20260902-product-page-discovery-and-support-sections/spec.md）。
+
+  リンク先は既存の実在ページ（D:\Inetpub\shopify_theme\templates\page.*.json、いずれも
+  2026-08-24作成・tasks/20260824-static-guide-legal-pages/spec.md）の想定URLをそのまま使用する
+  （sections/guide-top.liquid, sections/faq.liquid等、既に同じURLへリンクしている実装がある
+  ことを確認済み）:
+    - ご注文について             → /pages/order-guide
+    - お支払いについて           → /pages/payment-guide
+    - 商品のお届けと送料について → /pages/shipping-guide
+    - 返品・交換・キャンセルについて → /pages/return-guide
+    - 会員サービス、ポイントについて → /pages/member-guide
+
+  「マイページでできること」については、対応する静的ページが現時点で存在しない
+  （sections/member-guide.liquidのコメントにも「マイページ配下の機能は本タスクの対象外」と
+  明記されている）。存在しないページへリンクしないというルールのため、暫定的にShopify標準の
+  顧客アカウントページ（routes.account_url、ネイティブカスタマーアカウント機能で必ず実在する
+  URL）へ直接誘導している。「マイページでできること」を説明する専用ページを別途作成する場合は
+  リンク先の差し替えが必要（判断に迷った点として報告済み）。
+
+  templates/product.json の "order" で product_faq の直後・product_recommendations の
+  直前に配置（データ系からの提案配置をそのまま採用）。
+{% endcomment %}
+
+<div class="section-background color-{{ section.settings.color_scheme }}"></div>
+<div class="product-support color-{{ section.settings.color_scheme }} page-width-normal">
+  {% if section.settings.heading != blank %}
+    <h2 class="product-support__heading">{{ section.settings.heading }}</h2>
+  {% endif %}
+  <ul class="product-support__list" role="list">
+    <li><a href="/pages/order-guide" class="product-support__link">ご注文について</a></li>
+    <li><a href="/pages/payment-guide" class="product-support__link">お支払いについて</a></li>
+    <li><a href="/pages/shipping-guide" class="product-support__link">商品のお届けと送料について</a></li>
+    <li><a href="/pages/return-guide" class="product-support__link">返品・交換・キャンセルについて</a></li>
+    <li><a href="/pages/member-guide" class="product-support__link">会員サービス、ポイントについて</a></li>
+    <li><a href="{{ routes.account_url }}" class="product-support__link">マイページでできること</a></li>
+  </ul>
+</div>
+
+{% comment %}
+  {% stylesheet %} ではなく {% style %} を使用する（sections/ranking-list.liquid等で判明済みの
+  既知の不具合を避けるため）。
+{% endcomment %}
+{% style %}
+  .product-support {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding-block: 32px;
+  }
+
+  .product-support__heading {
+    margin: 0;
+  }
+
+  .product-support__list {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .product-support__link {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 16px;
+    border: 1px solid rgb(var(--color-foreground-rgb) / var(--opacity-10, 0.1));
+    border-radius: 8px;
+    color: inherit;
+    text-decoration: none;
+    font-size: 0.95rem;
+  }
+
+  .product-support__link::after {
+    content: '＞';
+    margin-left: 12px;
+    opacity: 0.5;
+  }
+
+  .product-support__link:hover {
+    border-color: rgb(var(--color-foreground-rgb) / var(--opacity-30, 0.3));
+  }
+
+  @media screen and (min-width: 750px) {
+    .product-support__list {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+{% endstyle %}
+
+{% schema %}
+{
+  "name": "購入サポートリンク",
+  "enabled_on": {
+    "templates": ["product"]
+  },
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "見出し",
+      "default": "お買い物のサポート"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:settings.color_scheme",
+      "default": "scheme-1"
+    }
+  ],
+  "presets": [
+    {
+      "name": "購入サポートリンク"
+    }
+  ]
+}
+{% endschema %}

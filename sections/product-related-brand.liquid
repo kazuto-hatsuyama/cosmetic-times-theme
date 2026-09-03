@@ -1,0 +1,196 @@
+{% comment %}
+  同じブランドの商品セクション（新規・2026-09-02、
+  tasks/20260902-product-page-discovery-and-support-sections/spec.md）。
+
+  商品が属するブランドSmartCollectionの判定方法は sections/brand-list.liquid
+  （tasks/20260824-brand-list-page/spec.md）と同一の基準を使う: custom.kana メタフィールドの
+  有無（ブランドコレクションにのみ設定されており、新着・アウトレット・カテゴリ等の他種別の
+  コレクションと区別できる唯一の手段。tags・SmartCollectionのrulesはLiquidから参照不可）。
+  SmartCollectionの自動振り分けルール自体がvendorを条件にしているため、対象商品は既に
+  自身のブランドコレクションに自動収録済み。closest.product.vendor の文字列をブランド名と
+  直接突合する必要はなく、product.collections をループしてこの条件を満たす最初の
+  コレクションを採用すればよい（blocks/product-category-badge.liquidの判定方式と同型）。
+
+  「もっと見る」リンクの遷移先は、この商品固有のブランドコレクションページ
+  （/collections/{handle}）ではなく、依頼内容に沿って全ブランド一覧ページ
+  （/pages/brand-list、sections/brand-list.liquid）としている。同一ブランドの商品を
+  もっと見たいだけなら個別コレクションへ直接送る方が自然という見方もあるため、
+  この点は判断に迷った点として報告済み（要確認）。
+{% endcomment %}
+{% liquid
+  assign product = closest.product
+  assign brand_collection = blank
+
+  if product != blank
+    for c in product.collections
+      unless c.handle == 'all'
+        if c.metafields.custom.kana != blank and brand_collection == blank
+          assign brand_collection = c
+        endif
+      endunless
+    endfor
+  endif
+%}
+
+{% if brand_collection != blank and brand_collection.products_count > 1 %}
+  <div class="section-background color-{{ section.settings.color_scheme }}"></div>
+  <div class="product-related color-{{ section.settings.color_scheme }} page-width-normal">
+    <div class="product-related__header">
+      <h2 class="product-related__heading">{{ brand_collection.title }}の商品</h2>
+      <a href="/pages/brand-list" class="product-related__more">同じブランドの商品をもっと見る ＞</a>
+    </div>
+    <ul class="product-related__grid" role="list">
+      {% liquid
+        assign max_items = 8
+        assign shown = 0
+      %}
+      {% for p in brand_collection.products %}
+        {% unless p.id == product.id %}
+          {% if shown < max_items %}
+            <li class="product-related__item">
+              <a href="{{ p.url }}" class="product-related__link">
+                <span class="product-related__media">
+                  {% if p.featured_image %}
+                    <img
+                      class="product-related__image"
+                      src="{{ p.featured_image | image_url: width: 300 }}"
+                      srcset="
+                        {{ p.featured_image | image_url: width: 150 }} 150w,
+                        {{ p.featured_image | image_url: width: 300 }} 300w,
+                        {{ p.featured_image | image_url: width: 600 }} 600w
+                      "
+                      sizes="(min-width: 750px) 200px, 45vw"
+                      loading="lazy"
+                      width="{{ p.featured_image.width }}"
+                      height="{{ p.featured_image.height }}"
+                      alt="{{ p.featured_image.alt | escape | default: p.title | escape }}"
+                    >
+                  {% else %}
+                    <span class="product-related__image product-related__image--placeholder"></span>
+                  {% endif %}
+                </span>
+                <span class="product-related__body">
+                  <span class="product-related__title">{{ p.title }}</span>
+                  <span class="product-related__price">{% render 'price', product_resource: p %}</span>
+                </span>
+              </a>
+            </li>
+            {% assign shown = shown | plus: 1 %}
+          {% endif %}
+        {% endunless %}
+      {% endfor %}
+    </ul>
+  </div>
+{% endif %}
+
+{% comment %}
+  {% stylesheet %} ではなく {% style %} を使用する（sections/ranking-list.liquid,
+  sections/brand-list.liquid等で判明済みの、Horizonのコンパイル済みCSSバンドルに
+  {% stylesheet %} が含まれない既知の不具合を避けるため）。
+{% endcomment %}
+{% style %}
+  .product-related {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding-block: 32px;
+  }
+
+  .product-related__header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .product-related__heading {
+    margin: 0;
+  }
+
+  .product-related__more {
+    font-size: 0.9rem;
+    color: inherit;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  .product-related__more:hover {
+    text-decoration: underline;
+  }
+
+  .product-related__grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .product-related__link {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .product-related__media {
+    display: block;
+    aspect-ratio: 1 / 1;
+    background: rgb(var(--color-foreground-rgb) / var(--opacity-5, 0.05));
+  }
+
+  .product-related__image,
+  .product-related__image--placeholder {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 4px;
+  }
+
+  .product-related__body {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .product-related__title {
+    font-size: 0.9rem;
+    line-height: 1.4;
+  }
+
+  .product-related__price {
+    font-size: 0.9rem;
+  }
+
+  @media screen and (min-width: 750px) {
+    .product-related__grid {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+{% endstyle %}
+
+{% schema %}
+{
+  "name": "同じブランドの商品",
+  "enabled_on": {
+    "templates": ["product"]
+  },
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:settings.color_scheme",
+      "default": "scheme-1"
+    }
+  ],
+  "presets": [
+    {
+      "name": "同じブランドの商品"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,168 @@
+{% comment %}
+  最近チェックした商品セクション（新規・2026-09-02、
+  tasks/20260902-product-page-discovery-and-support-sections/spec.md）。
+
+  既存の assets/recently-viewed-products.js（RecentlyViewedクラス、localStorageに直近4件の
+  商品IDを保持するだけのクラス）と、そのトラッキング呼び出し
+  （snippets/scripts.liquid: `RecentlyViewed.addProduct('{{ product.id }}')`、商品ページ表示時に
+  実行される）は、調査の結果すでに存在していた。しかし唯一の利用先は検索フライアウト
+  （assets/predictive-search.js）の「最近チェックした商品」空状態表示のみで、商品ページ自体
+  には一度も表示されていなかった。
+
+  predictive-search.js が使っている仕組み（Theme.routes.search_url に
+  `q=id:X OR id:Y`＋`resources[type]=product` を付与し、Section Rendering API
+  （@theme/section-renderer の sectionRenderer.getSectionHTML）で対象セクションを
+  再取得する方式、assets/predictive-search.js の #getRecentlyViewedProductsMarkup参照）を
+  そのまま再利用し、このセクション自身を同じ方法で再取得する。
+
+  SSR時点ではlocalStorageを参照できないため、初期状態（このファイル自体の直接レンダリング時）
+  は search.results が空でグリッドも空になる。クライアントサイドの
+  assets/product-recently-viewed.js（Web Component）が、現在の商品IDを除外した閲覧履歴IDで
+  上記の再取得を行い、結果が1件以上あればグリッドを差し替えて表示する
+  （0件の場合はセクション全体を hidden のままにする）。
+{% endcomment %}
+
+<recently-viewed-products-component
+  class="recently-viewed color-{{ section.settings.color_scheme }}"
+  data-section-id="{{ section.id }}"
+  data-current-product-id="{{ closest.product.id }}"
+  hidden
+>
+  <div class="section-background color-{{ section.settings.color_scheme }}"></div>
+  <div class="recently-viewed__inner page-width-normal">
+    {% if section.settings.heading != blank %}
+      <h2 class="recently-viewed__heading">{{ section.settings.heading }}</h2>
+    {% endif %}
+    <ul class="recently-viewed__grid" data-recently-viewed-grid role="list">
+      {% assign viewed_products = search.results | where: 'object_type', 'product' %}
+      {% for product in viewed_products %}
+        <li class="recently-viewed__item">
+          <a href="{{ product.url }}" class="recently-viewed__link">
+            <span class="recently-viewed__media">
+              {% if product.featured_image %}
+                <img
+                  class="recently-viewed__image"
+                  src="{{ product.featured_image | image_url: width: 300 }}"
+                  srcset="
+                    {{ product.featured_image | image_url: width: 150 }} 150w,
+                    {{ product.featured_image | image_url: width: 300 }} 300w,
+                    {{ product.featured_image | image_url: width: 600 }} 600w
+                  "
+                  sizes="(min-width: 750px) 180px, 45vw"
+                  loading="lazy"
+                  width="{{ product.featured_image.width }}"
+                  height="{{ product.featured_image.height }}"
+                  alt="{{ product.featured_image.alt | escape | default: product.title | escape }}"
+                >
+              {% else %}
+                <span class="recently-viewed__image recently-viewed__image--placeholder"></span>
+              {% endif %}
+            </span>
+            <span class="recently-viewed__body">
+              <span class="recently-viewed__title">{{ product.title }}</span>
+              <span class="recently-viewed__price">{% render 'price', product_resource: product %}</span>
+            </span>
+          </a>
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+</recently-viewed-products-component>
+
+{% comment %}
+  {% stylesheet %} ではなく {% style %} を使用する（sections/ranking-list.liquid等で判明済みの
+  既知の不具合を避けるため）。
+{% endcomment %}
+{% style %}
+  .recently-viewed__inner {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding-block: 32px;
+  }
+
+  .recently-viewed__heading {
+    margin: 0;
+  }
+
+  .recently-viewed__grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .recently-viewed__link {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .recently-viewed__media {
+    display: block;
+    aspect-ratio: 1 / 1;
+    background: rgb(var(--color-foreground-rgb) / var(--opacity-5, 0.05));
+  }
+
+  .recently-viewed__image,
+  .recently-viewed__image--placeholder {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 4px;
+  }
+
+  .recently-viewed__body {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .recently-viewed__title {
+    font-size: 0.9rem;
+    line-height: 1.4;
+  }
+
+  .recently-viewed__price {
+    font-size: 0.9rem;
+  }
+
+  @media screen and (min-width: 750px) {
+    .recently-viewed__grid {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+{% endstyle %}
+
+{% schema %}
+{
+  "name": "最近チェックした商品",
+  "enabled_on": {
+    "templates": ["product"]
+  },
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "見出し",
+      "default": "最近チェックした商品"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:settings.color_scheme",
+      "default": "scheme-1"
+    }
+  ],
+  "presets": [
+    {
+      "name": "最近チェックした商品"
+    }
+  ]
+}
+{% endschema %}

@@ -177,13 +177,34 @@
                     "padding-inline-end": 0
                   },
                   "blocks": {}
+                },
+                "sku_4RtYkq": {
+                  "type": "sku",
+                  "name": "商品番号",
+                  "settings": {
+                    "type_preset": "paragraph",
+                    "width": "100%",
+                    "alignment": "left",
+                    "font": "var(--font-body--family)",
+                    "font_size": "0.85rem",
+                    "line_height": "normal",
+                    "letter_spacing": "normal",
+                    "case": "none",
+                    "color": "var(--color-foreground)",
+                    "padding-block-start": 4,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {}
                 }
               },
               "block_order": [
                 "text_xrnftG",
                 "product_vendor_5KpQa1",
                 "product_category_7NmXe2",
-                "price_tVjtKg"
+                "price_tVjtKg",
+                "sku_4RtYkq"
               ]
             },
             "divider_VJhene": {
@@ -246,6 +267,32 @@
               },
               "block_order": []
             },
+            "free_shipping_banner_2Wq7Nx": {
+              "type": "text",
+              "name": "送料無料バナー",
+              "settings": {
+                "text": "<p><strong>8,000円以上（代引手数料除く）のご注文で全国送料無料</strong></p>",
+                "width": "100%",
+                "max_width": "normal",
+                "alignment": "left",
+                "type_preset": "paragraph",
+                "font": "var(--font-body--family)",
+                "font_size": "0.85rem",
+                "line_height": "normal",
+                "letter_spacing": "normal",
+                "case": "none",
+                "wrap": "pretty",
+                "color": "var(--color-foreground)",
+                "background": false,
+                "background_color": "#00000026",
+                "corner_radius": 0,
+                "padding-block-start": 8,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {}
+            },
             "delivery_estimate_9Zx1Qc": {
               "type": "text",
               "name": "配送目安",
@@ -296,6 +343,7 @@
             "divider_VJhene",
             "variant_picker_R3rGDr",
             "buy_buttons_eYQEYi",
+            "free_shipping_banner_2Wq7Nx",
             "delivery_estimate_9Zx1Qc",
             "favorite_button_9wLmQ2",
             "product_summary_aEtTtq"
@@ -330,6 +378,13 @@
     "product_faq": {
       "type": "product-faq",
       "settings": {
+        "color_scheme": "scheme-1"
+      }
+    },
+    "product_support_links": {
+      "type": "product-support-links",
+      "settings": {
+        "heading": "お買い物のサポート",
         "color_scheme": "scheme-1"
       }
     },
@@ -473,6 +528,25 @@
         "padding-block-start": 48,
         "padding-block-end": 48
       }
+    },
+    "product_related_brand": {
+      "type": "product-related-brand",
+      "settings": {
+        "color_scheme": "scheme-1"
+      }
+    },
+    "product_related_category": {
+      "type": "product-related-category",
+      "settings": {
+        "color_scheme": "scheme-1"
+      }
+    },
+    "product_recently_viewed": {
+      "type": "product-recently-viewed",
+      "settings": {
+        "heading": "最近チェックした商品",
+        "color_scheme": "scheme-1"
+      }
     }
   },
   "order": [
@@ -481,6 +555,10 @@
     "product_extra_info",
     "product_trust_info",
     "product_faq",
-    "product_recommendations_qggXJq"
+    "product_support_links",
+    "product_recommendations_qggXJq",
+    "product_related_brand",
+    "product_related_category",
+    "product_recently_viewed"
   ]
 }
