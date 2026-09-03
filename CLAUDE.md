@@ -305,6 +305,20 @@ shopify theme push --only "config/settings_data.json" --allow-live --theme 13881
 
 **未確認事項**: 本セッションでもChrome DevTools MCP・Playwright MCPいずれも実際には接続されておらず、`shopify theme check`によるlint検証（新規エラー・警告0件）とコードレビューのみで実装。実際のセール商品ページでのバッジ表示・計算結果の見た目はプレビューテーマでの実機確認を推奨。
 
+## 商品詳細ページ お気に入り登録数表示追加（2026-09-03、`feature/favorite-count-display`ブランチ）
+
+データ系（`D:\Inetpub\shopify_data`）からの依頼。`CT_Shopify_UI設計書.xlsx`の`02_PCワイヤーフレーム`シートで想定されていた「♥330人がお気に入り登録中」表示。データ系が旧DBの既存お気に入り登録数を商品単位（PRODUCTレベル、バリアント単位ではない）のメタフィールド`custom.favorite_count`（number_integer）へ一括投入済み・以降は`toggle_favorite.cfm`経由の登録/解除の都度バックエンドが+1/-1しリアルタイムに最新値を保つ運用のため、テーマ側はメタフィールドを読み取ってSSR表示するのみ。
+
+| ファイル | 内容 |
+|---|---|
+| `blocks/favorite-button.liquid` | `product.metafields.custom.favorite_count.value`を取得し、既存の「お気に入り」トグルボタン（ログイン時）/ログインリンク（未ログイン時）の直後に「♥{N}人がお気に入り登録中」を表示する`<p class="favorite-count">`を追加。0または未設定（blank）の場合は非表示（データ側は0の場合に明示的な値をセットしないケースがあるため、blank/0の両方をカバー）。ログイン状態を問わず表示（商品単位の集計値のため、お気に入りボタン自体の表示状態＝ログイン有無とは独立）。**`snippets/price.liquid`の`repeat_count`実装で判明した「別商品のカード（`resource-card.liquid`経由）にまで表示が漏れる」事故と同種の事故を避けるため、`template.name == 'product'`を明示的に確認したうえで`closest.product`（このブロックのスコープ内で解決される商品、変数名`product`）から値を取得する設計にした**。本ブロックは`templates/product.json`の`main`セクション内`product-details`ブロックの子として商品詳細ページでのみ使用され（`resource-card.liquid`・商品一覧カードからは呼ばれない、grep確認済み）、実際に事故は発生しないが、同種のPRODUCTレベルメタフィールドを扱う際の防御的な実装として踏襲。CSSは既存の`{% style %}`ブロック（本ブロックはこのストアの既知の不具合により元から`{% stylesheet %}`を使わず`{% style %}`方式）に`.favorite-count`/`.favorite-count__value`を追加（`snippets/price.liquid`の`.expected-points`/`.repeat-count`と同じフォントサイズ・`--color-foreground`等の既存CSS変数を使用） |
+
+**確認事項（実機確認済み）**: `shopify theme push --unpublished`でプレビューテーマ（`favorite-count-preview`、#139199348945、確認後削除済み）を作成し、認証済みcurl（`/password`フォーム送信→cookie保持）でストアパスワード保護を突破した上でSSR結果を直接検証（ブラウザGUIは本タスクの実行環境からは未接続）。
+- `favorite_count`>0の商品: ハンドル`24814072`（36）・`21311236`（2）・`09610556`（29）・`07710447`（1）・`07710219`（64）・`01710276`（31）・`55600026`（1）で「♥{N}人がお気に入り登録中」が表示されることを確認
+- `favorite_count`=0/未設定の商品: ハンドル`59300004`ほか、`/products.json`から取得した先頭15件中13件で該当pタグが一切出力されないことを確認（お気に入りボタン自体（`favorite-button-block`）は正常に表示されており、カウント表示のみが条件どおり非表示になっていることを確認）
+- mainマージ・`gh workflow run "Deploy to Shopify" --ref main`実行後（実行ID`33738415558`、`deploy`ジョブ成功）、本番liveテーマ（cosmetic-times-prd、パスワード保護状態のまま）上でもハンドル`24814072`（36表示）・`59300004`（非表示）を再確認済み
+- `shopify theme check --fail-level=error`: 新規エラー・警告0件（既存の無関係な4エラー・201警告は`sections/faq.liquid`・`sections/payment-guide.liquid`等の既存ファイルのもので本タスクの変更とは無関係）
+
 ## 商品詳細ページ リピート人数表示追加（2026-09-03、`feature/repeat-count-display`ブランチ）
 
 データ系（`D:\Inetpub\shopify_data`）からの依頼。`CT_Shopify_UI設計書.xlsx`の`02_PCワイヤーフレーム`シートで想定されていた「現在200人のCTメンバーがリピートしています」表示。データ系が`DM_UnitItemMartDT.RepeatCnt`（ItemCD=バリアント単位の既存集計値）をバリアントメタフィールド`custom.repeat_count`（number_integer、`sync_product.cfm`の`repeat_count`ステップで同期）へ反映済みのため、テーマ側はメタフィールドを読み取ってSSR表示するのみ。
