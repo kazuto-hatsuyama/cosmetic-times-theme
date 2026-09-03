@@ -77,6 +77,14 @@
     endif
   endif
 
+  # リピート人数（商品詳細ページのみ・商品カードでは表示しない）
+  # DM_UnitItemMartDT.RepeatCnt をShopify側で反映したバリアントメタフィールド。
+  # 0/未設定は「非表示」の判定をテーマ側で行う運用（データ側は常に値をセットする）
+  assign repeat_count = null
+  if is_product_card == false
+    assign repeat_count = selected_variant.metafields.custom.repeat_count.value
+  endif
+
   # Determine if currency code should be shown
   assign use_currency = false
   if product.handle == product_resource.handle
@@ -170,6 +178,11 @@
       {%- endif -%}
     </div>
   {%- endif -%}
+  {%- if repeat_count != blank and repeat_count != 0 -%}
+    <div class="repeat-count">
+      <span class="repeat-count__value">現在{{ repeat_count }}人のCTメンバーがリピートしています</span>
+    </div>
+  {%- endif -%}
   {%- if selected_variant.unit_price and show_unit_price %}
     {%- liquid
       if use_currency
@@ -214,6 +227,18 @@
   }
 
   .expected-points__value {
+    font-weight: 600;
+    color: var(--color-foreground);
+  }
+
+  .repeat-count {
+    margin-top: 0.35em;
+    font-size: min(0.85em, var(--font-paragraph--size));
+    font-weight: var(--font-paragraph--weight);
+    color: rgb(var(--color-foreground-rgb) / var(--opacity-subdued-text));
+  }
+
+  .repeat-count__value {
     font-weight: 600;
     color: var(--color-foreground);
   }
