@@ -305,6 +305,21 @@ shopify theme push --only "config/settings_data.json" --allow-live --theme 13881
 
 **未確認事項**: 本セッションでもChrome DevTools MCP・Playwright MCPいずれも実際には接続されておらず、`shopify theme check`によるlint検証（新規エラー・警告0件）とコードレビューのみで実装。実際のセール商品ページでのバッジ表示・計算結果の見た目はプレビューテーマでの実機確認を推奨。
 
+## 商品詳細ページ リピート人数表示追加（2026-09-03、`feature/repeat-count-display`ブランチ）
+
+データ系（`D:\Inetpub\shopify_data`）からの依頼。`CT_Shopify_UI設計書.xlsx`の`02_PCワイヤーフレーム`シートで想定されていた「現在200人のCTメンバーがリピートしています」表示。データ系が`DM_UnitItemMartDT.RepeatCnt`（ItemCD=バリアント単位の既存集計値）をバリアントメタフィールド`custom.repeat_count`（number_integer、`sync_product.cfm`の`repeat_count`ステップで同期）へ反映済みのため、テーマ側はメタフィールドを読み取ってSSR表示するのみ。
+
+| ファイル | 内容 |
+|---|---|
+| `snippets/price.liquid` | `selected_variant.metafields.custom.repeat_count.value`を`repeat_count`として取得し、「現在{{ repeat_count }}人のCTメンバーがリピートしています」を`.expected-points`の直後に表示。0/blank（未設定）は非表示（データ側は0も含め常に値をセットする運用のため、表示判定は必ずテーマ側で行う）。**商品詳細ページの本体表示のみに限定する判定を`template.name == 'product' and product.handle == product_resource.handle`で行う**（`is_product_card`という既存の判定フラグは`template.name != 'product'`というページ単位の判定であり、商品詳細ページ内で`snippets/resource-card.liquid`経由で表示される「おすすめ商品」カード（別商品）ではこの判定が効かず`false`のまま漏れてしまう不具合を実機確認で検出・回避）。CSSは既存の`{% style %}`ブロックに`.repeat-count`/`.repeat-count__value`を追加（`.expected-points`と同じフォントサイズ・色のトーンに合わせ、`--color-foreground`等の既存CSS変数を使用） |
+
+**⚠️ 既知の課題（未修正・要確認）**: 上記の実機確認で、`.expected-points`（獲得予定ポイント）・`.discount-badge`（割引率バッジ）は`is_product_card`のみで判定しているため、商品詳細ページ内のおすすめ商品カード（`resource-card.liquid`経由）にも同様に表示が漏れている可能性が高い（今回のリピート人数表示と同一原因）。今回は新規追加分（リピート人数）のみ`product.handle == product_resource.handle`判定で回避したが、既存2機能側の修正はスコープ外のため未対応。本番影響を確認の上、必要なら別タスクで`is_product_card`の判定自体（または各利用箇所）を見直すこと。
+
+**確認事項（実機確認済み）**: `shopify theme dev`でリモートプレビューテーマ（139199021265、確認後削除済み）をローカルにプロキシし、認証済みcurlで複数商品ページのSSR結果を直接検証（ブラウザGUIは本タスクの実行環境からは未接続）。
+- `RepeatCnt`>0の商品（例: ハンドル`24814072`）: 「現在4人のCTメンバーがリピートしています」が本体表示・スティッキーバー双方に表示されることを確認
+- `RepeatCnt`=0/未設定の商品（例: ハンドル`21311236`, `09610556`, `07710447`, `07710219`, `01710276`）: 該当divが一切出力されないことを確認
+- 上記の漏れ修正後、`resource-card.liquid`経由のおすすめ商品カードでリピート人数表示が出力されないことをdiv数（0または2=本体+スティッキーバー）で確認
+
 ## MCPサーバー設定
 
 | サーバー名 | 用途 | 設定場所 | 状態 |
