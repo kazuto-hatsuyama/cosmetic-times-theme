@@ -12,6 +12,7 @@
   assign show_sale_price_first = show_sale_price_first | default: false
   assign selected_variant = product_resource.selected_or_first_available_variant
   assign price = selected_variant.price
+  assign price_raw = selected_variant.price
   assign compare_at_price = selected_variant.compare_at_price
 
   assign show_compare_price = false
@@ -45,6 +46,25 @@
       assign has_volume_pricing = true
       assign price_min = selected_variant.quantity_price_breaks.last.price
       assign price_max = selected_variant.price
+    endif
+  endif
+
+  # 獲得予定ポイント（商品詳細ページのみ・商品カードでは表示しない）
+  # 還元率: ログイン中は customer.metafields.custom.point_rate、未設定/未ログインは
+  # shop.metafields.custom.default_point_rate にフォールバック（sync_member.cfmのpoint_rate_syncステップが同期）
+  assign expected_points = null
+  if is_product_card == false and price_raw != blank
+    assign expected_point_rate = shop.metafields.custom.default_point_rate.value
+    if customer
+      assign customer_point_rate = customer.metafields.custom.point_rate.value
+      if customer_point_rate != blank
+        assign expected_point_rate = customer_point_rate
+      endif
+    endif
+    if expected_point_rate != blank
+      # price_raw はcents相当（JPYは小数点なしのため常に100の倍数）なので割って実額(円)に戻す
+      assign price_yen = price_raw | divided_by: 100
+      assign expected_points = price_yen | times: expected_point_rate | divided_by: 100.0 | floor
     endif
   endif
 
@@ -126,6 +146,15 @@
       {% endif %}
     </div>
   {% endif %}
+  {%- if expected_points != null -%}
+    <div class="expected-points">
+      {%- if customer -%}
+        <span class="expected-points__label">獲得予定ポイント：</span><span class="expected-points__value">{{ expected_points }}pt</span>
+      {%- else -%}
+        <span class="expected-points__label">会員登録で</span><span class="expected-points__value">{{ expected_points }}pt</span><span class="expected-points__label">獲得</span>
+      {%- endif -%}
+    </div>
+  {%- endif -%}
   {%- if selected_variant.unit_price and show_unit_price %}
     {%- liquid
       if use_currency
@@ -145,3 +174,17 @@
     {{- 'content.volume_pricing_available' | t -}}
   </small>
 {%- endif -%}
+
+{% style %}
+  .expected-points {
+    margin-top: 0.35em;
+    font-size: min(0.85em, var(--font-paragraph--size));
+    font-weight: var(--font-paragraph--weight);
+    color: rgb(var(--color-foreground-rgb) / var(--opacity-subdued-text));
+  }
+
+  .expected-points__value {
+    font-weight: 600;
+    color: var(--color-foreground);
+  }
+{% endstyle %}
