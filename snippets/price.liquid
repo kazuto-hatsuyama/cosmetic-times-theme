@@ -20,6 +20,15 @@
     assign show_compare_price = true
   endif
 
+  # 割引率バッジ（◯◯％OFF!）用。フォーマット前の生の値（cents相当）で計算する。
+  # compare_at_price/price はこの後 money/money_with_currency フィルタで文字列化されるため、
+  # その前に price_raw と同様の生の数値を確保しておく
+  assign compare_at_price_raw = selected_variant.compare_at_price
+  assign discount_percent = null
+  if show_compare_price and compare_at_price_raw > 0
+    assign discount_percent = compare_at_price_raw | minus: price_raw | times: 100.0 | divided_by: compare_at_price_raw | floor
+  endif
+
   if product_resource == blank
     assign price = 1999
   endif
@@ -129,6 +138,9 @@
         <span class="price-item__group">
           <span class="visually-hidden">{{ 'content.price_sale' | t }}&nbsp;</span>
           <span class="price-item--sale price">{{ price | default: '&nbsp;' }}</span>
+          {%- if discount_percent != null -%}
+            <span class="discount-badge">{{ discount_percent }}％OFF!</span>
+          {%- endif -%}
         </span>
         <span class="price-item__group">
           <span class="visually-hidden">{{ 'content.price_regular' | t }}&nbsp;</span>
@@ -142,6 +154,9 @@
         <span class="price-item__group">
           <span class="visually-hidden">{{ 'content.price_sale' | t }}&nbsp;</span>
           <span class="price-item--sale price">{{ price | default: '&nbsp;' }}</span>
+          {%- if discount_percent != null -%}
+            <span class="discount-badge">{{ discount_percent }}％OFF!</span>
+          {%- endif -%}
         </span>
       {% endif %}
     </div>
@@ -176,6 +191,21 @@
 {%- endif -%}
 
 {% style %}
+  .discount-badge {
+    display: inline-block;
+    margin-left: 0.5em;
+    padding: 0.15em 0.6em;
+    background-color: #9B2226;
+    color: #ffffff;
+    font-size: 0.78em;
+    font-weight: 700;
+    line-height: 1.4;
+    letter-spacing: 0.02em;
+    border-radius: 3px;
+    vertical-align: middle;
+    white-space: nowrap;
+  }
+
   .expected-points {
     margin-top: 0.35em;
     font-size: min(0.85em, var(--font-paragraph--size));
