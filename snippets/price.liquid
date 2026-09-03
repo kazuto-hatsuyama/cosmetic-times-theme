@@ -77,11 +77,14 @@
     endif
   endif
 
-  # リピート人数（商品詳細ページのみ・商品カードでは表示しない）
+  # リピート人数（商品詳細ページの本体表示のみ・商品カードでは表示しない）
   # DM_UnitItemMartDT.RepeatCnt をShopify側で反映したバリアントメタフィールド。
   # 0/未設定は「非表示」の判定をテーマ側で行う運用（データ側は常に値をセットする）
+  # is_product_card は template.name のみで判定しているため、商品詳細ページ内の
+  # おすすめ商品カード（resource-card.liquid経由・別商品）では false のまま漏れて
+  # しまう。ここでは「表示中の商品詳細ページ自身」であることまで厳密に判定する
   assign repeat_count = null
-  if is_product_card == false
+  if template.name == 'product' and product.handle == product_resource.handle
     assign repeat_count = selected_variant.metafields.custom.repeat_count.value
   endif
 
