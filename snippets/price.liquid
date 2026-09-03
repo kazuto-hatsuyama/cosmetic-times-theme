@@ -148,7 +148,11 @@
   {% endif %}
   {%- if expected_points != null -%}
     <div class="expected-points">
-      <span class="expected-points__label">獲得予定ポイント：</span><span class="expected-points__value">{{ expected_points }}pt</span>
+      {%- if customer -%}
+        <span class="expected-points__label">獲得予定ポイント：</span><span class="expected-points__value">{{ expected_points }}pt</span>
+      {%- else -%}
+        <span class="expected-points__label">会員登録で</span><span class="expected-points__value">{{ expected_points }}pt</span><span class="expected-points__label">獲得</span>
+      {%- endif -%}
     </div>
   {%- endif -%}
   {%- if selected_variant.unit_price and show_unit_price %}
