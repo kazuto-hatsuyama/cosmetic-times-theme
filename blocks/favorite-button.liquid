@@ -35,6 +35,22 @@
       endif
     endfor
   endif
+
+  # お気に入り登録数（2026-09-03追加）。データ系（D:\Inetpub\shopify_data）が実装した
+  # 商品単位（PRODUCTレベル、バリアント単位ではない）のメタフィールド custom.favorite_count
+  # （number_integer）を表示する。toggle_favorite.cfm経由の登録/解除の都度バックエンドが
+  # +1/-1しており常に最新値のため、テーマ側でのキャッシュ待ち等は不要。
+  # 0または未設定(blank)の場合は非表示にする（データ側は0の場合に明示的な値をセットしない
+  # ケースがあるため、blank/0の両方をカバーする）。
+  # snippets/price.liquid の repeat_count 実装で判明した「別商品のカード
+  # （resource-card.liquid経由）にまで表示が漏れる」事故を避けるため、
+  # 本ブロックがtemplate.name == 'product'（商品詳細ページ）でのみ使われることを
+  # 明示的に確認したうえで、グローバルのproductオブジェクトではなくこのブロックの
+  # スコープ内で解決されるclosest.product（上のproduct変数）から値を取得する
+  assign favorite_count = null
+  if template.name == 'product' and product
+    assign favorite_count = product.metafields.custom.favorite_count.value
+  endif
 %}
 
 <div
@@ -95,6 +111,11 @@
       <span class="favorite-button__label">お気に入りに追加</span>
     </a>
   {% endif %}
+  {%- if favorite_count != blank and favorite_count != 0 -%}
+    <p class="favorite-count">
+      <span class="favorite-count__value">♥{{ favorite_count }}人がお気に入り登録中</span>
+    </p>
+  {%- endif -%}
 </div>
 
 {% style %}
@@ -156,6 +177,18 @@
     margin: 6px 0 0;
     font-size: 0.8rem;
     opacity: 0.85;
+  }
+
+  .favorite-count {
+    margin: 6px 0 0;
+    font-size: min(0.85em, var(--font-paragraph--size));
+    font-weight: var(--font-paragraph--weight);
+    color: rgb(var(--color-foreground-rgb) / var(--opacity-subdued-text));
+  }
+
+  .favorite-count__value {
+    font-weight: 600;
+    color: var(--color-foreground);
   }
 {% endstyle %}
 
