@@ -584,8 +584,10 @@
             2026-09-01: main-menu自体が空（もしくはHome/Catalog/Contactのみ）で、
             ドロワーメニューに実質「ランキング」しか表示されていなかったと判明したため、
             現行SPサイトのナビバー（新着/セール/ランキング/ブランド/カテゴリ）と同じ
-            項目を同じ理由で固定リンク化。セールは専用コレクション未作成のため
-            /collections/outlet を暫定使用（blocks/_header-menu.liquidの同種コメント参照）。
+            項目を同じ理由で固定リンク化。セールは当初専用コレクション未作成のため
+            /collections/outlet を暫定使用していたが、2026-09-04にデータ系が専用
+            SmartCollection（handle=sale）を作成したため /collections/sale へ差し替え済み
+            （blocks/_header-menu.liquidの同種コメント、D:\Inetpub\HANDOFF.md参照）。
           {%- endcomment -%}
           <li class="menu-drawer__list-item--flat">
             <a
@@ -597,7 +599,7 @@
           </li>
           <li class="menu-drawer__list-item--flat">
             <a
-              href="/collections/outlet"
+              href="/collections/sale"
               class="menu-drawer__menu-item menu-drawer__menu-item--mainlist menu-drawer__animated-element focus-inset"
             >
               <span class="menu-drawer__menu-item-text wrap-text">セール</span>

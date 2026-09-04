@@ -63,10 +63,11 @@
               Admin GraphQL API（menuUpdate）は write_online_store_navigation スコープが
               無く ACCESS_DENIED（既出の制約、上記elseブランチのコメント参照）のため、
               main-menu 自体の編集はユーザー側での対応が必要。
-              セールは対応する専用コレクションが未作成のため、既存の割引訴求コレクション
-              （/collections/outlet、templates/index.jsonのpromo_bannersで"OUTLET SALE"
-              として既に使われているもの）を暫定的に割り当てている。専用の「セール」
-              コレクションが作成され次第、リンク先を差し替えること。
+              セールは当初、対応する専用コレクションが未作成だったため既存の割引訴求
+              コレクション（/collections/outlet）を暫定的に割り当てていたが、
+              2026-09-04にデータ系が専用SmartCollection（handle=sale, custom.on_sale
+              基準）を作成したため、/collections/sale へ差し替え済み
+              （D:\Inetpub\HANDOFF.md参照）。
             {%- endcomment -%}
             <li>
               <a
@@ -78,7 +79,7 @@
             </li>
             <li>
               <a
-                href="/collections/outlet"
+                href="/collections/sale"
                 class="menu-list__item"
               >
                 セール
