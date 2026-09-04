@@ -424,9 +424,18 @@ body [class*="color-scheme"].color-scheme-9 {
  * （compiled_assets/styles.css側、同じクラスセレクタ1つ分の詳細度）が読み込み順で後勝ちし、
  * 背景が透明になって白文字（下記.menu-list__item）が白背景に紛れて実質見えなくなる不具合が発生した
  * （navigation_bar機能追加以降ずっと潜在していたが2026-09-04のフルpushで顕在化・実機確認で発覚）。
- * 詳細度の勝敗をロード順に依存させないよう!importantを付与して確実に上書きする。 */
+ * 詳細度の勝敗をロード順に依存させないよう!importantを付与して確実に上書きする。
+ * 2026-09-04（同日中に追加修正）: 上記だけでは実機Playwright検証で依然として見えないことが判明。
+ * 真因は行の直下の子要素 <div class="menu-list menu-list--mobile color-scheme-1">
+ * （Horizon標準、header-menuブロックが自動付与するcolor-scheme-1）がHorizon標準の
+ * `.color-scheme-1{background-color:var(--color-background)}`（白）を独自に持ってしまい、
+ * この子要素の不透明な白背景が親行の茶色背景を完全に覆い隠していたため（子要素側は今回の
+ * !important修正の対象外だった）。子要素の背景を透明にして親の色を見せるよう追加。 */
 .header__navigation-bar-row {
   background-color: #4a4537 !important;
+}
+.header__navigation-bar-row .menu-list--mobile {
+  background-color: transparent !important;
 }
 .header__navigation-bar-row .menu-list__item {
   color: #ffffff;
