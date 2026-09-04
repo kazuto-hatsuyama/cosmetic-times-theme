@@ -419,9 +419,14 @@ body [class*="color-scheme"].color-scheme-9 {
 }
 
 /* ヘッダー下段ナビバー全体（行の背景色。#new_header .head_menu と同じ考え方）
- * 2026-09-02: 背景色をscheme-7と同じ深いウォームブラウンに更新（上記参照） */
+ * 2026-09-02: 背景色をscheme-7と同じ深いウォームブラウンに更新（上記参照）
+ * 2026-09-04（緊急修正）: !important無しだと、Horizon標準の`.header__row{background-color:transparent}`
+ * （compiled_assets/styles.css側、同じクラスセレクタ1つ分の詳細度）が読み込み順で後勝ちし、
+ * 背景が透明になって白文字（下記.menu-list__item）が白背景に紛れて実質見えなくなる不具合が発生した
+ * （navigation_bar機能追加以降ずっと潜在していたが2026-09-04のフルpushで顕在化・実機確認で発覚）。
+ * 詳細度の勝敗をロード順に依存させないよう!importantを付与して確実に上書きする。 */
 .header__navigation-bar-row {
-  background-color: #4a4537;
+  background-color: #4a4537 !important;
 }
 .header__navigation-bar-row .menu-list__item {
   color: #ffffff;
