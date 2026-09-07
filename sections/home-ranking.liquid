@@ -1,0 +1,273 @@
+{% comment %}
+  トップページ用「売れ筋ランキング」ティザーセクション（新規・2026-09-07、
+  D:\Inetpub\shopify_data\stitch\top\ のデザイン案対応）。
+
+  データソースは sections/ranking-list.liquid（/pages/ranking の全件表示用）と同一の
+  shop.metafields.custom.sales_ranking（list.product_reference、Shop単位、配列の並び順が
+  そのまま順位）を再利用する。並び順そのものが順位のため専用の数値フィールドは無く、
+  forloop.indexを順位として表示する。
+
+  ranking-list.liquidを直接{% render %}することはできない（Shopifyのsectionは
+  render不可・sectionタグ/JSONテンプレート経由のみ）ため、上位4件だけを抜き出す
+  ティザー専用の縦グリッドカードUIとして別ファイルに実装している。
+  「すべて見る」の遷移先は既存の/pages/ranking（ranking-list.liquid使用）。
+
+  参照GIDが削除済み商品を指している場合は配列要素がblankになるためスキップする
+  （ranking-list.liquidと同じ方針）。0件/blankの場合はセクション自体を出力しない
+  （トップページで空の「準備中」枠を見せないため、全件表示ページとは挙動を分けている）。
+{% endcomment %}
+{% liquid
+  assign ranking_products_all = shop.metafields.custom.sales_ranking.value
+  assign max_items = 4
+%}
+
+{% if ranking_products_all != blank %}
+  <div class="section-background color-{{ section.settings.color_scheme }}"></div>
+  <div class="home-ranking color-{{ section.settings.color_scheme }} page-width-normal">
+    <div class="home-ranking__header">
+      <p class="home-ranking__eyebrow">{{ section.settings.eyebrow | default: 'DAILY BESTSELLERS' }}</p>
+      <h2 class="home-ranking__heading">{{ section.settings.heading | default: '売れ筋ランキング' }}</h2>
+      <a href="/pages/ranking" class="home-ranking__more">
+        すべて見る
+        <span class="material-symbols-outlined" aria-hidden="true">arrow_forward</span>
+      </a>
+    </div>
+
+    <ol class="home-ranking__grid">
+      {% assign shown = 0 %}
+      {% for product in ranking_products_all %}
+        {% if product != blank and shown < max_items %}
+          {% liquid
+            assign rank = shown | plus: 1
+            assign variant = product.selected_or_first_available_variant
+            assign show_sale_badge = false
+            if variant.compare_at_price > variant.price
+              assign show_sale_badge = true
+              assign discount_percent = variant.compare_at_price | minus: variant.price | times: 100.0 | divided_by: variant.compare_at_price | round
+            endif
+            assign review_rating = product.metafields.reviews.rating.value.rating
+            assign review_rating_count = product.metafields.reviews.rating_count.value
+          %}
+          <li class="home-ranking__item">
+            <a href="{{ product.url }}" class="home-ranking__link">
+              <span class="home-ranking__media">
+                <span class="home-ranking__rank{% if rank <= 3 %} home-ranking__rank--top{% endif %}" data-rank="{{ rank }}">{{ rank | prepend: '0' | slice: -2, 2 }}</span>
+                {% if show_sale_badge %}
+                  <span class="home-ranking__discount">{{ discount_percent }}% OFF</span>
+                {% endif %}
+                {% if product.featured_image %}
+                  <img
+                    class="home-ranking__image"
+                    src="{{ product.featured_image | image_url: width: 400 }}"
+                    srcset="
+                      {{ product.featured_image | image_url: width: 200 }} 200w,
+                      {{ product.featured_image | image_url: width: 400 }} 400w,
+                      {{ product.featured_image | image_url: width: 800 }} 800w
+                    "
+                    sizes="(min-width: 750px) 260px, 45vw"
+                    loading="lazy"
+                    width="{{ product.featured_image.width }}"
+                    height="{{ product.featured_image.height }}"
+                    alt="{{ product.featured_image.alt | escape | default: product.title | escape }}"
+                  >
+                {% else %}
+                  <span class="home-ranking__image home-ranking__image--placeholder"></span>
+                {% endif %}
+              </span>
+              <span class="home-ranking__body">
+                {% if product.vendor != blank %}
+                  <span class="home-ranking__vendor">{{ product.vendor }}</span>
+                {% endif %}
+                <span class="home-ranking__title">{{ product.title }}</span>
+                {% if review_rating != blank and review_rating_count > 0 %}
+                  <span class="home-ranking__rating">
+                    <span class="material-symbols-outlined" aria-hidden="true">star</span>
+                    {{ review_rating }}
+                    <span class="home-ranking__rating-count">({{ review_rating_count }})</span>
+                  </span>
+                {% endif %}
+                <span class="home-ranking__price">{% render 'price', product_resource: product %}</span>
+              </span>
+            </a>
+          </li>
+          {% assign shown = shown | plus: 1 %}
+        {% endif %}
+      {% endfor %}
+    </ol>
+  </div>
+{% endif %}
+
+{% style %}
+  .home-ranking {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding-block: 32px;
+  }
+
+  .home-ranking__header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    column-gap: 16px;
+    row-gap: 4px;
+  }
+
+  .home-ranking__eyebrow {
+    width: 100%;
+    margin: 0;
+  }
+
+  .home-ranking__heading {
+    margin: 0;
+  }
+
+  .home-ranking__more {
+    margin-inline-start: auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    color: inherit;
+    text-decoration: none;
+    font-size: 0.9rem;
+    white-space: nowrap;
+  }
+
+  .home-ranking__grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .home-ranking__link {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .home-ranking__media {
+    position: relative;
+    display: block;
+    aspect-ratio: 1 / 1;
+    background: rgb(var(--color-foreground-rgb) / var(--opacity-5, 0.05));
+  }
+
+  .home-ranking__image,
+  .home-ranking__image--placeholder {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .home-ranking__rank {
+    position: absolute;
+    z-index: 2;
+    top: 8px;
+    left: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 28px;
+    height: 28px;
+    padding-inline: 4px;
+    font-weight: var(--font-heading-bold--weight, 700);
+    font-size: 0.85rem;
+  }
+
+  .home-ranking__discount {
+    position: absolute;
+    z-index: 2;
+    top: 8px;
+    right: 8px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 3px 8px;
+  }
+
+  .home-ranking__body {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .home-ranking__vendor {
+    font-size: 0.72rem;
+    opacity: 0.65;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .home-ranking__title {
+    font-size: 0.9rem;
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .home-ranking__rating {
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+    font-size: 0.8rem;
+  }
+
+  .home-ranking__rating .material-symbols-outlined {
+    font-size: 0.95rem;
+  }
+
+  .home-ranking__rating-count {
+    opacity: 0.6;
+  }
+
+  .home-ranking__price {
+    font-size: 0.95rem;
+  }
+
+  @media screen and (min-width: 750px) {
+    .home-ranking__grid {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+{% endstyle %}
+
+{% schema %}
+{
+  "name": "売れ筋ランキング（トップ）",
+  "enabled_on": {
+    "templates": ["index"]
+  },
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "英字ラベル",
+      "default": "DAILY BESTSELLERS"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "見出し",
+      "default": "売れ筋ランキング"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:settings.color_scheme",
+      "default": "scheme-1"
+    }
+  ],
+  "presets": [
+    {
+      "name": "売れ筋ランキング（トップ）"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,110 @@
+{% comment %}
+  トップページ用 信頼性バッジ帯（新規・2026-09-07、D:\Inetpub\shopify_data\stitch\top\の
+  デザイン案対応）。
+
+  デザイン案（code.html）のこの帯には固有の電話番号・送料額（例:「全国一律600円〜」）等の
+  具体的な数値が含まれていたが、Stitchが生成した静的モックのダミー値であり本サイトの実際の
+  ポリシーと矛盾する（実際は8,000円以上で送料無料。CLAUDE.md/sections/product-information.liquidの
+  free_shipping_banner等で確認済み）。ダミーの数値をそのまま転記しないという方針
+  （商品詳細ページ対応時と同様）に従い、本セクションでは以下の実在する事実のみを使用する:
+    - 100%正規品保証: sections/product-trust-info.liquidと同じ実際の品質保証方針の要約
+    - 8,000円以上で送料無料: sections/product-information.liquidのfree_shipping_bannerと同一文言
+    - ポイント還元・会員ランク優待: 既存のポイント/ランク割引機能（実装済み）の要約
+    - カスタマーサポート: 電話番号は不明のため記載せず、実在する/pages/contactへ誘導する
+{% endcomment %}
+<div class="section-background color-{{ section.settings.color_scheme }}"></div>
+<div class="home-trust-badges color-{{ section.settings.color_scheme }} page-width-normal">
+  <ul class="home-trust-badges__grid" role="list">
+    <li class="home-trust-badges__item">
+      <span class="material-symbols-outlined home-trust-badges__icon" aria-hidden="true">verified_user</span>
+      <span class="home-trust-badges__title">100%正規品保証</span>
+      <span class="home-trust-badges__desc">全品鑑定済みの正規ルート仕入れ。安心してご購入いただけます。</span>
+    </li>
+    <li class="home-trust-badges__item">
+      <span class="material-symbols-outlined home-trust-badges__icon" aria-hidden="true">local_shipping</span>
+      <span class="home-trust-badges__title">送料無料</span>
+      <span class="home-trust-badges__desc">8,000円以上（代引手数料除く）のご注文で全国送料無料。</span>
+    </li>
+    <li class="home-trust-badges__item">
+      <span class="material-symbols-outlined home-trust-badges__icon" aria-hidden="true">redeem</span>
+      <span class="home-trust-badges__title">ポイント・会員優待</span>
+      <span class="home-trust-badges__desc">お買い物のたびにポイント還元。会員ランクに応じた割引もご用意。</span>
+    </li>
+    <li class="home-trust-badges__item">
+      <a href="/pages/contact" class="home-trust-badges__link">
+        <span class="material-symbols-outlined home-trust-badges__icon" aria-hidden="true">support_agent</span>
+        <span class="home-trust-badges__title">カスタマーサポート</span>
+        <span class="home-trust-badges__desc">ご不明点はお気軽にお問い合わせください。</span>
+      </a>
+    </li>
+  </ul>
+</div>
+
+{% style %}
+  .home-trust-badges {
+    padding-block: 32px;
+  }
+
+  .home-trust-badges__grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .home-trust-badges__item,
+  .home-trust-badges__link {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    text-align: center;
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .home-trust-badges__icon {
+    font-size: 1.6rem;
+  }
+
+  .home-trust-badges__title {
+    font-size: 0.9rem;
+    font-weight: var(--font-heading-bold--weight, 700);
+  }
+
+  .home-trust-badges__desc {
+    font-size: 0.78rem;
+    line-height: 1.5;
+    opacity: 0.7;
+  }
+
+  @media screen and (min-width: 750px) {
+    .home-trust-badges__grid {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+{% endstyle %}
+
+{% schema %}
+{
+  "name": "信頼性バッジ帯（トップ）",
+  "enabled_on": {
+    "templates": ["index"]
+  },
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:settings.color_scheme",
+      "default": "scheme-1"
+    }
+  ],
+  "presets": [
+    {
+      "name": "信頼性バッジ帯（トップ）"
+    }
+  ]
+}
+{% endschema %}
