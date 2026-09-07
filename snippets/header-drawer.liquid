@@ -586,8 +586,9 @@
             現行SPサイトのナビバー（新着/セール/ランキング/ブランド/カテゴリ）と同じ
             項目を同じ理由で固定リンク化。セールは当初専用コレクション未作成のため
             /collections/outlet を暫定使用していたが、2026-09-04にデータ系が専用
-            SmartCollection（handle=sale）を作成したため /collections/sale へ差し替え済み
-            （blocks/_header-menu.liquidの同種コメント、D:\Inetpub\HANDOFF.md参照）。
+            SmartCollection（handle=sale）を作成したため一時的に /collections/sale へ
+            差し替えていた。2026-09-07、ユーザー指示により/collections/outletへ再度
+            差し戻し（blocks/_header-menu.liquidの同種コメント、D:\Inetpub\HANDOFF.md参照）。
           {%- endcomment -%}
           <li class="menu-drawer__list-item--flat">
             <a
@@ -599,7 +600,7 @@
           </li>
           <li class="menu-drawer__list-item--flat">
             <a
-              href="/collections/sale"
+              href="/collections/outlet"
               class="menu-drawer__menu-item menu-drawer__menu-item--mainlist menu-drawer__animated-element focus-inset"
             >
               <span class="menu-drawer__menu-item-text wrap-text">セール</span>
