@@ -874,3 +874,424 @@ body [class*="color-scheme"].color-scheme-9 {
 .ranking-list__link:hover .ranking-list__title {
   color: #c9a84c;
 }
+
+
+/* ================================================================
+   ── 25. 商品詳細ページ（PDP）デザイン刷新
+   Stitchデザイン案（D:\Inetpub\shopify_data\stitch\item\DESIGN.md /
+   screen.png / code.html）準拠、2026-09-07。
+
+   方針: サイト全体（ゴールド×Cormorant Garamond）はそのまま維持し、
+   商品詳細ページ（body.template-product）のみ、デザイン案の配色
+   （ベリークリムゾン #c92a54 系）・フォント（Manrope / Plus Jakarta Sans）・
+   角丸・シャドウ・カード化トーンに切り替える。全て body.template-product
+   配下にスコープしたセレクタで実装し、他ページ（トップ・一覧・カート等）
+   のスタイルには一切影響しない。
+
+   対応セクション: sections/breadcrumbs.liquid, sections/product-information.liquid
+   （main、Horizonブロック構成）, sections/product-extra-info.liquid,
+   sections/product-trust-info.liquid, sections/product-faq.liquid,
+   sections/product-support-links.liquid, sections/product-recommendations
+   （Horizon _product-card ブロック）, sections/product-related-brand.liquid,
+   sections/product-related-category.liquid, sections/product-recently-viewed.liquid,
+   snippets/product-media-gallery-content.liquid（正規品バッジ追加分）。
+   ================================================================ */
+
+/* ── 25-1. デザイントークン（body.template-productスコープのみ） ── */
+body.template-product {
+  --pdp-color-surface: #faf9f6;
+  --pdp-color-surface-card: #ffffff;
+  --pdp-color-surface-low: #f4f3f1;
+  --pdp-color-border: #ebe8e3;
+  --pdp-color-border-hover: #d4cec5;
+  --pdp-color-text: #1a1a1a;
+  --pdp-color-text-secondary: #6e6b66;
+  --pdp-color-text-muted: #99958f;
+  --pdp-color-primary: #c92a54;
+  --pdp-color-primary-deep: #a7053d;
+  --pdp-color-primary-subtle: #fdf2f4;
+  --pdp-color-champagne: #a88f78;
+  --pdp-color-champagne-light: #f4ede4;
+  --pdp-color-success: #15803d;
+  --pdp-color-rating: #f59e0b;
+  --pdp-radius-card: 0.75rem;
+  --pdp-radius-md: 0.5rem;
+  --pdp-radius-sm: 0.375rem;
+  --pdp-radius-pill: 9999px;
+  --pdp-shadow-card: 0 2px 8px rgba(26, 26, 26, 0.05);
+  --pdp-shadow-card-hover: 0 8px 24px rgba(26, 26, 26, 0.08);
+  --pdp-font-heading: 'Manrope', 'Cormorant Garamond', sans-serif;
+  --pdp-font-body: 'Plus Jakarta Sans', 'Noto Sans JP', sans-serif;
+
+  /* Horizonのボタン/価格が参照する共通変数もPDP内だけ上書き（クリムゾンCTAに統一） */
+  --color-primary-button-text: #ffffff;
+  --color-primary-button-background: var(--pdp-color-primary);
+  --color-primary-button-border: var(--pdp-color-primary);
+  --color-primary-button-hover-text: #ffffff;
+  --color-primary-button-hover-background: var(--pdp-color-primary-deep);
+  --color-primary-button-hover-border: var(--pdp-color-primary-deep);
+
+  --color-secondary-button-text: var(--pdp-color-text);
+  --color-secondary-button-background: transparent;
+  --color-secondary-button-border: rgba(26, 26, 26, 0.28);
+  --color-secondary-button-hover-text: #ffffff;
+  --color-secondary-button-hover-background: var(--pdp-color-text);
+  --color-secondary-button-hover-border: var(--pdp-color-text);
+
+  background-color: var(--pdp-color-surface) !important;
+}
+
+body.template-product .section-background {
+  background-color: var(--pdp-color-surface) !important;
+}
+
+/* 見出し・本文フォント（PDP内のみMenrope/Plus Jakarta Sansへ） */
+body.template-product h1,
+body.template-product h2,
+body.template-product h3,
+body.template-product .h1,
+body.template-product .h2,
+body.template-product .h3 {
+  font-family: var(--pdp-font-heading) !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.01em !important;
+  color: var(--pdp-color-text) !important;
+}
+
+body.template-product,
+body.template-product p,
+body.template-product li,
+body.template-product dd,
+body.template-product dt {
+  font-family: var(--pdp-font-body);
+  color: var(--pdp-color-text);
+}
+
+/* Material Symbols アイコン共通クラス（DESIGN.md準拠アイコン利用箇所向け）
+   ⚠️ あえて body.template-product スコープを付けない: このクラスは
+   snippets/product-media-gallery-content.liquid のバッジ/トラストタグで使用しており、
+   同スニペットは assets/quick-add.js のクイック追加モーダル（商品ページ以外＝
+   collection/search等のページ）にもそのままクローンされるため、スコープを付けると
+   モーダル内でアイコン用フォントの適用先が無くなり生のリガチャ文字列
+   （例:「verified」）がそのまま見えてしまう。新規クラス名でサイト全体に既存の
+   衝突が無いことを確認済みのため、意図的にグローバル定義とする。 */
+.material-symbols-outlined {
+  font-family: 'Material Symbols Outlined';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 1.1em;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  vertical-align: -0.2em;
+}
+
+/* PDP内の価格・バッジは全体設定(section 8-9)よりクリムゾン系へ上書き */
+body.template-product .price,
+body.template-product .price__regular,
+body.template-product .price__sale {
+  color: var(--pdp-color-primary) !important;
+  font-family: var(--pdp-font-heading) !important;
+  font-weight: 800 !important;
+  letter-spacing: -0.01em !important;
+}
+body.template-product .price__compare,
+body.template-product .compare-at-price {
+  color: var(--pdp-color-text-muted) !important;
+}
+body.template-product .product-badges__badge {
+  background-color: var(--pdp-color-primary) !important;
+  color: #ffffff !important;
+  border: none !important;
+  font-family: var(--pdp-font-heading) !important;
+  font-size: 0.68rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.02em !important;
+  text-transform: none !important;
+  padding: 4px 10px !important;
+  border-radius: var(--pdp-radius-sm) !important;
+}
+
+/* ── 25-2. パンくずリスト（sections/breadcrumbs.liquid） ── */
+body.template-product .breadcrumbs {
+  padding-block: 10px;
+}
+body.template-product .breadcrumbs__item {
+  font-size: 0.8rem;
+  letter-spacing: 0;
+  color: var(--pdp-color-text-secondary);
+  font-family: var(--pdp-font-body);
+}
+body.template-product .breadcrumbs__item:not(:last-child)::after {
+  content: '/';
+  color: var(--pdp-color-text-muted);
+}
+body.template-product .breadcrumbs__current {
+  color: var(--pdp-color-text) !important;
+  font-weight: 600;
+}
+
+/* ── 25-3. 商品情報メイン（ギャラリー・購入エリアのカード化） ── */
+body.template-product .product-information__media {
+  position: relative;
+  background-color: var(--pdp-color-surface-card);
+  border-radius: var(--pdp-radius-card);
+  box-shadow: var(--pdp-shadow-card);
+  padding: 16px;
+}
+body.template-product .product-details {
+  background-color: var(--pdp-color-surface-card);
+  border-radius: var(--pdp-radius-card);
+  box-shadow: var(--pdp-shadow-card);
+  padding: 24px;
+}
+media-gallery {
+  position: relative;
+}
+
+/* 正規品保証バッジ（静的・全商品共通、snippets/product-media-gallery-content.liquidで追加したマークアップ）。
+   上記アイコンクラスと同じ理由で body.template-product スコープを付けず、クイック追加
+   モーダル内でも同じ見た目（白背景ピル・角丸・影）が保たれるようにする。 */
+/* ⚠️ 上記2クラス同様、値は --pdp-* カスタムプロパティ（body.template-productスコープ内でのみ
+   定義）を参照せずリテラル値で直書きする。クイック追加モーダルはbody.template-productを
+   持たない別ページ（collection/search等）に開くため、スコープ付き変数は未定義（無効値）に
+   なってしまうため。 */
+.pdp-media-trust-tag {
+  position: absolute;
+  z-index: 5;
+  left: 12px;
+  bottom: 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(255, 255, 255, 0.95);
+  color: #15803d;
+  font-family: 'Plus Jakarta Sans', 'Noto Sans JP', sans-serif;
+  font-size: 0.68rem;
+  font-weight: 600;
+  padding: 6px 10px;
+  border-radius: 0.5rem;
+  box-shadow: 0 2px 8px rgba(26, 26, 26, 0.05);
+  pointer-events: none;
+}
+.pdp-media-trust-tag .material-symbols-outlined {
+  font-size: 1rem;
+}
+.pdp-media-badges {
+  position: absolute;
+  z-index: 5;
+  left: 12px;
+  top: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  pointer-events: none;
+}
+.pdp-media-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-family: 'Manrope', 'Cormorant Garamond', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 5px 10px;
+  border-radius: 0.375rem;
+  box-shadow: 0 2px 8px rgba(26, 26, 26, 0.05);
+}
+.pdp-media-badge--sale {
+  background: #c92a54;
+  color: #ffffff;
+}
+.pdp-media-badge--soldout {
+  background: #6e6b66;
+  color: #ffffff;
+}
+
+/* ── 25-4. 購入エリア内のお気に入りアイコン ── */
+body.template-product .favorite-button svg,
+body.template-product [class*="favorite-button"] svg {
+  color: var(--pdp-color-primary);
+}
+
+/* ── 25-5. スティッキー購入バー ── */
+body.template-product .sticky-add-to-cart__bar {
+  background: rgba(255, 255, 255, 0.96);
+  border-radius: var(--pdp-radius-card);
+}
+body.template-product .sticky-add-to-cart__bar::before {
+  background: linear-gradient(var(--pdp-color-surface-card) 0 100%), linear-gradient(hsl(0 0% 0% / 0.08) 0 100%);
+}
+body.template-product .sticky-add-to-cart__title {
+  font-family: var(--pdp-font-heading);
+  color: var(--pdp-color-text);
+}
+body.template-product .sticky-add-to-cart__price {
+  color: var(--pdp-color-primary);
+  font-family: var(--pdp-font-heading);
+}
+
+/* ── 25-6. 補足情報系セクション共通カード化
+   （product-extra-info / product-trust-info / product-faq / product-support）
+   各セクション自身の{% style %}はBEMクラスのレイアウトのみ担当させ、
+   配色・カード化はここで一括して上書きする（保守性のため一箇所に集約） ── */
+body.template-product .product-extra-info,
+body.template-product .product-trust-info,
+body.template-product .product-faq,
+body.template-product .product-support {
+  max-width: 896px;
+  margin-inline: auto;
+  background: var(--pdp-color-surface-card);
+  border-radius: var(--pdp-radius-card);
+  box-shadow: var(--pdp-shadow-card);
+  padding: 32px !important;
+  margin-block: 24px;
+}
+
+body.template-product .product-extra-info__heading,
+body.template-product .product-trust-info__heading,
+body.template-product .product-faq__heading,
+body.template-product .product-support__heading {
+  font-family: var(--pdp-font-heading);
+  font-size: 1.375rem;
+  font-weight: 700;
+  color: var(--pdp-color-text);
+  text-align: center;
+  margin-bottom: 8px !important;
+}
+
+body.template-product .product-trust-info__item-heading {
+  font-family: var(--pdp-font-heading);
+  font-weight: 700;
+  color: var(--pdp-color-text);
+}
+body.template-product .product-trust-info__block {
+  background: var(--pdp-color-surface-low);
+  border-radius: var(--pdp-radius-md);
+  padding: 16px;
+}
+body.template-product .product-trust-info__more-link {
+  color: var(--pdp-color-primary) !important;
+}
+
+body.template-product .product-tag-list__item {
+  border-color: var(--pdp-color-border) !important;
+  background: var(--pdp-color-surface-low);
+  border-radius: var(--pdp-radius-pill) !important;
+  color: var(--pdp-color-text-secondary);
+}
+body.template-product .product-sales-record {
+  color: var(--pdp-color-primary) !important;
+}
+
+body.template-product .product-faq__question {
+  font-family: var(--pdp-font-heading);
+  font-weight: 700;
+}
+body.template-product .product-faq__question::before,
+body.template-product .product-faq__answer::before {
+  color: var(--pdp-color-primary);
+  font-weight: 700;
+}
+body.template-product .product-faq__item {
+  border-bottom: 1px solid var(--pdp-color-border);
+  padding-bottom: 16px;
+}
+body.template-product .product-faq__item:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+body.template-product .product-support__link {
+  border-color: var(--pdp-color-border) !important;
+  border-radius: var(--pdp-radius-md) !important;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
+}
+body.template-product .product-support__link:hover {
+  border-color: var(--pdp-color-primary) !important;
+  box-shadow: var(--pdp-shadow-card);
+  transform: translateY(-1px);
+}
+body.template-product .product-support__link::after {
+  color: var(--pdp-color-primary);
+  opacity: 1;
+}
+body.template-product .product-support__link-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+body.template-product .product-support__link-label .material-symbols-outlined {
+  color: var(--pdp-color-primary);
+  font-size: 1.2rem;
+}
+
+/* ── 25-7. 関連商品カルーセル群
+   （product-recommendations = Horizon _product-card ブロック構成、
+   product-related（同ブランド／同カテゴリ共通クラス）、recently-viewed） ── */
+body.template-product .product-recommendations h2,
+body.template-product .product-recommendations h3 {
+  font-family: var(--pdp-font-heading);
+  text-align: center;
+}
+body.template-product .product-recommendations .product-card__content {
+  border-radius: var(--pdp-radius-card) !important;
+}
+
+body.template-product .product-related,
+body.template-product .recently-viewed__inner {
+  max-width: 1280px;
+  margin-inline: auto;
+  padding-block: 24px !important;
+}
+
+body.template-product .product-related__heading,
+body.template-product .recently-viewed__heading {
+  font-family: var(--pdp-font-heading);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--pdp-color-text);
+}
+
+body.template-product .product-related__more {
+  color: var(--pdp-color-primary);
+  font-family: var(--pdp-font-body);
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+
+body.template-product .product-related__link,
+body.template-product .recently-viewed__link {
+  background: var(--pdp-color-surface-card);
+  border: 1px solid var(--pdp-color-border);
+  border-radius: var(--pdp-radius-card);
+  padding: 10px;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
+}
+body.template-product .product-related__link:hover,
+body.template-product .recently-viewed__link:hover {
+  border-color: var(--pdp-color-border-hover);
+  box-shadow: var(--pdp-shadow-card-hover);
+  transform: translateY(-2px);
+}
+body.template-product .product-related__image,
+body.template-product .product-related__image--placeholder,
+body.template-product .recently-viewed__image,
+body.template-product .recently-viewed__image--placeholder {
+  border-radius: var(--pdp-radius-sm);
+}
+body.template-product .product-related__title,
+body.template-product .recently-viewed__title {
+  font-family: var(--pdp-font-body);
+  color: var(--pdp-color-text);
+}
+body.template-product .product-related__price,
+body.template-product .recently-viewed__price {
+  font-family: var(--pdp-font-heading);
+  color: var(--pdp-color-primary);
+  font-weight: 700;
+}
