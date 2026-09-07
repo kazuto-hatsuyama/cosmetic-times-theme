@@ -1295,3 +1295,176 @@ body.template-product .recently-viewed__price {
   color: var(--pdp-color-primary);
   font-weight: 700;
 }
+
+
+/* ================================================================
+   ── 26. トップページ（index）デザイン刷新
+   Stitchデザイン案（D:\Inetpub\shopify_data\stitch\top\DESIGN.md /
+   screen.png / code.html）準拠、2026-09-07。商品詳細ページ（section 25）と
+   同一のデザインシステムをトップページのみに適用する。body.template-index配下に
+   スコープし、他ページ（トップ以外の一覧・カート等）には影響しない。
+
+   対応セクション: templates/index.json内の hero_jVaWmY（テキスト/色のみ変更）,
+   marquee_brands（人気ブランド）, sections/home-ranking.liquid（新規、売れ筋ランキング）,
+   product_list_fa6P9H（新着コスメ速報）, sections/home-feature-spotlight.liquid（新規）,
+   featured-blog-posts（コスメ特集・コラム）, sections/home-trust-badges.liquid（新規）。
+   category_grid・promo_bannersは今回のデザイン案に対応する構成要素が無いため、
+   既存の見た目（ゴールド系）のまま変更していない。
+   ================================================================ */
+
+body.template-index {
+  --home-color-surface: #faf9f6;
+  --home-color-surface-card: #ffffff;
+  --home-color-surface-low: #f4f3f1;
+  --home-color-border: #ebe8e3;
+  --home-color-border-hover: #d4cec5;
+  --home-color-text: #1a1a1a;
+  --home-color-text-secondary: #6e6b66;
+  --home-color-primary: #c92a54;
+  --home-color-primary-deep: #a7053d;
+  --home-color-primary-subtle: #fdf2f4;
+  --home-radius-card: 0.75rem;
+  --home-radius-sm: 0.375rem;
+  --home-shadow-card: 0 2px 8px rgba(26, 26, 26, 0.05);
+  --home-shadow-card-hover: 0 8px 24px rgba(26, 26, 26, 0.08);
+  --home-font-heading: 'Manrope', 'Cormorant Garamond', sans-serif;
+  --home-font-body: 'Plus Jakarta Sans', 'Noto Sans JP', sans-serif;
+
+  --color-primary-button-text: #ffffff;
+  --color-primary-button-background: var(--home-color-primary);
+  --color-primary-button-border: var(--home-color-primary);
+  --color-primary-button-hover-text: #ffffff;
+  --color-primary-button-hover-background: var(--home-color-primary-deep);
+  --color-primary-button-hover-border: var(--home-color-primary-deep);
+}
+
+body.template-index .price,
+body.template-index .price__regular,
+body.template-index .price__sale {
+  color: var(--home-color-primary) !important;
+  font-family: var(--home-font-heading) !important;
+  font-weight: 800 !important;
+}
+body.template-index .product-badges__badge {
+  background-color: var(--home-color-primary) !important;
+  color: #ffffff !important;
+  border: none !important;
+  font-family: var(--home-font-heading) !important;
+  border-radius: var(--home-radius-sm) !important;
+}
+
+/* 新着コスメ速報（product-list） カード化 */
+body.template-index #shopify-section-product_list_fa6P9H .product-card__content {
+  border-radius: var(--home-radius-card) !important;
+}
+body.template-index #shopify-section-product_list_fa6P9H h2,
+body.template-index #shopify-section-product_list_fa6P9H h3 {
+  font-family: var(--home-font-heading);
+}
+
+/* 人気ブランド（marquee_brands） ピル状に */
+body.template-index #shopify-section-marquee_brands .marquee__repeated-items a {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 20px;
+  border: 1px solid var(--home-color-border);
+  border-radius: 9999px;
+  background: var(--home-color-surface-card);
+  color: var(--home-color-text) !important;
+  transition: border-color 0.25s ease, color 0.25s ease, background 0.25s ease;
+}
+body.template-index #shopify-section-marquee_brands .marquee__repeated-items a:hover {
+  border-color: var(--home-color-primary);
+  color: var(--home-color-primary) !important;
+  background: var(--home-color-primary-subtle);
+}
+
+/* 新規セクション（ランキング/特集/信頼性バッジ）の見出し・アクセントをブランド色に統一 */
+body.template-index .home-ranking__heading,
+body.template-index .home-feature-spotlight__heading {
+  font-family: var(--home-font-heading);
+  font-weight: 700;
+}
+body.template-index .home-ranking__eyebrow,
+body.template-index .home-feature-spotlight__eyebrow {
+  color: var(--home-color-primary);
+  font-family: var(--home-font-heading);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+body.template-index .home-ranking__more,
+body.template-index .home-feature-spotlight__more {
+  color: var(--home-color-primary) !important;
+  font-weight: 600;
+}
+body.template-index .home-ranking__link,
+body.template-index .home-feature-spotlight__card {
+  background: var(--home-color-surface-card);
+  border: 1px solid var(--home-color-border);
+  border-radius: var(--home-radius-card);
+  padding: 10px;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
+}
+body.template-index .home-ranking__link:hover,
+body.template-index .home-feature-spotlight__card:hover {
+  border-color: var(--home-color-border-hover);
+  box-shadow: var(--home-shadow-card-hover);
+  transform: translateY(-2px);
+}
+body.template-index .home-ranking__image,
+body.template-index .home-ranking__image--placeholder,
+body.template-index .home-feature-spotlight__image {
+  border-radius: var(--home-radius-sm);
+  overflow: hidden;
+}
+body.template-index .home-ranking__rank {
+  background: var(--home-color-text);
+  color: #ffffff;
+  border-radius: var(--home-radius-sm);
+  font-family: var(--home-font-heading);
+}
+body.template-index .home-ranking__rank--top {
+  background: var(--home-color-primary);
+}
+body.template-index .home-ranking__discount {
+  background: var(--home-color-primary);
+  color: #ffffff;
+  border-radius: var(--home-radius-sm);
+}
+body.template-index .home-ranking__rating {
+  color: #f59e0b;
+}
+body.template-index .home-ranking__price {
+  color: var(--home-color-primary);
+  font-family: var(--home-font-heading);
+  font-weight: 700;
+}
+body.template-index .home-feature-spotlight__badge {
+  background: var(--home-color-primary);
+  color: #ffffff;
+  border-radius: var(--home-radius-sm);
+}
+body.template-index .home-feature-spotlight__title {
+  font-family: var(--home-font-heading);
+}
+body.template-index .home-feature-spotlight__cta {
+  color: var(--home-color-primary);
+  font-weight: 600;
+}
+
+/* コスメ特集・コラム（featured-blog-posts、editorialレイアウト） */
+body.template-index #shopify-section-home_editorial_blog h2,
+body.template-index #shopify-section-home_editorial_blog h3,
+body.template-index #shopify-section-home_editorial_blog h4 {
+  font-family: var(--home-font-heading);
+}
+
+/* 信頼性バッジ帯 */
+body.template-index .home-trust-badges__icon {
+  color: var(--home-color-primary);
+}
+body.template-index .home-trust-badges__title {
+  font-family: var(--home-font-heading);
+}

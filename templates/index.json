@@ -12,7 +12,7 @@
       "type": "custom-liquid",
       "name": "ヒーロースライドショー",
       "settings": {
-        "custom_liquid": "<style>.ct-hero{position:relative;width:100%;overflow:hidden;height:60svh;min-height:340px;background:#060E17}.ct-hero-slide{position:absolute;inset:0;opacity:0;animation:ctFade 15s infinite}.ct-hero-slide:nth-child(1){animation-delay:0s}.ct-hero-slide:nth-child(2){animation-delay:5s}.ct-hero-slide:nth-child(3){animation-delay:10s}@keyframes ctFade{0%{opacity:0}4%,30%{opacity:1}34%,100%{opacity:0}}.ct-hero-slide img{width:100%;height:100%;object-fit:cover;object-position:center}.ct-hero-overlay{position:absolute;inset:0;background:rgba(6,14,23,.06);z-index:1;pointer-events:none}.ct-hero-content{position:absolute;bottom:0;left:0;right:0;z-index:2;background:linear-gradient(to top,rgba(6,14,23,.82) 0%,rgba(6,14,23,.55) 60%,transparent 100%);padding:clamp(32px,5vw,64px) clamp(24px,5vw,80px) clamp(28px,4vw,52px);text-align:center}.ct-hero-label{display:block;font-size:.6rem;letter-spacing:.38em;text-transform:uppercase;color:#c9a84c;font-family:var(--font-heading--family,serif);margin-bottom:14px}.ct-hero-title{font-size:clamp(1.8rem,4vw,3.5rem);font-weight:300;color:#f5f0e8;letter-spacing:.08em;margin:0 0 12px;font-family:var(--font-heading--family,serif);line-height:1.15}.ct-hero-sub{display:block;font-size:clamp(.78rem,1.5vw,.95rem);color:rgba(245,240,232,.75);margin-bottom:28px;letter-spacing:.06em;font-family:var(--font-body--family,sans-serif)}.ct-hero-btn{display:inline-flex;align-items:center;gap:10px;padding:14px 36px;border:1px solid #c9a84c;color:#c9a84c;text-decoration:none;font-size:.68rem;letter-spacing:.28em;text-transform:uppercase;font-family:var(--font-heading--family,serif);transition:background .3s,color .3s}.ct-hero-btn:hover{background:#c9a84c;color:#0d1b2a}</style><div class=\"ct-hero\"><div class=\"ct-hero-slide\"><img src=\"https://cdn.shopify.com/s/files/1/0807/5821/0788/files/1000_320.png?v=1779421972\" alt=\"\" loading=\"eager\"></div><div class=\"ct-hero-slide\"><img src=\"https://cdn.shopify.com/s/files/1/0807/5821/0788/files/outlet_banner.png?v=1779421975\" alt=\"\" loading=\"lazy\"></div><div class=\"ct-hero-slide\"><img src=\"https://cdn.shopify.com/s/files/1/0807/5821/0788/files/20200623deo_slide.jpg?v=1779421972\" alt=\"\" loading=\"lazy\"></div><div class=\"ct-hero-overlay\"></div><div class=\"ct-hero-content\"><span class=\"ct-hero-label\">Brand Cosmetics Online Store</span><h2 class=\"ct-hero-title\">デパコスが驚きの価格で</h2><span class=\"ct-hero-sub\">CHANEL・DIOR・SHISEIDO など国内外ブランドをご提供</span><a href=\"/collections/all\" class=\"ct-hero-btn\">今すぐショッピング →</a></div></div>",
+        "custom_liquid": "<style>.ct-hero{position:relative;width:100%;overflow:hidden;height:60svh;min-height:340px;background:#060E17}.ct-hero-slide{position:absolute;inset:0;opacity:0;animation:ctFade 15s infinite}.ct-hero-slide:nth-child(1){animation-delay:0s}.ct-hero-slide:nth-child(2){animation-delay:5s}.ct-hero-slide:nth-child(3){animation-delay:10s}@keyframes ctFade{0%{opacity:0}4%,30%{opacity:1}34%,100%{opacity:0}}.ct-hero-slide img{width:100%;height:100%;object-fit:cover;object-position:center}.ct-hero-overlay{position:absolute;inset:0;background:rgba(6,14,23,.06);z-index:1;pointer-events:none}.ct-hero-content{position:absolute;bottom:0;left:0;right:0;z-index:2;background:linear-gradient(to top,rgba(6,14,23,.82) 0%,rgba(6,14,23,.55) 60%,transparent 100%);padding:clamp(32px,5vw,64px) clamp(24px,5vw,80px) clamp(28px,4vw,52px);text-align:center}.ct-hero-label{display:block;font-size:.6rem;letter-spacing:.38em;text-transform:uppercase;color:#c92a54;font-family:'Manrope',var(--font-heading--family,serif);margin-bottom:14px}.ct-hero-title{font-size:clamp(1.8rem,4vw,3.5rem);font-weight:700;color:#f5f0e8;letter-spacing:0;margin:0 0 12px;font-family:'Manrope',var(--font-heading--family,serif);line-height:1.15}.ct-hero-sub{display:block;font-size:clamp(.78rem,1.5vw,.95rem);color:rgba(245,240,232,.75);margin-bottom:28px;letter-spacing:.06em;font-family:var(--font-body--family,sans-serif)}.ct-hero-btn{display:inline-flex;align-items:center;gap:10px;padding:14px 36px;border:1px solid #c92a54;background:#c92a54;color:#fff;text-decoration:none;font-size:.68rem;letter-spacing:.28em;text-transform:uppercase;font-family:'Manrope',var(--font-heading--family,serif);transition:background .3s,color .3s,border-color .3s}.ct-hero-btn:hover{background:#a7053d;border-color:#a7053d;color:#fff}.ct-hero-btn--outline{background:transparent;color:#f5f0e8}.ct-hero-btn--outline:hover{background:#c92a54;border-color:#c92a54;color:#fff}.ct-hero-trust{display:flex;flex-wrap:wrap;justify-content:center;gap:18px;margin-top:18px;font-size:.68rem;letter-spacing:.04em;color:rgba(245,240,232,.85);font-family:var(--font-body--family,sans-serif)}</style><div class=\"ct-hero\"><div class=\"ct-hero-slide\"><img src=\"https://cdn.shopify.com/s/files/1/0807/5821/0788/files/1000_320.png?v=1779421972\" alt=\"\" loading=\"eager\"></div><div class=\"ct-hero-slide\"><img src=\"https://cdn.shopify.com/s/files/1/0807/5821/0788/files/outlet_banner.png?v=1779421975\" alt=\"\" loading=\"lazy\"></div><div class=\"ct-hero-slide\"><img src=\"https://cdn.shopify.com/s/files/1/0807/5821/0788/files/20200623deo_slide.jpg?v=1779421972\" alt=\"\" loading=\"lazy\"></div><div class=\"ct-hero-overlay\"></div><div class=\"ct-hero-content\"><span class=\"ct-hero-label\">LIMITED TIME LUXURY EDIT</span><h2 class=\"ct-hero-title\">ブランドコスメ・デパコスが最大92%OFF</h2><span class=\"ct-hero-sub\">国内151ブランドのデパコス・ブランドコスメを、正規ルート仕入れ・全品鑑定済みで取り扱い。</span><a href=\"/collections/outlet\" class=\"ct-hero-btn\">セール商品を見る →</a><a href=\"/collections/new-arrivals\" class=\"ct-hero-btn ct-hero-btn--outline\">新着コスメをチェック</a><div class=\"ct-hero-trust\"><span>8,000円以上で送料無料</span><span>全品100%正規品保証</span><span>全国発送対応</span></div></div></div>",
         "color_scheme": "scheme-6",
         "section_width": "full-width",
         "padding-block-start": 0,
@@ -505,7 +505,7 @@
               "type": "_product-list-text",
               "name": "t:names.collection_title",
               "settings": {
-                "text": "<h3>新着商品</h3>",
+                "text": "<h3>新着コスメ速報</h3>",
                 "width": "fit-content",
                 "max_width": "normal",
                 "alignment": "left",
@@ -657,13 +657,73 @@
         "padding-block-start": 64,
         "padding-block-end": 64
       }
+    },
+    "home_ranking": {
+      "type": "home-ranking",
+      "settings": {
+        "eyebrow": "DAILY BESTSELLERS",
+        "heading": "売れ筋ランキング",
+        "color_scheme": "scheme-1"
+      }
+    },
+    "home_feature_spotlight": {
+      "type": "home-feature-spotlight",
+      "settings": {
+        "eyebrow": "CURATED LABELS",
+        "heading": "おすすめ注目ブランド特集",
+        "color_scheme": "scheme-1"
+      }
+    },
+    "home_editorial_blog": {
+      "type": "featured-blog-posts",
+      "name": "コスメ特集・コラム",
+      "blocks": {
+        "static-blog-title": {
+          "type": "_featured-blog-posts-title",
+          "static": true,
+          "settings": {
+            "text": "<h3>コスメ特集・コラム</h3>"
+          },
+          "blocks": {}
+        },
+        "static-blog-post-card": {
+          "type": "_featured-blog-posts-card",
+          "static": true,
+          "settings": {},
+          "blocks": {}
+        }
+      },
+      "block_order": [],
+      "settings": {
+        "layout_type": "editorial",
+        "post_limit": 3,
+        "columns": 3,
+        "mobile_columns": "2",
+        "carousel_on_mobile": false,
+        "columns_gap": 16,
+        "rows_gap": 16,
+        "section_width": "page-width",
+        "color_scheme": "scheme-1",
+        "padding-block-start": 48,
+        "padding-block-end": 48
+      }
+    },
+    "home_trust_badges": {
+      "type": "home-trust-badges",
+      "settings": {
+        "color_scheme": "scheme-1"
+      }
     }
   },
   "order": [
     "hero_jVaWmY",
     "category_grid",
-    "product_list_fa6P9H",
     "marquee_brands",
-    "promo_banners"
+    "home_ranking",
+    "product_list_fa6P9H",
+    "home_feature_spotlight",
+    "promo_banners",
+    "home_editorial_blog",
+    "home_trust_badges"
   ]
 }
