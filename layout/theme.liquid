@@ -9,6 +9,15 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Noto+Sans+JP:wght@300;400&display=swap" rel="stylesheet">
+    {%- if template.name == 'product' -%}
+      {%- comment -%}
+        商品詳細ページ専用デザイン刷新（2026-09-07、D:\Inetpub\shopify_data\stitch\item\DESIGN.md準拠）。
+        Manrope（見出し・価格数字）/ Plus Jakarta Sans（本文）/ Material Symbols Outlined（アイコン）を
+        商品ページのみ読み込む。サイト全体のCormorant Garamond/Noto Sans JPはそのまま維持し、他ページには影響しない。
+      {%- endcomment -%}
+      <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+      <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,300..500,0..1,-25..0&display=swap" rel="stylesheet">
+    {%- endif -%}
     {%- if settings.favicon != blank -%}
       <link
         rel="icon"
@@ -44,7 +53,7 @@
     {% # theme-check-enable RemoteAsset %}
   </head>
 
-  <body class="page-width-{{ settings.page_width }} card-hover-effect-{{ settings.card_hover_effect }}">
+  <body class="page-width-{{ settings.page_width }} card-hover-effect-{{ settings.card_hover_effect }} template-{{ template.name }}">
     {% render 'skip-to-content-link', href: '#MainContent', text: 'accessibility.skip_to_text' %}
     <div id="header-group">
       {% sections 'header-group' %}

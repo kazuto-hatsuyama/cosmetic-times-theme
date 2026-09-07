@@ -356,6 +356,41 @@
     data-presentation="{{ media_presentation }}"
     {{ block_shopify_attributes }}
   >
+    {%- comment -%}
+      PDPデザイン刷新（2026-09-07、D:\Inetpub\shopify_data\stitch\item\DESIGN.md準拠）:
+      セール割引率バッジ／売り切れバッジ／正規品鑑定済みトラストタグをギャラリー左上・左下に
+      オーバーレイ表示する。表示スタイルは assets/custom-luxury.css の
+      「25. 商品詳細ページ（PDP）デザイン刷新」セクションでbody.template-productにスコープして定義。
+      バッジは選択中バリアント（無ければ商品の代表バリアント）の在庫/セール状態から算出するのみで、
+      既存のバリアント切り替えJS（assets/media-gallery.js等）の挙動には影響しない。
+    {%- endcomment -%}
+    {%- liquid
+      assign pdp_badge_variant = selected_product.selected_or_first_available_variant
+      assign pdp_show_sale_badge = false
+      assign pdp_show_soldout_badge = false
+      if pdp_badge_variant.available == false
+        assign pdp_show_soldout_badge = true
+      elsif pdp_badge_variant.compare_at_price > pdp_badge_variant.price
+        assign pdp_show_sale_badge = true
+        assign pdp_discount_percent = pdp_badge_variant.compare_at_price | minus: pdp_badge_variant.price | times: 100.0 | divided_by: pdp_badge_variant.compare_at_price | round
+      endif
+    -%}
+    {%- if pdp_show_sale_badge or pdp_show_soldout_badge -%}
+      <div class="pdp-media-badges">
+        {%- if pdp_show_soldout_badge -%}
+          <span class="pdp-media-badge pdp-media-badge--soldout">{{ 'products.product.sold_out' | t }}</span>
+        {%- elsif pdp_show_sale_badge -%}
+          <span class="pdp-media-badge pdp-media-badge--sale">
+            <span class="material-symbols-outlined" aria-hidden="true">local_offer</span>
+            -{{ pdp_discount_percent }}%
+          </span>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+    <div class="pdp-media-trust-tag">
+      <span class="material-symbols-outlined" aria-hidden="true">verified</span>
+      <span>100%正規品鑑定済み</span>
+    </div>
     {% capture slides %}
       {% for media in sorted_media %}
         {% capture children %}
