@@ -1304,12 +1304,20 @@ body.template-product .recently-viewed__price {
    同一のデザインシステムをトップページのみに適用する。body.template-index配下に
    スコープし、他ページ（トップ以外の一覧・カート等）には影響しない。
 
-   対応セクション: templates/index.json内の hero_jVaWmY（テキスト/色のみ変更）,
-   marquee_brands（人気ブランド）, sections/home-ranking.liquid（新規、売れ筋ランキング）,
-   product_list_fa6P9H（新着コスメ速報）, sections/home-feature-spotlight.liquid（新規）,
-   featured-blog-posts（コスメ特集・コラム）, sections/home-trust-badges.liquid（新規）。
-   category_grid・promo_bannersは今回のデザイン案に対応する構成要素が無いため、
-   既存の見た目（ゴールド系）のまま変更していない。
+   対応セクション: templates/index.json内の hero_jVaWmY（2カラム→見出し+CTA+信頼バッジ構成に
+   全面書き換え）, popular_brands_header（新規、人気ブランド見出し行）,
+   marquee_brands（人気ブランド、ピル状に再スタイル）,
+   sections/home-ranking.liquid（新規、売れ筋ランキング。shop.metafields.custom.sales_ranking
+   を再利用）, product_list_fa6P9H（新着コスメ速報、collectionをallからnew-arrivalsへ変更）,
+   sections/home-feature-spotlight.liquid（新規、handle先頭が'feature-'の実在Custom
+   Collectionを動的抽出）, sections/home-trust-badges.liquid（新規）。
+
+   category_grid・promo_bannersは今回のデザイン案に対応する構成要素が無く、旧ゴールド配色の
+   ままだと新デザインと視覚的に衝突するため、templates/index.jsonから削除した
+   （画像バナー自体はShopify上に残っており、必要になれば復元可能）。
+   コスメ特集・コラム（featured-blog-posts）は、このストアにブログが1件も存在しないこと
+   （`shopify theme console`でblogs.size=0を確認済み）が判明したため、空のプレースホルダー
+   カードが表示されてしまうのを避けるべく追加を見送った（ダミーテキストを入れない方針のため）。
    ================================================================ */
 
 body.template-index {
@@ -1459,13 +1467,6 @@ body.template-index .home-feature-spotlight__title {
 body.template-index .home-feature-spotlight__cta {
   color: var(--home-color-primary);
   font-weight: 600;
-}
-
-/* コスメ特集・コラム（featured-blog-posts、editorialレイアウト） */
-body.template-index #shopify-section-home_editorial_blog h2,
-body.template-index #shopify-section-home_editorial_blog h3,
-body.template-index #shopify-section-home_editorial_blog h4 {
-  font-family: var(--home-font-heading);
 }
 
 /* 信頼性バッジ帯 */
