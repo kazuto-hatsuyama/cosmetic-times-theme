@@ -1363,6 +1363,12 @@ body.template-index #shopify-section-product_list_fa6P9H h3 {
 }
 
 /* 人気ブランド（marquee_brands） ピル状に */
+body.template-index #shopify-section-marquee_brands .marquee__repeated-items p {
+  font-family: var(--home-font-heading) !important;
+  letter-spacing: 0.04em;
+  font-size: 0.8rem !important;
+  color: var(--home-color-text) !important;
+}
 body.template-index #shopify-section-marquee_brands .marquee__repeated-items a {
   display: inline-flex;
   align-items: center;
@@ -1370,6 +1376,7 @@ body.template-index #shopify-section-marquee_brands .marquee__repeated-items a {
   border: 1px solid var(--home-color-border);
   border-radius: 9999px;
   background: var(--home-color-surface-card);
+  font-family: var(--home-font-heading) !important;
   color: var(--home-color-text) !important;
   transition: border-color 0.25s ease, color 0.25s ease, background 0.25s ease;
 }
