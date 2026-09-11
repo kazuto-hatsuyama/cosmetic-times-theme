@@ -664,6 +664,52 @@
         "color_scheme": "scheme-1"
       }
     },
+    "home_faq": {
+      "type": "home-faq",
+      "blocks": {
+        "faq_1": {
+          "type": "question",
+          "settings": {
+            "question": "並行輸入品とは？",
+            "answer": "海外から届く商品でも、信頼できるサプライヤーからのみ仕入れておりますのでご安心ください。偽物や粗悪品の心配はありません。"
+          }
+        },
+        "faq_2": {
+          "type": "question",
+          "settings": {
+            "question": "商品の信頼性について",
+            "answer": "入荷時には1品1品検品を行い、24時間365日空調管理された倉庫で保管。入荷時期や使用期限も個別に管理しています。"
+          }
+        },
+        "faq_3": {
+          "type": "question",
+          "settings": {
+            "question": "国内流通商品との違いは？",
+            "answer": "処方・成分・パッケージ・使用感などが国内製品と若干異なる場合がございます。実店舗を持たないため、全品正規品を国内希望小売価格よりお得な価格でご提供しています。"
+          }
+        },
+        "faq_4": {
+          "type": "question",
+          "settings": {
+            "question": "パッケージ・仕様について",
+            "answer": "流通国によってパッケージデザインが複数存在する場合や、箱・フィルムがない状態で届く場合があります。入荷時期により表記やパッケージが異なることもございます。"
+          }
+        },
+        "faq_5": {
+          "type": "question",
+          "settings": {
+            "question": "配送について",
+            "answer": "8,000円以上のご注文で全国送料無料（7,999円以下は一律500円）。ご注文から最短3日〜1週間程度でお届けします（国内配送のみ、配達日時指定可）。"
+          }
+        }
+      },
+      "block_order": ["faq_1", "faq_2", "faq_3", "faq_4", "faq_5"],
+      "settings": {
+        "heading": "よくあるご質問",
+        "more_link": "/pages/faq",
+        "color_scheme": "scheme-1"
+      }
+    },
     "popular_brands_header": {
       "type": "custom-liquid",
       "name": "人気ブランド見出し",
@@ -684,6 +730,7 @@
     "product_list_fa6P9H",
     "home_feature_spotlight",
     "home_trust_content",
-    "home_trust_badges"
+    "home_trust_badges",
+    "home_faq"
   ]
 }

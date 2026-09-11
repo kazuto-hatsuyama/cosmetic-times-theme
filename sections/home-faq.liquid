@@ -1,0 +1,222 @@
+{% comment %}
+  トップページ用FAQセクション（新規・2026-09-11）。
+  「04_SE確認事項」シート No.8 対応（データ系 D:\Inetpub\shopify_data からの依頼）。
+
+  sections/product-faq.liquid と同じ実装方針（SSRの<dl>/<dt>/<dd>で常時全文表示、
+  タブ・アコーディオン不使用）を踏襲するが、参照元は shop.metafields.custom.faq_items
+  ではなく本セクションのブロック設定に直接ハードコードした固定5件とする。
+  商品ページFAQ（product-faq.liquid）とは意図的に別内容（トップページ全体向けの
+  並行輸入・配送についての案内）のため、メタフィールドとは連携させない。
+
+  内容（並行輸入品/商品の信頼性/国内流通商品との違い/パッケージ・仕様/配送について）は
+  既存サイトのガイドページ（guide-reason/company/shipping-guide等）の記載内容を踏まえて
+  事前に用意された文言だが、2026-09-11時点でWEB担当者による最終文言の確認・承認は
+  未取得の暫定（プレースホルダー）版。正式承認後に内容が変更される可能性がある。
+
+  末尾に「FAQをすべて見る ＞」リンクを設置し、既存の /pages/faq （よくいただくご質問、
+  2026-08-24作成済み・8カテゴリ67件を統合したページ）へ誘導する。新規ページは作成しない。
+{% endcomment %}
+
+{% if section.blocks.size > 0 %}
+  <div class="section-background color-{{ section.settings.color_scheme }}"></div>
+  <div class="home-faq color-{{ section.settings.color_scheme }} page-width-normal">
+    {% if section.settings.heading != blank %}
+      <h2 class="home-faq__heading">{{ section.settings.heading }}</h2>
+    {% endif %}
+
+    <dl class="home-faq__list">
+      {% for block in section.blocks %}
+        {% if block.type == 'question' and block.settings.question != blank and block.settings.answer != blank %}
+          <div class="home-faq__item" {{ block.shopify_attributes }}>
+            <dt class="home-faq__question">{{ block.settings.question }}</dt>
+            <dd class="home-faq__answer">{{ block.settings.answer }}</dd>
+          </div>
+        {% endif %}
+      {% endfor %}
+    </dl>
+
+    {% liquid
+      assign faq_more_link = section.settings.more_link | default: '/pages/faq'
+    %}
+    <a href="{{ faq_more_link }}" class="home-faq__more">
+      FAQをすべて見る
+      <span aria-hidden="true">＞</span>
+    </a>
+  </div>
+
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {% assign faq_json_count = 0 %}
+        {% for block in section.blocks %}
+          {% if block.type == 'question' and block.settings.question != blank and block.settings.answer != blank %}
+            {% if faq_json_count > 0 %},{% endif %}
+            {
+              "@type": "Question",
+              "name": {{ block.settings.question | json }},
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": {{ block.settings.answer | json }}
+              }
+            }
+            {% assign faq_json_count = faq_json_count | plus: 1 %}
+          {% endif %}
+        {% endfor %}
+      ]
+    }
+  </script>
+{% endif %}
+
+{% style %}
+  .home-faq {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding-block: 32px;
+  }
+
+  .home-faq__heading {
+    margin: 0;
+  }
+
+  .home-faq__list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin: 0;
+  }
+
+  .home-faq__item {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid rgb(var(--color-foreground-rgb) / var(--opacity-10, 0.1));
+  }
+
+  .home-faq__item:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+
+  .home-faq__question {
+    font-weight: var(--font-body-bold--weight, 600);
+  }
+
+  .home-faq__question::before {
+    content: 'Q. ';
+  }
+
+  .home-faq__answer {
+    margin: 0;
+  }
+
+  .home-faq__answer::before {
+    content: 'A. ';
+  }
+
+  .home-faq__more {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    align-self: flex-start;
+    margin-top: 4px;
+    font-size: 0.9rem;
+    color: var(--color-primary, currentColor);
+    text-decoration: none;
+  }
+
+  .home-faq__more:hover {
+    text-decoration: underline;
+  }
+{% endstyle %}
+
+{% schema %}
+{
+  "name": "FAQ（トップページ）",
+  "enabled_on": {
+    "templates": ["index"]
+  },
+  "blocks": [
+    {
+      "type": "question",
+      "name": "Q&A",
+      "settings": [
+        {
+          "type": "text",
+          "id": "question",
+          "label": "質問"
+        },
+        {
+          "type": "textarea",
+          "id": "answer",
+          "label": "回答"
+        }
+      ]
+    }
+  ],
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "見出し",
+      "default": "よくあるご質問"
+    },
+    {
+      "type": "url",
+      "id": "more_link",
+      "label": "「すべて見る」リンク先"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:settings.color_scheme",
+      "default": "scheme-1"
+    }
+  ],
+  "presets": [
+    {
+      "name": "FAQ（トップページ）",
+      "blocks": [
+        {
+          "type": "question",
+          "settings": {
+            "question": "並行輸入品とは？",
+            "answer": "海外から届く商品でも、信頼できるサプライヤーからのみ仕入れておりますのでご安心ください。偽物や粗悪品の心配はありません。"
+          }
+        },
+        {
+          "type": "question",
+          "settings": {
+            "question": "商品の信頼性について",
+            "answer": "入荷時には1品1品検品を行い、24時間365日空調管理された倉庫で保管。入荷時期や使用期限も個別に管理しています。"
+          }
+        },
+        {
+          "type": "question",
+          "settings": {
+            "question": "国内流通商品との違いは？",
+            "answer": "処方・成分・パッケージ・使用感などが国内製品と若干異なる場合がございます。実店舗を持たないため、全品正規品を国内希望小売価格よりお得な価格でご提供しています。"
+          }
+        },
+        {
+          "type": "question",
+          "settings": {
+            "question": "パッケージ・仕様について",
+            "answer": "流通国によってパッケージデザインが複数存在する場合や、箱・フィルムがない状態で届く場合があります。入荷時期により表記やパッケージが異なることもございます。"
+          }
+        },
+        {
+          "type": "question",
+          "settings": {
+            "question": "配送について",
+            "answer": "8,000円以上のご注文で全国送料無料（7,999円以下は一律500円）。ご注文から最短3日〜1週間程度でお届けします（国内配送のみ、配達日時指定可）。"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
