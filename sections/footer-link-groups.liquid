@@ -1,0 +1,228 @@
+{% comment %}
+  フッター4グループ構成セクション（新規・2026-09-11）。
+  「04_SE確認事項」シート No.9 対応（データ系 D:\Inetpub\shopify_data からの依頼）。
+
+  現状（対応前）は sections/footer-group.json の footer_m9NzUG セクション内、単一の
+  group ブロック（footer_sp_group_Kq3nR7）にSNS訴求・電話CTA×2・リッチテキストの
+  クイックリンク一覧（6件）が全て縦積みで入っており、「商品を探す／ショッピングガイド／
+  COSMETIC TIMES／会員・法定情報」という4グループへの構造化もSPのアコーディオンも
+  存在しなかった。本セクションはその4グループのリンクメニュー部分を独立した新規セクション
+  として切り出し、置き換えるもの（SNS訴求文・SNSアイコン・電話CTA×2は
+  footer_sp_group_Kq3nR7 側にそのまま残す。著作権バー側の footer_utilities_jLGE8U は
+  対象外・変更なし）。
+
+  Horizon標準の「menu」フッターブロックは Admin管理の Navigation（linklist）を参照する
+  仕組みだが、このストアで使える既存Admin APIトークンには write_online_store_navigation
+  スコープが無く、Admin側にメニューを新規作成できない制約が既にある
+  （blocks/_header-menu.liquid・snippets/header-drawer.liquid の固定リンク方式と同じ理由）。
+  そのため本セクションもテーマ側（Liquid）に4グループのリンクを直接ハードコードする方式を
+  採用した（sections/category-list.liquid・sections/trouble-list.liquid と同じ静的方式）。
+
+  SPアコーディオンはJSに依存しない<details>/<summary>のネイティブ挙動を使用
+  （snippets/header-drawer.liquid と同じSSRセーフなパターン）。閉じた状態でも
+  <a>タグは常にサーバー生成HTML内に存在し、ブラウザが折りたたみ表示するだけ
+  （curl等の生HTML取得でも常に確認できる）。
+  PC幅（min-width:750px）では、UA標準の「details:not([open]) > *:not(summary){display:none}」
+  というUAスタイルシート由来の非表示ルールを、author側CSS（本ファイル内 .footer-link-group__content
+  の通常優先度ルール）で上書きし、open属性の有無に関わらず常時表示・複数列グリッドに切り替える
+  （author CSSはUA CSSより優先度が高いためこの上書きが機能する。JS不要）。summary側もPC幅では
+  pointer-events:noneで無効化し、開閉できるように見えるが実際には機能しない矢印UIの混乱を防ぐ。
+
+  最終的なグループ→リンクのマッピング（データ系との調整・既存ページ調査を踏まえた実際の割り当て）:
+    商品を探す: ブランド一覧(/pages/brand-list)・カテゴリ一覧(/pages/category-list)・
+      お悩みから探す(/pages/trouble-list)・ランキング(/pages/ranking)・
+      新着コスメ(/collections/new-arrivals)・特集(/pages/feature-list)
+    ショッピングガイド: ご利用ガイド(/pages/guide-top)・よくいただくご質問(/pages/faq)・
+      営業・配送日カレンダー(外部URL)・お問い合わせ(外部URL)
+    COSMETIC TIMES: 会社概要・規約(/pages/company)・品質管理について(/pages/guide-reason)
+      ※提案リストにあった「当店について」は sections/home-trust-content.liquid の
+      card3_link と同じ /pages/company を指すため、「会社概要・規約」と実質同一リンクの
+      重複を避けるためこのグループでは1本化した（下記コメント参照）
+    会員・法定情報: マイページ/ログイン（ログイン状態に応じて routes.account_url /
+      routes.storefront_login_url を出し分け）・ご利用規約(/pages/terms-of-service、
+      2026-08-24作成済みだが従来のフッターからは一切リンクされていなかった導線漏れを
+      本対応で解消)・プライバシーポリシー(/pages/privacy-policy)・
+      特定商取引法に基づく表示(/pages/company#transaction、sections/company.liquid内の
+      既存アンカー)
+
+  routes.storefront_login_url を未ログイン時のリンク先に採用しているのは、
+  sections/header.liquid の header-member-bar-row と同じ理由（return_toでストアページに
+  戻り、layout/theme.liquidのcustomer-syncが確実に発火するため。account_login_urlより
+  こちらを優先する既存方針を踏襲）。
+{% endcomment %}
+
+<div class="section-background color-{{ section.settings.color_scheme }}"></div>
+<div class="footer-link-groups color-{{ section.settings.color_scheme }} page-width-normal">
+  <div class="footer-link-groups__grid">
+    <details class="footer-link-group">
+      <summary class="footer-link-group__summary">商品を探す</summary>
+      <ul class="footer-link-group__content">
+        <li><a href="/pages/brand-list">ブランド一覧</a></li>
+        <li><a href="/pages/category-list">カテゴリ一覧</a></li>
+        <li><a href="/pages/trouble-list">お悩みから探す</a></li>
+        <li><a href="/pages/ranking">ランキング</a></li>
+        <li><a href="/collections/new-arrivals">新着コスメ</a></li>
+        <li><a href="/pages/feature-list">特集</a></li>
+      </ul>
+    </details>
+
+    <details class="footer-link-group">
+      <summary class="footer-link-group__summary">ショッピングガイド</summary>
+      <ul class="footer-link-group__content">
+        <li><a href="/pages/guide-top">ご利用ガイド</a></li>
+        <li><a href="/pages/faq">よくいただくご質問</a></li>
+        <li><a href="https://www.cosmetic-times.com/common/calendar">営業・配送日カレンダー</a></li>
+        <li><a href="https://www.cosmetic-times.com/inquiry/entry">お問い合わせ</a></li>
+      </ul>
+    </details>
+
+    <details class="footer-link-group">
+      <summary class="footer-link-group__summary">COSMETIC TIMES</summary>
+      <ul class="footer-link-group__content">
+        <li><a href="/pages/company">会社概要・規約</a></li>
+        <li><a href="/pages/guide-reason">品質管理について</a></li>
+      </ul>
+    </details>
+
+    <details class="footer-link-group">
+      <summary class="footer-link-group__summary">会員・法定情報</summary>
+      <ul class="footer-link-group__content">
+        {% if customer %}
+          <li><a href="{{ routes.account_url }}">マイページ</a></li>
+        {% else %}
+          <li><a href="{{ routes.storefront_login_url }}">ログイン</a></li>
+        {% endif %}
+        <li><a href="/pages/terms-of-service">ご利用規約</a></li>
+        <li><a href="/pages/privacy-policy">プライバシーポリシー</a></li>
+        <li><a href="/pages/company#transaction">特定商取引法に基づく表示</a></li>
+      </ul>
+    </details>
+  </div>
+</div>
+
+{% style %}
+  .footer-link-groups {
+    padding-block: 8px;
+  }
+
+  .footer-link-groups__grid {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .footer-link-group {
+    border-bottom: 1px solid rgb(var(--color-foreground-rgb) / var(--opacity-10, 0.1));
+  }
+
+  .footer-link-group:first-child {
+    border-top: 1px solid rgb(var(--color-foreground-rgb) / var(--opacity-10, 0.1));
+  }
+
+  .footer-link-group__summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-block: 14px;
+    font-weight: var(--font-heading--weight, 600);
+    font-size: 0.95rem;
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .footer-link-group__summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .footer-link-group__summary::after {
+    content: '+';
+    font-size: 1.1rem;
+    line-height: 1;
+    transition: transform 0.2s ease;
+  }
+
+  .footer-link-group[open] > .footer-link-group__summary::after {
+    content: '−';
+  }
+
+  .footer-link-group__content {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin: 0;
+    padding: 0 0 18px;
+    list-style: none;
+  }
+
+  .footer-link-group__content a {
+    color: inherit;
+    text-decoration: none;
+    font-size: 0.88rem;
+    opacity: 0.85;
+  }
+
+  .footer-link-group__content a:hover {
+    opacity: 1;
+    text-decoration: underline;
+  }
+
+  @media screen and (min-width: 750px) {
+    .footer-link-groups__grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 32px;
+    }
+
+    .footer-link-group {
+      border-bottom: none;
+    }
+
+    .footer-link-group:first-child {
+      border-top: none;
+    }
+
+    .footer-link-group__summary {
+      padding-block: 0 12px;
+      cursor: default;
+      pointer-events: none;
+    }
+
+    .footer-link-group__summary::after {
+      display: none;
+    }
+
+    /*
+      UA標準の details:not([open]) > *:not(summary) { display: none; } を
+      author側の通常優先度ルールで上書きし、open属性の有無に関わらずPC幅では
+      常時表示にする（origin/importanceの優先順位により author > user-agent のため
+      !important不要だが、他ルールとの詳細度競合を避けるため明示しておく）。
+    */
+    .footer-link-group__content {
+      display: flex !important;
+      padding-bottom: 0;
+    }
+  }
+{% endstyle %}
+
+{% schema %}
+{
+  "name": "フッターリンクグループ",
+  "enabled_on": {
+    "groups": ["footer"]
+  },
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:settings.color_scheme",
+      "default": "scheme-8"
+    }
+  ],
+  "presets": [
+    {
+      "name": "フッターリンクグループ",
+      "category": "t:categories.footer"
+    }
+  ]
+}
+{% endschema %}

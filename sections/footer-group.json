@@ -96,25 +96,13 @@
                 "custom_width_mobile": 100
               },
               "blocks": {}
-            },
-            "footer_quick_links_4jYp9d": {
-              "type": "text",
-              "settings": {
-                "text": "<p><a href=\"https://www.cosmetic-times.com/inquiry/entry\">お問い合わせ</a>　<a href=\"/pages/faq\">よくいただくご質問</a></p><p><a href=\"/pages/guide-top\">ご利用ガイド</a>　<a href=\"https://www.cosmetic-times.com/common/calendar\">営業・配送日カレンダー</a></p><p><a href=\"/pages/company\">会社概要・規約</a>　<a href=\"/pages/privacy-policy\">プライバシーポリシー</a></p>",
-                "width": "100%",
-                "max_width": "normal",
-                "alignment": "center",
-                "type_preset": "rte"
-              },
-              "blocks": {}
             }
           },
           "block_order": [
             "footer_sns_heading_9mQ2Lx",
             "footer_sns_icons_7hTb4W",
             "footer_phone_order_2cVn8s",
-            "footer_phone_inquiry_5wFz1k",
-            "footer_quick_links_4jYp9d"
+            "footer_phone_inquiry_5wFz1k"
           ]
         }
       },
@@ -128,6 +116,13 @@
         "color_scheme": "scheme-8",
         "padding-block-start": 30,
         "padding-block-end": 30
+      }
+    },
+    "footer_link_groups_Nq8wZ2": {
+      "type": "footer-link-groups",
+      "name": "フッターリンクグループ",
+      "settings": {
+        "color_scheme": "scheme-8"
       }
     },
     "footer_utilities_jLGE8U": {
@@ -168,6 +163,7 @@
   },
   "order": [
     "footer_m9NzUG",
+    "footer_link_groups_Nq8wZ2",
     "footer_utilities_jLGE8U"
   ]
 }
