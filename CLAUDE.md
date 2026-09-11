@@ -379,6 +379,11 @@ shopify theme push --only "config/settings_data.json" --allow-live --theme 13881
 
 **未確認事項**: ブラウザでの実際の見た目（アコーディオンの開閉アニメーション・PC4カラムの視覚的バランス・SNS/電話CTAとの縦間隔）はコードレビュー＋上記curl検証ベースで、ブラウザGUIでの確認は本タスクの実行環境からは未実施。マージ前にプレビューテーマ等での実機見た目確認を推奨。
 
+**2026-09-11 実ブラウザQA実施・PC幅の重大バグを発見・修正済み（`c617f70`）**: ローカルnode_modulesのPlaywright（Chromium、`shopify theme dev`不使用）で一時プレビューテーマ（`visual-qa-faq-footer-temp`→修正確認用に`-v2`を再push、いずれも確認後削除済み）にストアパスワード（`1shuei`）突破の上で実アクセスし、TOP/商品ページのFAQセクション・フッター4グループをデスクトップ(1440px)・モバイル(390px、iPhone UA)双方でスクリーンショット確認。
+- **発見したバグ（修正済み）**: PC幅（≥750px）でフッター4グループの見出し（summary）は表示されるが、実際のリンク一覧が画面上は不可視のまま高さ0で潰れて見えない（4グループとも「見出しだけ」状態）。原因は現行Chromium（120以降）が`<details>`の非summary子要素を内部の`::details-content`擬似要素でラップし、`open`属性が無い間はその擬似要素自体に`content-visibility:hidden; block-size:0`を適用して隠す実装になっているため。`.footer-link-group__content`（子要素）側の`display`を`!important`で上書きしても祖先の`::details-content`擬似要素には効かず、curlでの生HTML確認・`shopify theme check`だけでは検出できなかった（旧WebKit実装を前提にしたコードコメントの認識違いが原因）。`.footer-link-group::details-content`を直接明示的に上書きするCSSを追加して解消し、修正後は16リンク全てが実際に画面上でも視認可能・クリック可能であることをPlaywrightで再検証済み
+- **問題なしと確認できた項目**: FAQセクション（PC/SP双方でQ&A5件・「FAQをすべて見る」リンクが`/pages/faq`へ実クリック遷移することを確認）、SP側フッターアコーディオンの開閉（4グループとも開閉が正常動作、閉状態では内容が正しく隠れる）、PC4カラムグリッドのレイアウト崩れ・重なりなし、4グループ各1本ずつ計4リンクの実クリック遷移（`/pages/brand-list`・`/pages/faq`・`/pages/company`・`/pages/privacy-policy`、いずれも200・正しいページへ遷移）、SNSアイコン・電話CTA×2・著作権バー（`© 2026 cosmetic-times-prd, Powered by Shopify`）の表示維持、商品ページでの`home-faq`非表示・フッター4グループ表示の一貫性
+- マージ・本番デプロイ可（go）と判断。詳細は`sections/footer-link-groups.liquid`のコミット`c617f70`のコメント参照
+
 ## MCPサーバー設定
 
 | サーバー名 | 用途 | 設定場所 | 状態 |
