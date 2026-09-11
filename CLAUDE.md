@@ -334,6 +334,31 @@ shopify theme push --only "config/settings_data.json" --allow-live --theme 13881
 - `RepeatCnt`=0/未設定の商品（例: ハンドル`21311236`, `09610556`, `07710447`, `07710219`, `01710276`）: 該当divが一切出力されないことを確認
 - 上記の漏れ修正後、`resource-card.liquid`経由のおすすめ商品カードでリピート人数表示が出力されないことをdiv数（0または2=本体+スティッキーバー）で確認
 
+## 商品詳細ページ（PDP）Stitchデザイン刷新（2026-09-07）※本表の記載漏れを2026-09-11に追記
+
+`assets/custom-luxury.css`の「25. 商品詳細ページ（PDP）デザイン刷新」（`body.template-product`スコープ、クリムゾン#c92a54系＋Manrope/Plus Jakarta Sans）は2026-09-07に`feature/product-detail-page-stitch-redesign`ブランチのコミット`d5eeba5`で実装され、**同日中にmainへ反映・`gh workflow run "Deploy to Shopify"`で本番live theme（138815832273）へデプロイ済み**（2026-09-11時点でcosmetic-times-prdの実商品ページで実機確認済み）だったが、当時このCLAUDE.mdへの追記が漏れていたため、今回（2026-09-11、別の依頼で本ページの改善作業をした際に発覚）まとめて記載する。トップページの同種刷新（`sections/home-*.liquid`新規、コミット`92ca5c3`、custom-luxury.css section 26）も同時期・同方式で実施・デプロイ済み。
+
+| ファイル | 内容 |
+|---|---|
+| `assets/custom-luxury.css`（section 25、d5eeba5） | パンくず・商品情報メイン（ギャラリー・購入エリア）・スティッキー購入バー・補足情報系セクション（product-extra-info/product-trust-info/product-faq/product-support）・関連商品カルーセル群を`body.template-product`スコープでクリムゾン×白カードのデザインに統一 |
+| `layout/theme.liquid`（d5eeba5） | `body`クラスに`template-{{ template.name }}`を追加（スコープの土台）。商品ページのみManrope/Plus Jakarta Sans/Material Symbols Outlinedフォントを追加読込 |
+| `snippets/product-media-gallery-content.liquid`（d5eeba5） | セール割引率/売り切れバッジ（`.pdp-media-badge`）と正規品鑑定済みトラストタグ（`.pdp-media-trust-tag`）をギャラリーに追加。既存のバリアント画像切替JSには影響なし |
+| `sections/product-support-links.liquid`（d5eeba5） | 各リンクにMaterial Symbolsアイコンを追加 |
+
+**2026-09-11追加分**（`C:\Users\1213\Desktop\item.html`のより詳細なStitchモックアップを踏まえた依頼、`feature/pdp-variant-cards-judgeme-color-harmony`ブランチ、**ユーザー確認前のためmainへは未マージ**）:
+
+| ファイル | 内容 |
+|---|---|
+| `assets/custom-luxury.css`（section 25-8） | 容量バリアント選択（`snippets/variant-main-picker.liquid`、Horizon標準variant-picker）を、Horizonが用意するCSSカスタムプロパティ（`--color-variant-*`/`--color-selected-variant-*`/`--options-border-radius`等、定義元`snippets/color-schemes.liquid`/`assets/base.css`）の上書きのみでカード風（角丸・シャドウ・ホバーリフト・選択時ハイライト）に変更。マークアップ・`assets/variant-picker.js`は無変更 |
+| `assets/custom-luxury.css`（section 25-9） | Judge.meレビューウィジェット（テーマapp embed。実機確認の結果`config/settings_data.json`経由ではなくAdmin側で導入済みで、このリポジトリには設置状態が反映されていないことを確認）の配色を、Judge.me公式カスタマイズ用CSS変数（`--jdgm-primary-color`等）の上書きのみでPDP新デザイン（クリムゾン＋レーティングはアンバー）に統一。マークアップ・JSは無変更 |
+
+**確認事項**: `shopify theme check --fail-level=error`でエラー0件（既存の無関係な4エラーのみ、201→207警告は無関係な既存warning側の自然増）。一時的な非公開プレビューテーマ（`pdp-polish-preview`、確認後削除済み）をcosmetic-times-prdへpushし、ストアパスワード認証済みcurlで実商品ページ（ハンドル`24814072`）を取得、配信された`custom-luxury.css`に両セクションのルールが含まれること・既存の価格表示等が壊れていないことを確認済み（ブラウザでの見た目確認は本タスクの実行環境からは未実施、Chrome DevTools MCP/Playwright MCPいずれも接続不可のため）。
+
+**未実装（`C:\Users\1213\Desktop\item.html`との差分、意図的に見送り）**:
+- 8つの肌ベネフィットグリッド・成分ハイライト3枚カード・レビューの年代別統計等は、モックアップ上のダミーコピーであり対応する実データ（メタフィールド等）が無いため実装していない（ダミー文言をそのまま実装しない方針のため）
+- FAQのアコーディオン化: サイト全体の既存方針（`ranking-list`/`category-list`/`product-extra-info`等、タブ・アコーディオン不使用）と矛盾するため、`sections/product-faq.liquid`は従来どおり常時全文表示のまま据え置いた
+- モバイル下部固定購入バーはHorizon標準のスティッキー購入バー（`sticky_details_desktop`設定、section 25-5で既にPDP配色に統一済み）で代替可能なため新規実装していない
+
 ## MCPサーバー設定
 
 | サーバー名 | 用途 | 設定場所 | 状態 |
