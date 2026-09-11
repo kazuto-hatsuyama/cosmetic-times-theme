@@ -1296,6 +1296,95 @@ body.template-product .recently-viewed__price {
   font-weight: 700;
 }
 
+/* ── 25-8. 容量バリアント選択のカード化（2026-09-11、新リファレンス
+   `C:\Users\1213\Desktop\item.html`の「容量を選択」2カラムカードUIを踏まえた追加）。
+   Horizon標準のvariant-picker（blocks/variant-picker.liquid, snippets/variant-main-picker.liquid,
+   assets/variant-picker.js）のマークアップ・チェック状態の切り替えロジックには一切手を入れず、
+   Horizonが用意している配色・サイズ用CSSカスタムプロパティ（--color-variant-*,
+   --color-selected-variant-*, --options-border-*, --variant-option-padding-inline。
+   定義元: snippets/color-schemes.liquid, assets/base.css）をbody.template-productスコープ内
+   でのみ上書きし、ボタン→カード風の見た目に寄せる。 ── */
+body.template-product .variant-picker {
+  --color-variant-background: var(--pdp-color-surface-card);
+  --color-variant-border: var(--pdp-color-border);
+  --color-variant-text: var(--pdp-color-text);
+  --color-variant-hover-background: var(--pdp-color-primary-subtle);
+  --color-variant-hover-border: var(--pdp-color-primary);
+  --color-variant-hover-text: var(--pdp-color-primary);
+  --color-selected-variant-background: var(--pdp-color-primary-subtle);
+  --color-selected-variant-border: var(--pdp-color-primary);
+  --color-selected-variant-text: var(--pdp-color-primary-deep);
+  --color-selected-variant-hover-background: var(--pdp-color-primary-subtle);
+  --color-selected-variant-hover-border: var(--pdp-color-primary-deep);
+  --color-selected-variant-hover-text: var(--pdp-color-primary-deep);
+  --options-border-radius: var(--pdp-radius-md);
+  --variant-option-padding-inline: 16px;
+}
+body.template-product .variant-option--buttons {
+  gap: 10px;
+}
+body.template-product .variant-option__button-label:not(.variant-option__button-label--has-swatch) {
+  min-height: 3.75em;
+  padding-block: 14px;
+  box-shadow: var(--pdp-shadow-card);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.15s ease;
+}
+body.template-product .variant-option__button-label:not(.variant-option__button-label--has-swatch):hover {
+  box-shadow: var(--pdp-shadow-card-hover);
+  transform: translateY(-1px);
+}
+body.template-product .variant-option__button-label:has(:checked):not(.variant-option__button-label--has-swatch) {
+  box-shadow: var(--pdp-shadow-card-hover);
+}
+body.template-product .variant-option__button-label__text {
+  font-family: var(--pdp-font-heading);
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+body.template-product .variant-option legend {
+  font-family: var(--pdp-font-heading);
+  font-weight: 700;
+  color: var(--pdp-color-text);
+  font-size: 0.9rem;
+}
+
+/* ── 25-9. Judge.meレビューウィジェットの配色をPDP新デザインに統一（2026-09-11追加）。
+   Judge.meはテーマアプリ拡張（app embed）としてストアに導入済みで、実機（ストアパスワード
+   認証済みcurlで cosmetic-times-prd の実商品ページを取得・確認、2026-09-11）で
+   `--jdgm-primary-color: #108474`ほかデフォルトのティール系配色のまま動作していることを
+   確認した。app embedの設置状態は config/settings_data.json 経由でこのリポジトリには
+   反映されない（ライブテーマの当該設定はgit管理外・pull禁止のため）ため、Liquid側に
+   ウィジェットの設置箇所そのものは無い。マークアップ・JSには一切触れず、Judge.meが
+   `:root`に定義する公式カスタマイズ用CSS変数だけをbody.template-productスコープで
+   上書きし、新PDPデザイン（クリムゾン#c92a54系＋レーティングは既存のアンバー
+   `--pdp-color-rating`）と視覚的に統一する。 ── */
+body.template-product {
+  --jdgm-primary-color: var(--pdp-color-primary);
+  --jdgm-secondary-color: var(--pdp-color-primary-subtle);
+  --jdgm-star-color: var(--pdp-color-rating);
+  --jdgm-write-review-text-color: #ffffff;
+  --jdgm-write-review-bg-color: var(--pdp-color-primary);
+  --jdgm-paginate-color: var(--pdp-color-primary);
+  --jdgm-border-radius: 0.5rem;
+  --jdgm-reviewer-name-color: var(--pdp-color-text);
+}
+body.template-product .jdgm-widget.jdgm-review-widget,
+body.template-product #judgeme_product_reviews,
+body.template-product .jdgm-widget-container {
+  max-width: 896px;
+  margin-inline: auto;
+  background: var(--pdp-color-surface-card);
+  border-radius: var(--pdp-radius-card);
+  box-shadow: var(--pdp-shadow-card);
+  padding: 32px;
+  margin-block: 24px;
+  font-family: var(--pdp-font-body);
+}
+body.template-product .jdgm-rev-widg__title,
+body.template-product .jdgm-widget-header {
+  font-family: var(--pdp-font-heading) !important;
+}
+
 
 /* ================================================================
    ── 26. トップページ（index）デザイン刷新
