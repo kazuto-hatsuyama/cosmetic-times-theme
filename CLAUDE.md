@@ -359,6 +359,31 @@ shopify theme push --only "config/settings_data.json" --allow-live --theme 13881
 - FAQのアコーディオン化: サイト全体の既存方針（`ranking-list`/`category-list`/`product-extra-info`等、タブ・アコーディオン不使用）と矛盾するため、`sections/product-faq.liquid`は従来どおり常時全文表示のまま据え置いた
 - モバイル下部固定購入バーはHorizon標準のスティッキー購入バー（`sticky_details_desktop`設定、section 25-5で既にPDP配色に統一済み）で代替可能なため新規実装していない
 
+## トップページFAQ・フッター4グループ化（2026-09-11、`feature/top-faq-and-footer-link-groups`ブランチ）
+
+「04_SE確認事項」シート No.8・No.9対応（データ系 `D:\Inetpub\shopify_data` からの依頼）。**ユーザー確認前のためmainへは未マージ**（GitHubへはpush済み）。
+
+| ファイル | 内容 |
+|---|---|
+| `sections/home-faq.liquid` | トップページ専用の新規FAQセクション（No.8）。`sections/product-faq.liquid`と同じSSR常時表示（タブ・アコーディオン不使用）の`<dl>`パターンを踏襲するが、参照元は`shop.metafields.custom.faq_items`ではなく本セクションのブロック設定（`question`ブロック×5、質問・回答をブロック設定のデフォルト値としてハードコード）。商品ページFAQとは意図的に別内容のためメタフィールド連携はしない。FAQPage JSON-LDを付与。末尾に既存`/pages/faq`（2026-08-24作成済み）への「FAQをすべて見る ＞」リンクを設置（新規ページは作成していない）。**内容（並行輸入品・商品の信頼性・国内流通品との違い・パッケージ仕様・配送について）は既存サイト記載を踏まえた暫定文言。2026-09-11時点でWEB担当者の最終承認は未取得** |
+| `templates/index.json` | `home-faq`セクション（`home_faq`、5件のQ&Aブロックを直接値で記述）を`order`末尾に追加 |
+| `sections/footer-link-groups.liquid` | SPフッターを「商品を探す／ショッピングガイド／COSMETIC TIMES／会員・法定情報」の4グループに再編する新規セクション（No.9）。Admin Navigationへの書き込み権限が無い既存制約（`blocks/_header-menu.liquid`等と同じ）のため、`sections/category-list.liquid`と同じ静的ハードコード方式を採用。SPはネイティブ`<details>/<summary>`によるアコーディオン（`snippets/header-drawer.liquid`と同じSSRセーフなパターン、JS不使用）で、折りたたみ時もリンクは常にSSR済みHTML内に存在する（実機curl検証済み、下記参照）。PC幅（min-width:750px）はUA標準の`details:not([open]) > *:not(summary){display:none}`をauthor CSS（`.footer-link-group__content{display:flex!important}`）で上書きし、`open`属性の有無に関わらず常時展開の4カラムグリッド表示にする（JS不要）。最終的なグループ分け: **商品を探す**=ブランド一覧/カテゴリ一覧/お悩みから探す/ランキング/新着コスメ/特集、**ショッピングガイド**=ご利用ガイド/よくいただくご質問/営業・配送日カレンダー/お問い合わせ、**COSMETIC TIMES**=会社概要・規約(`/pages/company`)/品質管理について(`/pages/guide-reason`)、**会員・法定情報**=マイページ・ログイン（`customer`有無で`routes.account_url`/`routes.storefront_login_url`を出し分け）/ご利用規約(`/pages/terms-of-service`)/プライバシーポリシー/特定商取引法に基づく表示(`/pages/company#transaction`)。**提案リストにあった「当店について」は`sections/home-trust-content.liquid`のcard3_linkと同じ`/pages/company`を指すため、「会社概要・規約」との重複を避け1本化した**。**`/pages/terms-of-service`（2026-08-24作成済み）は従来のフッター（`footer_quick_links_4jYp9d`）・ヘッダーいずれからもリンクされていなかった導線漏れだったため、本対応で新規に追加**。新規ページは作成していない |
+| `sections/footer-group.json` | `footer_m9NzUG`内の旧リッチテキストブロック`footer_quick_links_4jYp9d`（会社概要・FAQ・ガイド・カレンダー・お問い合わせ・プライバシーポリシー計6件を1つのrte blockに詰め込んでいた、アコーディオンなし）を削除し、新規セクション`footer_link_groups_Nq8wZ2`（`footer-link-groups`タイプ）を`footer_m9NzUG`と`footer_utilities_jLGE8U`の間に追加。SNS訴求文・SNSアイコン・電話CTA×2（`footer_sp_group_Kq3nR7`内）はそのまま変更なし。著作権バー（`footer_utilities_jLGE8U`）も対象外・変更なし |
+
+**実機確認済み（2026-09-11）**: `shopify theme push --unpublished --theme="footer-faq-preview"`でプレビューテーマ（#139271864529、確認後削除済み）をcosmetic-times-prdへpushし、認証済みcurl（`/password`フォーム送信→cookie保持、ブラウザGUIは本タスクの実行環境からはChrome DevTools MCP/Playwright MCPいずれも接続不可のため未使用）でSSR結果を直接検証。
+- トップページ: `home-faq`セクションに5件のQ&A・「FAQをすべて見る」リンク（`/pages/faq`）・`FAQPage`JSON-LD（`Question`5件）が出力されることを確認。`/pages/faq`は200応答
+- 商品ページ（ハンドル`24814072`）: `home-faq`が出力されないこと（`enabled_on.templates: ["index"]`が正しく効いていること）、フッター4グループは他ページ同様に出力されることを確認
+- フッター4グループ: `<details class="footer-link-group">`に`open`属性が付与されない（＝SPでは初期状態は折りたたみ）ことを確認した上で、各`<details>`〜`</details>`の生HTMLを直接パースし、折りたたみ状態でも全14リンク（4グループ合計）の`<a href>`がSSR済みHTMLに存在することを確認（`awk`でブロック単位に切り出し、`grep`でhref列挙）。デスクトップ用CSS（`grid-template-columns: repeat(4, 1fr)`・`display: flex !important`・`pointer-events: none`）が配信されたHTMLに含まれることも確認
+- 全14リンク先（`/pages/brand-list`・`/pages/category-list`・`/pages/trouble-list`・`/pages/ranking`・`/collections/new-arrivals`・`/pages/feature-list`・`/pages/guide-top`・`/pages/faq`・`/pages/company`・`/pages/guide-reason`・`/pages/terms-of-service`・`/pages/privacy-policy`、外部URL2件は既存サイト側のため未検証）が200応答することを確認
+- `shopify theme check --fail-level=error`: 新規エラー0件（既存の無関係な4エラーのみ）。新規ファイルの警告は`sections/footer-link-groups.liquid`の`HardcodedRoutes`（`/collections/new-arrivals`固定URL）1件のみで、`category-list.liquid`等の既存ファイルと同種の許容済みパターン
+
+**未確認事項**: ブラウザでの実際の見た目（アコーディオンの開閉アニメーション・PC4カラムの視覚的バランス・SNS/電話CTAとの縦間隔）はコードレビュー＋上記curl検証ベースで、ブラウザGUIでの確認は本タスクの実行環境からは未実施。マージ前にプレビューテーマ等での実機見た目確認を推奨。
+
+**2026-09-11 実ブラウザQA実施・PC幅の重大バグを発見・修正済み（`c617f70`）**: ローカルnode_modulesのPlaywright（Chromium、`shopify theme dev`不使用）で一時プレビューテーマ（`visual-qa-faq-footer-temp`→修正確認用に`-v2`を再push、いずれも確認後削除済み）にストアパスワード（`1shuei`）突破の上で実アクセスし、TOP/商品ページのFAQセクション・フッター4グループをデスクトップ(1440px)・モバイル(390px、iPhone UA)双方でスクリーンショット確認。
+- **発見したバグ（修正済み）**: PC幅（≥750px）でフッター4グループの見出し（summary）は表示されるが、実際のリンク一覧が画面上は不可視のまま高さ0で潰れて見えない（4グループとも「見出しだけ」状態）。原因は現行Chromium（120以降）が`<details>`の非summary子要素を内部の`::details-content`擬似要素でラップし、`open`属性が無い間はその擬似要素自体に`content-visibility:hidden; block-size:0`を適用して隠す実装になっているため。`.footer-link-group__content`（子要素）側の`display`を`!important`で上書きしても祖先の`::details-content`擬似要素には効かず、curlでの生HTML確認・`shopify theme check`だけでは検出できなかった（旧WebKit実装を前提にしたコードコメントの認識違いが原因）。`.footer-link-group::details-content`を直接明示的に上書きするCSSを追加して解消し、修正後は16リンク全てが実際に画面上でも視認可能・クリック可能であることをPlaywrightで再検証済み
+- **問題なしと確認できた項目**: FAQセクション（PC/SP双方でQ&A5件・「FAQをすべて見る」リンクが`/pages/faq`へ実クリック遷移することを確認）、SP側フッターアコーディオンの開閉（4グループとも開閉が正常動作、閉状態では内容が正しく隠れる）、PC4カラムグリッドのレイアウト崩れ・重なりなし、4グループ各1本ずつ計4リンクの実クリック遷移（`/pages/brand-list`・`/pages/faq`・`/pages/company`・`/pages/privacy-policy`、いずれも200・正しいページへ遷移）、SNSアイコン・電話CTA×2・著作権バー（`© 2026 cosmetic-times-prd, Powered by Shopify`）の表示維持、商品ページでの`home-faq`非表示・フッター4グループ表示の一貫性
+- マージ・本番デプロイ可（go）と判断。詳細は`sections/footer-link-groups.liquid`のコミット`c617f70`のコメント参照
+
 ## MCPサーバー設定
 
 | サーバー名 | 用途 | 設定場所 | 状態 |
