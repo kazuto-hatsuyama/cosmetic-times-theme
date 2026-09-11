@@ -652,6 +652,12 @@
         "color_scheme": "scheme-1"
       }
     },
+    "home_trust_content": {
+      "type": "home-trust-content",
+      "settings": {
+        "color_scheme": "scheme-1"
+      }
+    },
     "home_trust_badges": {
       "type": "home-trust-badges",
       "settings": {
@@ -677,6 +683,7 @@
     "home_ranking",
     "product_list_fa6P9H",
     "home_feature_spotlight",
+    "home_trust_content",
     "home_trust_badges"
   ]
 }
