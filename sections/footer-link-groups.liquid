@@ -201,6 +201,26 @@
       display: flex !important;
       padding-bottom: 0;
     }
+
+    /*
+      2026-09-11 実機QAで判明・修正: 上記コメントの前提（`details:not([open]) > *:not(summary)
+      { display: none }` という単純なUAルール）は古いWebKit/Blinkの実装で、現行Chromium
+      （Chrome 120以降）では非summary子要素をまとめて内部の ::details-content 擬似要素で
+      ラップし、open属性が無い間は `content-visibility: hidden; block-size: 0;` を
+      その擬似要素自体に適用して隠す実装に変わっている。.footer-link-group__content
+      （子要素）側の display を !important で上書きしても、祖先の ::details-content
+      擬似要素の content-visibility/block-size は変わらないため、PC幅でopen属性が
+      付与されないこのマークアップでは見出し（summary）のみ表示され、実際のリンク一覧が
+      画面上は不可視のまま高さ0で潰れていた（Playwrightでの実ブラウザレンダリング検証で
+      発覚。curlでの生HTML確認だけでは検出できない）。::details-content 側を直接
+      明示的に上書きして解消する。
+    */
+    .footer-link-group::details-content {
+      content-visibility: visible !important;
+      display: block !important;
+      block-size: auto !important;
+      overflow: visible !important;
+    }
   }
 {% endstyle %}
 
