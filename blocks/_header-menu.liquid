@@ -69,6 +69,13 @@
               基準）を作成したため、一時的に/collections/sale へ差し替えていた。
               2026-09-07、ユーザー指示により/collections/outletへ再度差し戻し
               （D:\Inetpub\HANDOFF.md参照）。
+              2026-09-11: 「お悩みから探す」（/pages/trouble-list、69件のお悩みタグ
+              SmartCollectionへのリンク一覧ページ）への固定リンクを追加。SE確認事項
+              （04_SE確認事項シートNo.1）の調査対応で、ブランド一覧・カテゴリ一覧は
+              既にこのナビバー等に固定リンクがある一方、お悩み一覧のみヘッダー内に
+              導線が一切無い（trouble-list.liquid自体は2026-08-25から存在するが未リンク）
+              というギャップが判明したため、既存4項目と全く同じ方式（main-menu非依存の
+              固定<li>リンク）で追加した。
             {%- endcomment -%}
             <li>
               <a
@@ -108,6 +115,14 @@
                 class="menu-list__item"
               >
                 カテゴリ
+              </a>
+            </li>
+            <li>
+              <a
+                href="/pages/trouble-list"
+                class="menu-list__item"
+              >
+                お悩みから探す
               </a>
             </li>
           </ul>
