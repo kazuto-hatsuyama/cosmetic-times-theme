@@ -1,0 +1,245 @@
+{% comment %}
+  トップページ用「当店について」紹介文＋信頼性カード3枚セクション（新規・2026-09-11）。
+
+  データ系（D:\Inetpub\shopify_data）からの実装依頼。内容は事前にドラフト・承認済みの
+  文言（店舗紹介文＋並行輸入品/品質管理/当店について の3カード）で、文言自体は改変せず
+  そのまま使用する（将来的にWEB担当者が管理画面から編集する可能性がある想定文言）。
+
+  カードのリンク先は既存の静的ページ:
+    - 並行輸入品について → /pages/guide-reason#hinshitsu
+      （sections/guide-reason.liquid 47行目に既存の id="hinshitsu" アンカーあり。
+        sections/product-trust-info.liquidが商品ページで既に同じリンク形式を使用中）
+    - 品質管理について → /pages/guide-reason
+    - 当店について → /pages/company
+
+  デザインは他のhome-*.liquidセクション（home-feature-spotlight.liquid・
+  home-trust-badges.liquid）と同じ「自セクション内{% style %}完結・カードはgrid+
+  border+角丸のシンプルな枠」パターンを踏襲。カードのホバー演出（金アクセント枠線＋
+  シャドウ＋わずかな浮き上がり）は、custom-luxury.css内で.collection-card/.brand-card/
+  .feature-cardに既に使われている値（border-color rgba(201,168,76,.5)、
+  box-shadow 0 10px 36px rgba(0,0,0,.08)、translateY(-2px)）と同じ値をこのセクション
+  スコープ内で再利用し、新しい色を増やさずテーマ全体のカード演出と統一している。
+
+  sections/home-trust-badges.liquid（アイコン+短いラベルの帯）とは役割が異なるため
+  共存させている（バッジ=一目でわかる要点、本セクション=文章での詳しい説明+誘導リンク）。
+  templates/index.json内の並び順は home_trust_badges の直前に配置し、
+  「詳しい説明→要点バッジのおさらい」の流れにしている。
+{% endcomment %}
+
+<div class="section-background color-{{ section.settings.color_scheme }}"></div>
+<div class="home-trust-content color-{{ section.settings.color_scheme }} page-width-normal">
+  {% if section.settings.heading != blank %}
+    <h2 class="home-trust-content__heading">{{ section.settings.heading }}</h2>
+  {% endif %}
+
+  {% if section.settings.intro_text != blank %}
+    <p class="home-trust-content__intro">{{ section.settings.intro_text }}</p>
+  {% endif %}
+
+  <div class="home-trust-content__grid">
+    {% for i in (1..3) %}
+      {% liquid
+        case i
+          when 1
+            assign card_title = section.settings.card1_title
+            assign card_text = section.settings.card1_text
+            assign card_link = section.settings.card1_link | default: '/pages/guide-reason#hinshitsu'
+          when 2
+            assign card_title = section.settings.card2_title
+            assign card_text = section.settings.card2_text
+            assign card_link = section.settings.card2_link | default: '/pages/guide-reason'
+          when 3
+            assign card_title = section.settings.card3_title
+            assign card_text = section.settings.card3_text
+            assign card_link = section.settings.card3_link | default: '/pages/company'
+        endcase
+      %}
+      {% if card_title != blank %}
+        <a
+          {% if card_link != blank %}href="{{ card_link }}"{% endif %}
+          class="home-trust-content__card"
+        >
+          <span class="home-trust-content__card-title">{{ card_title }}</span>
+          {% if card_text != blank %}
+            <span class="home-trust-content__card-text">{{ card_text }}</span>
+          {% endif %}
+          {% if card_link != blank %}
+            <span class="home-trust-content__card-cta">
+              詳しくはこちら
+              <span class="material-symbols-outlined" aria-hidden="true">arrow_forward</span>
+            </span>
+          {% endif %}
+        </a>
+      {% endif %}
+    {% endfor %}
+  </div>
+</div>
+
+{% style %}
+  .home-trust-content {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding-block: 32px;
+  }
+
+  .home-trust-content__heading {
+    margin: 0;
+  }
+
+  .home-trust-content__intro {
+    margin: 0;
+    max-width: 68ch;
+    font-size: 0.95rem;
+    line-height: 1.9;
+    opacity: 0.85;
+  }
+
+  .home-trust-content__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+    margin-top: 4px;
+  }
+
+  .home-trust-content__card {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 20px 22px 24px;
+    border: 1px solid rgb(var(--color-foreground-rgb) / var(--opacity-10, 0.1));
+    border-radius: 8px;
+    color: inherit;
+    text-decoration: none;
+    transition: border-color 0.35s ease, box-shadow 0.35s ease, transform 0.35s ease;
+  }
+
+  .home-trust-content__card:hover {
+    border-color: rgba(201, 168, 76, 0.5);
+    box-shadow: 0 10px 36px rgba(0, 0, 0, 0.08);
+    transform: translateY(-2px);
+  }
+
+  .home-trust-content__card-title {
+    font-size: 1.05rem;
+    font-weight: var(--font-heading-bold--weight, 700);
+  }
+
+  .home-trust-content__card-text {
+    font-size: 0.85rem;
+    line-height: 1.7;
+    opacity: 0.8;
+  }
+
+  .home-trust-content__card-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: 4px;
+    font-size: 0.82rem;
+    color: var(--color-primary, currentColor);
+  }
+
+  @media screen and (min-width: 750px) {
+    .home-trust-content__grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+{% endstyle %}
+
+{% schema %}
+{
+  "name": "当店についてセクション（トップ）",
+  "enabled_on": {
+    "templates": ["index"]
+  },
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "見出し",
+      "default": "コスメティックタイムズについて"
+    },
+    {
+      "type": "textarea",
+      "id": "intro_text",
+      "label": "紹介文",
+      "default": "コスメティックタイムズは2008年オープン、海外・国内の人気コスメを幅広く取り揃える通販サイトです。全品100%正規品を国内希望小売価格よりお得な価格でご提供し、8,000円以上のご注文で全国送料無料。日本人スタッフによる安心のサポートも自慢です。"
+    },
+    {
+      "type": "header",
+      "content": "カード1"
+    },
+    {
+      "type": "text",
+      "id": "card1_title",
+      "label": "タイトル",
+      "default": "並行輸入品について"
+    },
+    {
+      "type": "textarea",
+      "id": "card1_text",
+      "label": "説明文",
+      "default": "海外から届く商品も安心。信頼できるサプライヤーから仕入れ、入荷時に1品1品検品を行い、偽物や粗悪品を徹底的に排除しています。"
+    },
+    {
+      "type": "url",
+      "id": "card1_link",
+      "label": "リンク先"
+    },
+    {
+      "type": "header",
+      "content": "カード2"
+    },
+    {
+      "type": "text",
+      "id": "card2_title",
+      "label": "タイトル",
+      "default": "品質管理について"
+    },
+    {
+      "type": "textarea",
+      "id": "card2_text",
+      "label": "説明文",
+      "default": "検品・セキュリティ・在庫管理・出荷準備の4段階で品質を徹底管理。24時間365日空調管理された倉庫で商品をお預かりしています。"
+    },
+    {
+      "type": "url",
+      "id": "card2_link",
+      "label": "リンク先"
+    },
+    {
+      "type": "header",
+      "content": "カード3"
+    },
+    {
+      "type": "text",
+      "id": "card3_title",
+      "label": "タイトル",
+      "default": "当店について"
+    },
+    {
+      "type": "textarea",
+      "id": "card3_text",
+      "label": "説明文",
+      "default": "コスメティックタイムズは2008年オープン。海外・国内の人気コスメを幅広く取り揃え、全品正規品を国内よりお得な価格でお届けします。"
+    },
+    {
+      "type": "url",
+      "id": "card3_link",
+      "label": "リンク先"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:settings.color_scheme",
+      "default": "scheme-1"
+    }
+  ],
+  "presets": [
+    {
+      "name": "当店についてセクション（トップ）"
+    }
+  ]
+}
+{% endschema %}
